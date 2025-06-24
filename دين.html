@@ -122,29 +122,25 @@
             </p>
         </header>
 
-        <!-- Search Section -->
         <div class="mb-8 p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200">
             <label for="search-input" class="block text-lg font-semibold text-blue-800 mb-2">البحث في الخريطة:</label>
             <input type="text" id="search-input" placeholder="ادخل كلمة للبحث عنها..." class="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-right">
             <div id="search-results" class="mt-4 space-y-2"></div>
         </div>
 
-        <!-- Table of Contents -->
         <nav id="table-of-contents" class="mb-8 p-4 bg-green-50 rounded-lg shadow-sm border border-green-200 sticky top-0 z-50">
             <h2 class="text-2xl font-bold text-green-800 mb-4">فهرس المحتويات</h2>
             <ul class="list-none space-y-2 text-lg text-green-700">
-                <!-- Links will be generated here by JavaScript -->
-            </ul>
+                </ul>
         </nav>
 
         <main id="mind-map-content" class="space-y-8">
-            <!-- 1. أحداث القيامة -->
             <div id="section-1" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-1-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-1-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         1. أحداث القيامة
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-1-content">+</button>
                 </div>
                 <div id="section-1-content" class="content-wrapper space-y-6 mt-4">
                     <p class="text-gray-700 leading-relaxed">
@@ -202,13 +198,12 @@
                 </div>
             </div>
 
-            <!-- 2. يوم الحشر -->
             <div id="section-2" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-2-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-2-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         2. يوم الحشر
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-2-content">+</button>
                 </div>
                 <div id="section-2-content" class="content-wrapper space-y-6 mt-4">
                     <div class="mind-map-node level-2">
@@ -269,13 +264,12 @@
                 </div>
             </div>
 
-            <!-- 3. العرض والحساب -->
             <div id="section-3" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-3-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-3-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         3. العرض والحساب
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-3-content">+</button>
                 </div>
                 <div id="section-3-content" class="content-wrapper space-y-6 mt-4">
                     <div class="mind-map-node level-2">
@@ -341,13 +335,12 @@
                 </div>
             </div>
 
-            <!-- 4. الميزان -->
             <div id="section-4" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-4-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-4-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         4. الميزان
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-4-content">+</button>
                 </div>
                 <div id="section-4-content" class="content-wrapper space-y-6 mt-4">
                     <div class="mind-map-node level-2">
@@ -379,13 +372,12 @@
                 </div>
             </div>
 
-            <!-- 5. الحوض -->
             <div id="section-5" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-5-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-5-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         5. الحوض
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-5-content">+</button>
                 </div>
                 <div id="section-5-content" class="content-wrapper space-y-6 mt-4">
                     <div class="mind-map-node level-2">
@@ -451,13 +443,12 @@
                 </div>
             </div>
 
-            <!-- 6. الصراط المستقيم -->
             <div id="section-6" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-6-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-6-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         6. الصراط المستقيم
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-6-content">+</button>
                 </div>
                 <div id="section-6-content" class="content-wrapper space-y-6 mt-4">
                     <div class="mind-map-node level-2">
@@ -536,13 +527,12 @@
                 </div>
             </div>
 
-            <!-- 7. الجنة ونعيمها -->
             <div id="section-7" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-7-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-7-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         7. الجنة ونعيمها
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-7-content">+</button>
                 </div>
                 <div id="section-7-content" class="content-wrapper space-y-6 mt-4">
                     <div class="mind-map-node level-2">
@@ -644,13 +634,12 @@
                 </div>
             </div>
 
-            <!-- 8. سورة الفاتحة وشرحها -->
             <div id="section-8" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-8-content', this)">
+                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-8-content">
                     <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
                         8. سورة الفاتحة وشرحها
                     </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
+                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-8-content">+</button>
                 </div>
                 <div id="section-8-content" class="content-wrapper space-y-6 mt-4">
                     <div class="mind-map-node level-2">
@@ -708,1027 +697,106 @@
                             <div class="mind-map-node level-3">
                                 <h4 class="text-xl font-medium text-indigo-700 mb-2">الرحمن الرحيم</h4>
                                 <p class="text-gray-700">
-                                    الله عظيم الرحمة ودائم الرحمة. الرحمن ذو الرحمة الشاملة لجميع الخلائق في الدنيا، وللمؤمنين في الآخرة. الرحيم ذو الرحمة للمؤمنين. الرحمن دال على أن الرحمة صفته، والرحيم دال على أنه يرحم خلقه برحمته. اسم الرحمن لا يجوز للمخلوق أن يتسمى به.
-                                </p>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">مالك يوم الدين</h4>
-                                <p class="text-gray-700">
-                                    المالك المتفرد بيوم الحساب والمتصرف فيه.
-                                </p>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">إياك نعبد وإياك نستعين</h4>
-                                <p class="text-gray-700">
-                                    نخصك يا الله بالعبادة ونستعين بك على طاعتك. العبادة (الأفعال والأقوال الظاهرة والباطنة) مقترنة بالاستعانة بالله فقط.
-                                </p>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">اهدنا الصراط المستقيم صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين</h4>
-                                <p class="text-gray-700">
-                                    أرشدنا إلى دينك المستقيم، ولا تجعلنا من زمرة أعدائك الحائدين عن الصراط المستقيم.
+                                    الله عظيم الرحمة ودائم الرحمة. الرحمن ذو الرحمة الشاملة لجميع الخلائق في الدنيا، وللمؤمنين في الآخرة....
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- 9. التجويد -->
-            <div id="section-9" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-9-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        9. التجويد
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-9-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            مفهوم التجويد
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: التحسين والإتقان، الإتيان بالشيء الجيد.</li>
-                            <li>اصطلاحًا: إخراج كل حرف من مخرجه، متصفًا بصفاته.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            نشأته
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            وصل إلينا من أئمة ثقات وضعوا أصوله واستنبطوا أحكامه من قراءة النبي صلى الله عليه وسلم والصحابة والتابعين.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الهدف
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            حفظ اللسان من الوقوع في اللحن عند قراءة القرآن الكريم.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            حكمه
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            مراعاة قوانين قراءته فرض عين على كل شخص مكلف.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أهميته
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>توحيد طريقة لفظ مفردات القرآن على الطريقة النبوية.</li>
-                            <li>يعطي تناسقًا صوتيًا وجمالًا ونغمة تشد السامعين.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            تعريف اللحن وأنواعه
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>اللحن: الخطأ والميل والانحراف عن الصواب.</li>
-                            <li>اللحن الجلي: الخطأ الذي يطرأ على الألفاظ ويُخل بالمعنى المقصود للآية، مثل استبدال حرف مكان آخر أو تغيير حركة بأخرى. حكمه محرم باتفاق العلماء.</li>
-                            <li>اللحن الخفي: الخطأ الذي لا يغير المعنى ولكن يُخالف قواعد التجويد، مثل ترك الغنة أو تقصير المد. حكمه مكروه.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 10. الإعجاز في القرآن -->
-            <div id="section-10" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-10-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        10. الإعجاز في القرآن
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-10-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الإعجاز
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: التقصير، الإعياء.</li>
-                            <li>اصطلاحًا: أمر خارق للعادة مقرون بالتحدي، سالم من المعارضة، يظهره الله على يد رسله.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            إعجاز القرآن
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>العلم الذي يعرف من خلاله تحدي القرآن للإنس والجن.</li>
-                            <li>عجز الناس أو الجن الإتيان بمثله أو بسورة من مثله.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            وظيفة المعجزة
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            الدليل على صدق النبي وأنه مرسل من الله.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            شروط الإعجاز
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>التحدي.</li>
-                            <li>وجود السبب الذي يدفع المتحدي إلى المباراة.</li>
-                            <li>عدم وجود مانع يمنع المباراة.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            وجوه إعجاز القرآن
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>حسن تأليفه وفصاحته وبلاغته الخارقة.</li>
-                            <li>صحة معانيه وفصاحة ألفاظه.</li>
-                            <li>سلطانه على النفوس والعقول.</li>
-                            <li>الروعة التي تلحق قلوب السامعين.</li>
-                            <li>معجز في تاريخه إلى قيام الساعة دون سائر الكتب السماوية.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            فضل القرآن الكريم على اللغة العربية
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>حفظ اللغة بالنموذج الأسمى من الفصاحة والبلاغة.</li>
-                            <li>أحدث فيها علومًا لم تكن لتوجد لولاه.</li>
-                            <li>جعلها تتفوق على كثير من لغات الأقوام.</li>
-                            <li>حفظ لغة العرب من الضياع.</li>
-                            <li>وسع دائرة اللغة العربية باستخدام ألفاظ دينية جديدة.</li>
-                            <li>ضمن استمرار اللغة العربية وتطورها.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 11. شرح وحفظ آيات من سورة البقرة -->
-            <div id="section-11" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-11-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        11. شرح وحفظ آيات من سورة البقرة
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-11-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أسباب تسمية سورة البقرة
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            لاشتمالها على قصة البقرة التي أمر الله بني إسرائيل بذبحها لاكتشاف قاتل بينهم.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            فضائل سورة البقرة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>تأتي شفيعة لصاحبها يوم القيامة هي وآل عمران.</li>
-                            <li>قراءتها في البيت تجلب البركة وتحفظ من شر السحرة.</li>
-                            <li>تطرد الشياطين من البيت.</li>
-                            <li>من السور العظيمة التي تظل صاحبها يوم القيامة.</li>
-                            <li>خواتيمها من كنز تحت العرش.</li>
-                            <li>هي سنام القرآن.</li>
-                            <li>فيها أعظم آية في القرآن (آية الكرسي).</li>
-                            <li>أطول سورة في القرآن، وفيها آخر آية نزلت من القرآن.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الآيات المطلوبة شرحها
-                        </h3>
-                        <div class="space-y-3 mt-4">
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 21: يا أيها الناس اعبدوا ربكم الذي خلقكم والذين من قبلكم لعلكم تتقون.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>المناسبة: بعد ذكر صفات المؤمنين والكافرين والمنافقين، جاءت هذه الآية بذكر الأدلة والبراهين على وحدانية الله ونعمه.</li>
-                                    <li>معناها: يدعو الله بني آدم أن يعبدوه بتوحيده وشكره وطاعته، فهو الذي أوجدهم من العدم وخلق الأمم من قبلهم ليكونوا من المتقين.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 22: الذي جعل لكم الأرض فراشًا والسماء بناء وأنزل من السماء ماء فأخرج به من الثمرات رزقًا لكم فلا تجعلوا لله أندادًا وأنتم تعلمون.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>تشير إلى: الله جعل الأرض مهادًا وفراشًا مستقرة للسكن.</li>
-                                    <li>جعل السماء سقفًا مرفوعًا كالقبة.</li>
-                                    <li>أنزل من السحاب مطرًا فأخرج به أنواع الثمار والخضار رزقًا للناس.</li>
-                                    <li>يوصي الناس بألا يتخذوا لله شركاء في العبادة وهم يعلمون أن الأصنام لا تخلق ولا ترزق.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 23: وإن كنتم في ريب مما نزلنا على عبدنا فأتوا بسورة من مثله وادعوا شهداءكم من دون الله إن كنتم صادقين.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>معناها: إذا كنتم في شك من صدق القرآن وعجزتم عن الإتيان بمثله، فأتوا بسورة واحدة من مثله، واستعينوا بمن شئتم من فصحاء وبلغاء غير الله.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 24: فإن لم تفعلوا ولن تفعلوا فاتقوا النار التي وقودها الناس والحجارة أعدت للكافرين.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>معناها: إن لم تقدروا على الإتيان بمثل سورة من القرآن في الماضي ولن تقدروا في المستقبل، فخافوا عذاب الله واحذروا نار جهنم التي وقودها الكفار والأصنام التي عبدوها من دون الله.</li>
-                                    <li>قوله تعالى "ولن تفعلوا": جملة اعتراضية للإشارة إلى عجز البشر في الحاضر والمستقبل.</li>
-                                    <li>وقود النار: الكفار والأصنام التي عبدوها من دون الله.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 25: وبشر الذين آمنوا وعملوا الصالحات أن لهم جنات تجري من تحتها الأنهار كلما رزقوا منها من ثمرة رزقًا قالوا هذا الذي رزقنا من قبل وأتوا به متشابهًا ولهم فيها أزواج مطهرة وهم فيها خالدون.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>المناسبه: بشارة للمؤمنين المتقين الذين جمعوا بين الإيمان والعمل الصالح.</li>
-                                    <li>صفة الجنات: متعددة، تجري من تحت قصورها الأنهار، يكفيهم رزقهم فيها.</li>
-                                    <li>ثمارها: متشابهة في الشكل والمنظر لا في الطعم.</li>
-                                    <li>أزواج مطهرة: زوجات من الحور العين، مطهرات من الأقذار الحسية والمعنوية، أنشأها الله أبكارًا.</li>
-                                    <li>خلود أهل الجنة: يعيشون حياة خالدة بلا انقطاع.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 26: إن الله لا يستحي أن يضرب مثلًا ما بعوضة فما فوقها فأما الذين آمنوا فيعلمون أنه الحق من ربهم وأما الذين كفروا فيقولون ماذا أراد الله بهذا مثلًا يضل به كثيرًا ويهدي به كثيرًا وما يضل به إلا الفاسقين.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>سبب النزول: لما ذكر الله الذباب والعنكبوت في كتابه، ضحكت اليهود وقالوا: هل الله ينزل مثل هذا الكلام.</li>
-                                    <li>معناها: الله لا يمتنع أن يضرب مثلًا بأي شيء (حتى البعوضة)، فالمؤمنون يعلمون أن ذلك حق من ربهم. أما الكافرون فيتساءلون عن مراد الله من هذا المثل، فيضل الله به كثيرًا من الكافرين ويهدي به كثيرًا من المؤمنين، ولا يضل به إلا الخارجين عن طاعة الله (الفاسقين).</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 27: الذين ينقضون عهد الله من بعد ميثاقه ويقطعون ما أمر الله به أن يوصل ويفسدون في الأرض أولئك هم الخاسرون.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>أوصاف الفاسقين: ينقضون كل عهد وميثاق من الإيمان بالله والتصديق بالرسل.</li>
-                                    <li>يقطعون صلة الأرحام.</li>
-                                    <li>يفسدون في الأرض بالمعاصي.</li>
-                                    <li>استبدلوا الضلالة بالهدى.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 28: كيف تكفرون بالله وكنتم أمواتًا فأحياكم ثم يميتكم ثم يحييكم ثم إليه ترجعون.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>معناها: كيف تجحدون الخالق وأنتم كنتم نطفًا في العدم، فأخرجكم إلى الدنيا، ثم يميتكم عند انقضاء الآجال، ثم يحييكم بالبعث من القبور، ثم إليه ترجعون للحساب والجزاء.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الآية 29: هو الذي خلق لكم ما في الأرض جميعًا ثم استوى إلى السماء فسواهن سبع سماوات وهو بكل شيء عليم.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>معناها: خلق الله لكم الأرض وما فيها لتنتفعوا بكل ما فيها، ثم وجه إرادته إلى السماء فصيَّرهن سبع سماوات محكمة البناء، وهو عالم بكل ما خلق.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الآيات المطلوبة حفظها
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الآيات من 1 إلى 5 من سورة البقرة.</li>
-                            <li>الآيات من 8 إلى 12 من سورة البقرة.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 12. الهجرة إلى يثرب -->
-            <div id="section-12" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-12-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        12. الهجرة إلى يثرب
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-12-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            المرحلة الأولى: هجرة المسلمين إلى المدينة
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            أمر النبي صلى الله عليه وسلم أصحابه بالهجرة إلى المدينة رحمة وعطفًا عليهم وحفاظًا على دينهم، فاستجابوا وتركوا أهلهم وأموالهم.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            المرحلة الثانية: هجرة الرسول صلى الله عليه وسلم
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>مؤامرة دار الندوة: رأى النبي أن دار هجرته هي المدينة، فأذن الله له بالهجرة. اجتمع المشركون لمنعه، واتفقوا على قتله، ولكن الله أخبر نبيه.</li>
-                            <li>خروج النبي: أمر عليًا أن ينام في فراشه، وخرج من بيته وهم ينتظرونه، وتلا آيات من سورة يس، ونثر التراب على رؤوسهم، فلم يروه.</li>
-                            <li>الغار: ذهب إلى بيت أبي بكر وخرجا إلى غار ثور، واختفيا فيه لمدة ثلاثة أيام.</li>
-                            <li>أول فدائي في الإسلام: علي كرم الله وجهه (نام في فراش النبي).</li>
-                            <li>تكفل عبد الله بن أبي بكر بنقل أخبار أهل مكة لهما.</li>
-                            <li>عامر بن فهيرة (راعي أغنام أبي بكر) يمسح آثار أقدام عبد الله.</li>
-                            <li>أسماء بنت أبي بكر (ذات النطاقين) تأتيهما بالطعام كل يوم (كانت حاملًا في شهرها السابع). هذا يدل على دور المرأة العظيم.</li>
-                            <li>دليلهما: عبد الله بن أريقط (كان كافرًا).</li>
-                            <li>عرضت قريش 100 ناقة لمن يأتي بهما.</li>
-                            <li>تعرض لهما سراقة بن مالك، ثم عاد حاميًا لهما.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            وصوله إلى المدينة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>وصل إلى قباء يوم الاثنين الثاني عشر من ربيع الأول، ومكث 14 يومًا وأسس مسجد قباء.</li>
-                            <li>ثم سار إلى المدينة، وكانت ناقته مأمورة، فبركت في مكان المسجد النبوي الآن.</li>
-                            <li>نزل في المدينة عند أبي أيوب الأنصاري، ومكث عنده 7 أشهر حتى بنى مسجده وحجرات أمهات المؤمنين.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أهمية المسجد
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            أول ما حرص عليه الرسول في قباء والمدينة، فهو مكان اجتماع المسلمين ومدرستهم الأولى.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            ما بعد الهجرة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>المهاجرون: من جاء من مكة.</li>
-                            <li>الأنصار: من أسلم من أهل المدينة.</li>
-                            <li>يثرب: سُميت دار الهجرة، والمدينة النبوية.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أسباب الهجرة من مكة إلى المدينة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>البحث عن الأمن والأمان: بسبب اضطهاد قريش ومحاولة قتله.</li>
-                            <li>الحصار الاقتصادي: مقاطعة قريش للمسلمين.</li>
-                            <li>استعداد أهل المدينة: لحبهم للنبي ورغبتهم في استقباله.</li>
-                            <li>إقامة الدولة الإسلامية: لنشر الدين، ووجود حصن قوي لتكوين مملكة إسلامية.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الدروس المستفادة من الهجرة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الصبر والإصرار على الحق.</li>
-                            <li>التوكل على الله.</li>
-                            <li>التخطيط للعمل.</li>
-                            <li>حسن اختيار الصحبة.</li>
-                            <li>السرية في العمل.</li>
-                            <li>انتصار الحق على الباطل.</li>
-                            <li>الله يجعل الخير لمن يهاجر في سبيله.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            النبي في المدينة
-                        </h3>
-                        <div class="space-y-3 mt-4">
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">استقبال الرسول صلى الله عليه وسلم</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>خرج أهل المدينة جميعًا بفرح يغمرهم، يهللون ويكبرون، وتتقدمهم الفتيات بالدفوف ينشدن أنشودة "طلع البدر علينا".</li>
-                                    <li>كان معظمهم يحبونه قبل أن يروه.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">في ضيافة أبي أيوب الأنصاري</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>حرص أهل المدينة على استضافته.</li>
-                                    <li>بنى مسجد قباء أولًا.</li>
-                                    <li>أسرع سادات يثرب لاستقباله وتوجيه ناقته، لكنها كانت مأمورة.</li>
-                                    <li>بركت الناقة عند بيت أبي أيوب الأنصاري، فأقام النبي في ضيافته 7 أشهر.</li>
-                                    <li>اختار النبي الطابق الأرضي لراحة زواره.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">المؤاخاة بين الأوس والخزرج</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>كان العرب قبل الإسلام يعيشون في تناحر.</li>
-                                    <li>سعى النبي لربط الأمة برابطة الدين والأخوة.</li>
-                                    <li>آخى بين المهاجرين والأنصار.</li>
-                                    <li>قرب بين الأوس والخزرج.</li>
-                                    <li>آخى بين العرب والموالي (مثل أبي الدرداء وسلمان الفارسي).</li>
-                                    <li>نتائج الإخاء: تأسيس أسرة إسلامية واحدة، سقوط فوارق النسب واللون، تحقيق مفهوم "لا فضل لعربي على أعجمي إلا بالتقوى"، ضرب المثل في التعاون، وحدة المدينة.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">بناء المسجد</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>أول ما حرص عليه الرسول في المدينة.</li>
-                                    <li>ليكون مركزًا للعبادة، وجامعة تعليمية، ومدرسة تربوية، ومقرًا حكوميًا استشاريًا.</li>
-                                    <li>اشترى النبي أرض المسجد من الغلامين، وعمل بنفسه في البناء.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">المعاهدة بين المسلمين واليهود</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>حرص النبي على بناء روابط الوصل بين الأمة الإسلامية وغيرهم من الأمم.</li>
-                                    <li>أقرهم على دينهم، وضمن لهم أموالهم.</li>
-                                    <li>أساسها الأخوة في السلم والدفاع عن المدينة وقت الحرب.</li>
-                                    <li>بنودها: يهود بني عوف أمة مع المؤمنين، لليهود دينهم وللمسلمين دينهم، على اليهود نفقتهم وعلى المسلمين نفقتهم، بينهم النصر على من حارب أهل هذه الصحيفة، بينهم النصح والبر.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 13. كل مادة الحديث -->
-            <div id="section-13" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-13-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        13. كل مادة الحديث
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-13-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            علم مصطلح الحديث
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>تعريفه: العلم الذي يُعرف به أحوال السند والمتن من حيث القبول والرد.</li>
-                            <li>أقسامه:
-                                <ul class="list-circle list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>علم رواية الحديث: يبحث في كيفية اتصال سند الحديث ورجاله من حيث أحوال رواته (ضبطًا وعدالة) وعلاقتهم بالسند. يركز على ألفاظ الرسول من حيث صحة ودقة صدورها.</li>
-                                    <li>علم دراية الحديث: يبحث عن المعنى الذي يفهم من ألفاظ الحديث (المتن) والمراد منها وفقًا لقواعد اللغة وضوابط الشريعة. يركز على متن الحديث.</li>
-                                </ul>
-                            </li>
-                            <li>فائدته وأهميته: يساعد على معرفة ما يجب قبوله أو رده من الراوي والمروي، لتنقية الأدلة الحديثية.</li>
-                            <li>أهدافه: إعطاء الدارس مفاتيح المعرفة، القدرة على إدراك المنهجية، تحقيق معاني المتون.</li>
-                            <li>السند والمتن:
-                                <ul class="list-circle list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>السند: سلسلة رواة الحديث الذين تحملوا الحديث من أول السند حتى وصوله إلى الرسول.</li>
-                                    <li>المتن: كلام الرسول أو فعله، أو هو ما انتهى إليه السند.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أقسام الحديث من حيث حال الرواة
-                        </h3>
-                        <div class="space-y-3 mt-4">
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الحديث المقبول</h4>
-                                <p class="text-gray-700">
-                                    الذي يحتج به ويعمل به، وهو الصحيح والحسن.
-                                </p>
-                                <div class="space-y-3 mt-2">
-                                    <div class="mind-map-node level-3.5">
-                                        <h5 class="text-lg font-medium text-purple-700 mb-1">أولًا: الحديث الصحيح</h5>
-                                        <ul class="list-disc list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                            <li>معناه:
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>لغةً: ضد السقيم.</li>
-                                                    <li>اصطلاحًا: ما اتصل سنده بنقل العدل الضابط، عن مثله إلى منتهاه، من غير شذوذ ولا علة.</li>
-                                                </ul>
-                                            </li>
-                                            <li>شروطه (خمسة):
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>اتصال السند: كل راوٍ أخذ الحديث عمن فوقه مباشرة.</li>
-                                                    <li>عدالة الرواة: كل راوٍ مسلم، بالغ، عاقل، غير فاسق، غير مخروم المروءة. (مراعاة العرف السائد بشرط ألا يخالف الشرع في المروءة).</li>
-                                                    <li>ضبط الرواة: كل راوٍ تام الضبط (ضبط صدر أو ضبط كتاب).</li>
-                                                    <li>عدم الشذوذ: عدم مخالفة الثقة لمن هو أوثق منه.</li>
-                                                    <li>عدم العلة: لا توجد علة قادحة.</li>
-                                                </ul>
-                                            </li>
-                                            <li>حكمه: وجوب العمل به بالإجماع.</li>
-                                            <li>أقسامه:
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>الصحيح لذاته: ما اشتمل على الشروط الخمسة.</li>
-                                                    <li>الصحيح لغيره: الحديث الذي لا توجد له طرق صحيحة بذاتها، بل يتقوى بطريق آخر حسن فيرتقي إلى الصحيح. (أقل درجة من الصحيح لذاته).</li>
-                                                </ul>
-                                            </li>
-                                            <li>مراتبه: ما اتفق عليه الشيخان، ما انفرد به البخاري، ما انفرد به مسلم، ما كان على شرطهما ولم يخرجاه، ما كان على شرط البخاري ولم يخرجه، ما كان على شرط مسلم ولم يخرجه، ما كان صحيحًا عند غيرهما وليس على شرطهما.</li>
-                                            <li>مظانه (مصادره): صحيح البخاري، صحيح مسلم، موطأ مالك.</li>
-                                        </ul>
-                                    </div>
-                                    <div class="mind-map-node level-3.5">
-                                        <h5 class="text-lg font-medium text-purple-700 mb-1">ثانيًا: الحديث الحسن</h5>
-                                        <ul class="list-disc list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                            <li>معناه:
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>لغةً: صفة مشبهة من الحسن بمعنى الجمال.</li>
-                                                    <li>اصطلاحًا: ما اتصل سنده بنقل العدل خفيف الضبط، عن مثله إلى منتهاه، من غير شذوذ ولا علة.</li>
-                                                </ul>
-                                            </li>
-                                            <li>شروطه (خمسة): نفس شروط الصحيح، لكن الضبط فيه أقل من الضبط التام.</li>
-                                            <li>حكمه: كالحديث الصحيح في الاحتجاج به، وإن كان دونه في القوة.</li>
-                                            <li>أقسامه:
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>الحسن لذاته: ما اشتمل على الشروط الخمسة في الحسن.</li>
-                                                    <li>الحسن لغيره: الحديث الضعيف إذا تعددت طرقه، ولم يكن سبب ضعفه فسق الراوي أو كذبه. (أقل درجة من الحسن لذاته).</li>
-                                                </ul>
-                                            </li>
-                                            <li>مظانه: سنن الترمذي، سنن أبي داود، سنن الدارقطني.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الحديث المردود (المرفوض)</h4>
-                                <p class="text-gray-700">
-                                    ما فقد شرطًا أو أكثر من شروط القبول، أي لم تجتمع فيه شروط القبول جميعها. يشمل الحديث الضعيف بأقسامه.
-                                </p>
-                                <div class="space-y-3 mt-2">
-                                    <div class="mind-map-node level-3.5">
-                                        <h5 class="text-lg font-medium text-purple-700 mb-1">أولًا: الحديث الضعيف</h5>
-                                        <ul class="list-disc list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                            <li>معناه:
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>لغةً: ضد القوة.</li>
-                                                    <li>اصطلاحًا: الحديث الذي لم تجتمع فيه صفات الحديث الصحيح أو الحسن.</li>
-                                                </ul>
-                                            </li>
-                                            <li>أسباب ضعفه:
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>عدم اتصال السند.</li>
-                                                    <li>عدم عدالة الرواة أو بعضهم.</li>
-                                                    <li>عدم ضبط الرواة أو بعضهم.</li>
-                                                    <li>وجود الشذوذ.</li>
-                                                    <li>وجود العلة القادحة.</li>
-                                                </ul>
-                                            </li>
-                                            <li>حكم العمل به:
-                                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                                    <li>المذهب الأول: لا يعمل به مطلقًا (لا في الأحكام الشرعية ولا الترغيب والترهيب).</li>
-                                                    <li>المذهب الثاني: يعمل به مطلقًا بشروط (ألا يكون الضعف شديدًا، ألا يتعارض مع حديث آخر، ألا يكون في الباب حديث غيره).</li>
-                                                    <li>المذهب الثالث: يعمل به بقيود (يعمل به في فضائل الأعمال، والقصص، والمواعظ، والترغيب والترهيب، لكن لا يعمل به في العقائد، والأحكام، والفرض والواجب).</li>
-                                                </ul>
-                                            </li>
-                                            <li>تفاوته: يتفاوت حسب ضعف وضبط الرواة، فمنه الضعيف، والضعيف جدًا، والواهي، وأشدها الموضوع.</li>
-                                            <li>مظانه: كتاب الضعفاء للعقيلي، ميزان الاعتدال للذهبي، كتاب العلل للدارقطني.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 14. من مادة التهذيب: صلة الأرحام أو إصلاح ذات البين -->
-            <div id="section-14" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-14-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        14. من مادة التهذيب: صلة الأرحام أو إصلاح ذات البين
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-14-content" class="content-wrapper space-y-6 mt-4">
-                    <p class="text-gray-700 leading-relaxed">
-                        سأقدم لك معلومات عن كلا الموضوعين لاختيار ما هو الأنسب لمراجعتك.
-                    </p>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            صلة الأرحام
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>مفهوم صلة الرحم:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>صلة: الوصل. الرحم: اسم جامع لكل الأقارب.</li>
-                                    <li>اصطلاحًا: زيارة الأقارب وتفقد أحوالهم، والبر بهم، ومشاركتهم أفراحهم وأتراحهم.</li>
-                                </ul>
-                            </li>
-                            <li>من هم الأرحام؟ الأقارب من النسب (من جهة الأب والأم)، لا من الرضاع. (أقارب الزوجين ليسوا أرحامًا للآخر، لكن ينبغي الإحسان إليهم).</li>
-                            <li>حكم صلة الرحم: واجبة على كل مسلم ومسلمة، وقطيعة الرحم معصية وذنب كبير.</li>
-                            <li>أهمية صلة الرحم: مكانة عالية في الإسلام، اشتق اسمها من اسم "الرحمن"، وجعلت منزلتها عند عرش الله.</li>
-                            <li>فضائل صلة الرحم:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>من علامات الإيمان.</li>
-                                    <li>سبب للبركة في الرزق والعمر.</li>
-                                    <li>سبب لصلة الله تعالى وإكرامه.</li>
-                                    <li>من أسباب دخول الجنة.</li>
-                                </ul>
-                            </li>
-                            <li>عواقب قطع الرحم:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>قاطع الرحم ملعون في كتاب الله.</li>
-                                    <li>تُعجل له العقوبة في الدنيا، وتنقطع صلته بالله.</li>
-                                    <li>الحرمان من دخول الجنة.</li>
-                                </ul>
-                            </li>
-                            <li>من أسباب قطيعة الرحم: كثرة العتاب الشديد، ضعف الوازع الديني، التكلف الزائد في الإكرام، تأخير قسمة الميراث، الشراكة بين الأقارب، طلاق الأقارب.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            إصلاح ذات البين
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>مشروعية إصلاح ذات البين: الإسلام رغّب في جمع القلوب والإصلاح بين الناس، وجعل الأخوة أمرًا مرغوبًا. دلت النصوص الشرعية الكثيرة على أهميته.</li>
-                            <li>سبل إصلاح ذات البين:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>توفر النية الصادقة.</li>
-                                    <li>اعتماد معايير العدل وتقوى الله.</li>
-                                    <li>اعتماد آداب النصح (أسلوب التقديم، اختيار العبارات، السر).</li>
-                                    <li>حفظ خصوصيات أطراف النزاع وعدم إفشاء ما يجب إسراره.</li>
-                                    <li>العدل (الوقوف بين المتخاصمين بنفس المسافة).</li>
-                                    <li>الحوار (أسلوب لتقريب وجهات النظر).</li>
-                                    <li>الوعظ والإرشاد (توضيح فضل الإصلاح وعواقب الإفساد).</li>
-                                    <li>القضاء أو التحكيم (إذا استلزم الإصلاح ذلك).</li>
-                                </ul>
-                            </li>
-                            <li>شروط المصلح:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>العلم الكافي بسبل الإصلاح.</li>
-                                    <li>السيرة الحسنة والأخلاق القويمة.</li>
-                                    <li>الإخلاص في مساعي الصلح.</li>
-                                </ul>
-                            </li>
-                            <li>الآثار المترتبة على إفساد ذات البين:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>ضياع جذوة الالتزام بالدين (يُسمى "الحالقة").</li>
-                                    <li>تسمم العلاقات الاجتماعية، انتشار الخصومة، تفكك الروابط.</li>
-                                    <li>توتر الفرد وقلقه.</li>
-                                    <li>نيل غضب الله وسخطه.</li>
-                                </ul>
-                            </li>
-                            <li>ما يجب مراعاته في جلسة الصلح: تحديد أساسيات التصالح، توضيح أهمية الصلح، الموضوعية، الابتعاد عن الأنانية، الاستماع للآخرين، التعاطف مع الجميع، استخدام الكلمات بحرص، التصرف بحكمة.</li>
-                            <li>فوائد الصلح بين المتخاصمين: حلول المحبة والألفة، غرس الفضيلة، كسب الحسنات ورفع الدرجات، استقامة حياة المجتمع، طمأنينة القلوب وسعادتها.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 15. من مادة الفقه: الزكاة -->
-            <div id="section-15" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-15-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        15. من مادة الفقه: الزكاة
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-15-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            تعريف الزكاة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: النماء والبركة والزيادة، والطهارة.</li>
-                            <li>اصطلاحًا: اسم صريح لأخذ شيء مخصوص من مال مخصوص، على أوصاف مخصوصة، لطائفة مخصوصة.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أصناف المال الذي تجب فيه الزكاة
-                        </h3>
-                        <div class="space-y-3 mt-4">
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">أولًا: النقدان: الذهب والفضة، والعملات النقدية.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>نصابهما: 85 جرامًا من الذهب (ما يعادل 595 جرامًا من الفضة).</li>
-                                    <li>مقدارها: ربع العشر (2.5%).</li>
-                                    <li>زكاة حُليّ المرأة: لا زكاة فيها ما لم تبلغ حد الإسراف؛ لأنها للزينة.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">ثانيًا: الأنعام: الإبل، البقر، الغنم (ويلحق بها الماعز).</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>شروط زكاتها: أن تكون سائمة (ترعى الكلأ المباح أكثر السنة)، وأن تتخذ للدر (الحليب) أو التسمين أو النسل (لا للعمل).</li>
-                                    <li>ملاحظة: ما توالد أثناء الحول، يُزكى عنه مع الكبار عند تمام حولها.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">ثالثًا: الزروع والثمار:</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>الواجب فيها: ما يقتاته الناس في أحوالهم العادية ويمكن ادخاره (كالقمح والشعير والأرز والعدس والتمر والزبيب). (لا تجب فيما يؤكل تنعمًا أو تداويًا).</li>
-                                    <li>نصابها: لا يقل عن خمسة أوسق كيلًا (ما يساوي 652.8 كغم).</li>
-                                    <li>القدر الواجب فيها: العشر (10%) إذا كانت بعلية (تُسقى بالمطر)، ونصف العشر (5%) إذا كانت تُسقى بآلات وتكاليف.</li>
-                                    <li>وقت وجوبها: عند الحصاد، بعد تصفيتها.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">رابعًا: عروض التجارة: كل ما أعد للتجارة من أصول أو عروض (مثل العقار أو المواد الغذائية).</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>شروطها: أن يملكه بعقد فيه عوض، ونية المتاجرة به.</li>
-                                    <li>قيمتها ووقتها: تُقوم العروض بالنقد في نهاية الحول، وتجب فيها 2.5% من القيمة.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">خامسًا: الركاز: ما كان مدفونًا يرجع إلى ما قبل الإسلام.</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>زكاته: الخمس (20%)، تجب بمجرد العثور عليه.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            دور الزكاة في حل مشاكل المجتمع (فوائدها)
-                        </h3>
-                        <div class="space-y-3 mt-4">
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">أولًا: الفوائد الاقتصادية:</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>تنعش الاقتصاد وتحقق التنمية بمنع الاكتناز.</li>
-                                    <li>تسهم في زيادة التنمية الاقتصادية بتدوير الأموال.</li>
-                                    <li>إيجاد فرص عمل وتقضي على البطالة.</li>
-                                    <li>بلورة مشاريع متنوعة (مثل إعطاء الحرفيين من الزكاة لشراء آلات صنعتهم).</li>
-                                    <li>تقليل الفجوة بين الفئات الاجتماعية.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">ثانيًا: الفوائد الاجتماعية:</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>إشاعة القيم الإنسانية ونشر المعاني الأخلاقية (الترابط والتكافل).</li>
-                                    <li>تطهير نفس الفقير من الحسد والطمع وكبح الحقد والكراهية.</li>
-                                    <li>تحقيق العدالة الاجتماعية.</li>
-                                    <li>سد حاجة الفقراء والمساكين واليتامى والمدينين.</li>
-                                    <li>درء الجرائم مثل السرقة والنهب والقتل.</li>
-                                </ul>
-                            </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">ثالثًا: الفوائد النفسية:</h4>
-                                <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1 pr-4">
-                                    <li>تقرب المزكي من الله وتمنحه الاستقرار النفسي.</li>
-                                    <li>تربية المسلم على شكر النعمة.</li>
-                                    <li>تساهم في تربية المزكي روحيًا وأخلاقيًا ونفسيًا (تطهيره من الأنانية).</li>
-                                    <li>تزرع السكينة والطمأنينة وتشرح الصدر.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 16. حفظ الأحاديث الأربعة وشرحها -->
-            <div id="section-16" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleSection('section-16-content', this)">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        16. حفظ الأحاديث الأربعة وشرحها
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center">+</button>
-                </div>
-                <div id="section-16-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            1. أهل القرآن هم أهل الله
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الحديث: "إن لله أهلين من الناس"، قالوا: يا رسول الله من هم؟ قال: "هم أهل القرآن، أهل الله وخاصته".</li>
-                            <li>راوي الحديث: أنس بن مالك بن النضر الأنصاري الخزرجي، ولد قبل الهجرة بعشر سنوات، خدم الرسول 10 سنوات، دعا له الرسول بـ "اللهم أكثر ماله وولده وأطل عمره واغفر ذنبه". روى 2286 حديثًا.</li>
-                            <li>شرح الحديث:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>من هم أهل الله؟ حفظة القرآن العاملون به.</li>
-                                    <li>لماذا سموا بذلك؟ تعظيمًا لهم، كما يقال "بيت الله".</li>
-                                    <li>لا يكفي مجرد التلاوة، بل العمل بأحكامه والوقوف عند حدوده والتخلق بأخلاقه.</li>
-                                </ul>
-                            </li>
-                            <li>ما يستفاد من الحديث: ألا يمر على المسلم يوم إلا وهو يتلو القرآن بتدبر وعمل.</li>
-                            <li>ما يؤخذ من الحديث:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>أهل الله هم الذين يتمسكون بالقرآن.</li>
-                                    <li>حث المسلمين على تلاوة القرآن والتمسك به.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            2. حب الرسول من الإيمان
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الحديث: "لا يؤمن أحدكم حتى أكون أحب إليه من ولده، ووالده، والناس أجمعين".</li>
-                            <li>راوي الحديث: أنس بن مالك، وأبو هريرة. (أبو هريرة: اسمه عبد الرحمن بن صخر الدوسي، أشهر الصحابة رواية للحديث، أسلم عام خيبر، لزمه النبي).</li>
-                            <li>أنواع المحبة: إجلال وإعظام (كحب الوالد)، شفقة ورحمة (كحب الولد)، مشاكلة واستحسان (كحب سائر الناس).</li>
-                            <li>شرح مفردات الحديث:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>لا يؤمن أحدكم: لا يحصل له الإيمان الكامل الذي تبرأ به ذمته ويدخل الجنة بلا عذاب.</li>
-                                    <li>من ولده: يشمل الذكر والأنثى.</li>
-                                    <li>ووالده: يشمل أباه وجده وأمه وجدته.</li>
-                                    <li>والناس أجمعين: يشمل إخوته، أعمامه، أبناءهم، أصحابه، ونفسه.</li>
-                                </ul>
-                            </li>
-                            <li>فوائد الحديث:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>وجوب محبة الرسول وتقديمها على محبة كل مخلوق.</li>
-                                    <li>الأعمال من الإيمان (المحبة عمل القلب).</li>
-                                    <li>نفي الإيمان لا يدل على الخروج من الإسلام.</li>
-                                    <li>الإيمان الصادق لابد أن يظهر أثره.</li>
-                                    <li>وجوب تقديم محبة الرسول على النفس والولد والوالد والناس.</li>
-                                    <li>وجوب تقديم قول الرسول على قول كل الناس.</li>
-                                    <li>فداء الرسول بالنفس والمال.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            3. المرأة تُنكح لأربع
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الحديث: "تنكح المرأة لأربع: لمالها ولحسبها وجمالها ولدينها فاظفر بذات الدين تربت يداك".</li>
-                            <li>راوي الحديث: أبو هريرة.</li>
-                            <li>المعنى العام: مقاصد الناس في الزواج تختلف، والنabi رغّب في الزواج بالمرأة لدينها.</li>
-                            <li>الصفات والمعايير المطلوبة في الخاطبين:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>الخلق والدين: أهم صفة، توفرهما يعين على استمرار الحياة الزوجية.</li>
-                                    <li>الحسب والأصل: حسن الاختيار له أثر بالغ في ترعرع الأبناء.</li>
-                                    <li>المال والجمال: معايير يقدم عليها كثيرون، لكن الجمال ينمحق.</li>
-                                    <li>الأبكار: يفضل زواج البكر، ويجوز من غير البكر.</li>
-                                    <li>الودود والولود: أن تكون المرأة ودودة ولودة منجبة للأولاد.</li>
-                                    <li>العقل: الزواج من الحمقاء بلاء.</li>
-                                    <li>الاغتراب: ألا تكون المرأة ذات قرابة قريبة جدًا لتجنب قطع الرحم ومشاكل الوراثة.</li>
-                                    <li>تقارب السن: مستحب لضمان الانسجام.</li>
-                                    <li>الكفاءة: تقارب الزوجين في الصفات، ويفضل تفوق الزوج.</li>
-                                </ul>
-                            </li>
-                            <li>أحكام شرعية مستنبطة:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>الحديث يدعو إلى نبذ المرأة التي لا تتوفر فيها العقيدة الصالحة.</li>
-                                    <li>مسؤولية اختيار الزوجة تقع على عاتق الرجل.</li>
-                                    <li>السعادة المطلقة لا تتوفر إلا في كون المرأة متدينة.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            4. فضل الصلاة على النبي
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الحديث: "إذا سمعتم المؤذن فقولوا مثل ما يقول، ثم صلوا علي فإنه من صلى علي صلاة صلى الله عليه بها عشراً، ثم سلوا الله لي الوسيلة فإنها درجة في الجنة لا تنبغي إلا لعبد من عباد الله، وأرجو أن أكون أنا هو، فمن سأل لي الوسيلة حلت عليه شفاعتي يوم القيامة".</li>
-                            <li>راوي الحديث: عبد الله بن عمرو بن العاص. (أنس بن مالك أيضًا روى أحاديث عن الصلاة على النبي).</li>
-                            <li>شرح الحديث:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>الترديد مع المؤذن: يُردد السامع مثل قول المؤذن، إلا في "حي على الصلاة" و "حي على الفلاح" فيقال: "لا حول ولا قوة إلا بالله".</li>
-                                    <li>فضل الصلاة على النبي: الله وملائكته يصلون على النبي. من صلى على النبي صلى الله عليه وسلم مرة، صلى الله عليه بها عشرًا. الصلاة من الله رحمة، ومن الملائكة استغفار، ومن المؤمن دعاء.</li>
-                                    <li>سؤال الوسيلة: الوسيلة درجة عالية في الجنة لا تنبغي إلا لعبد واحد، ويرجو النبي أن يكون هو. من سألها له، حلت عليه شفاعة النبي.</li>
-                                    <li>الصلاة على النبي سبب لرفع الدرجات.</li>
-                                </ul>
-                            </li>
-                            <li>ما يؤخذ من الحديث:
-                                <ul class="list-circle list-inside mt-1 text-gray-600 space-y-1 pr-4">
-                                    <li>الترديد مع المؤذن.</li>
-                                    <li>الصلاة على الرسول بعد الأذان.</li>
-                                    <li>طلب الوسيلة والفضيلة للرسول.</li>
-                                    <li>استحقاق شفاعته يوم القيامة.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
         </main>
-
-        <footer class="text-center mt-12 pt-6 border-t-2 border-gray-200 text-gray-500 text-sm">
-            <p>تم تصميم هذه الخريطة لمساعدتك في مراجعة امتحان البجروت في الإسلام.</p>
-        </footer>
     </div>
 
-    <!-- Back to Top Button -->
-    <button id="back-to-top" title="العودة للأعلى">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-        </svg>
+    <button id="back-to-top">
+        العودة للأعلى
     </button>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to generate and populate the Table of Contents
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to generate Table of Contents
             function generateTableOfContents() {
                 const tocList = document.querySelector('#table-of-contents ul');
-                const mainSections = document.querySelectorAll('.mind-map-node.level-1 > div > h2');
+                const mainSections = document.querySelectorAll('.mind-map-node.level-1 h2');
 
-                mainSections.forEach((h2, index) => {
-                    const sectionId = `section-${index + 1}`; // Ensure consistent IDs with HTML
-                    h2.closest('.mind-map-node.level-1').id = sectionId; // Set ID to the main div
-
+                mainSections.forEach((sectionTitle, index) => {
+                    const sectionId = sectionTitle.closest('.mind-map-node.level-1').id;
                     const listItem = document.createElement('li');
                     const link = document.createElement('a');
                     link.href = `#${sectionId}`;
-                    link.textContent = h2.textContent.trim(); // Get the text content of the H2
-                    link.classList.add('block', 'p-2', 'rounded-md', 'hover:bg-green-100', 'transition-colors', 'duration-200');
-
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        document.getElementById(sectionId).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    });
-
+                    link.textContent = sectionTitle.textContent.trim();
+                    link.classList.add('hover:text-green-900', 'transition-colors', 'duration-200');
                     listItem.appendChild(link);
                     tocList.appendChild(listItem);
                 });
             }
 
-            // Function to setup collapsible sections
-            window.toggleSection = function(contentId, buttonContainer) {
-                const contentDiv = document.getElementById(contentId);
-                const toggleButton = buttonContainer.querySelector('.toggle-btn');
-                if (contentDiv) {
-                    contentDiv.classList.toggle('hidden');
-                    if (contentDiv.classList.contains('hidden')) {
-                        toggleButton.textContent = '+';
-                    } else {
-                        toggleButton.textContent = '-';
-                    }
-                }
-            };
-
-            // Function to handle search functionality
+            // Function for search functionality
             function setupSearch() {
                 const searchInput = document.getElementById('search-input');
                 const searchResultsDiv = document.getElementById('search-results');
-                let highlightedElements = [];
+                const contentDiv = document.getElementById('mind-map-content');
+                let originalContent = contentDiv.innerHTML; // Store original content to restore after search
 
-                searchInput.addEventListener('input', function() {
-                    const query = this.value.trim();
-                    clearHighlights();
+                searchInput.addEventListener('input', (event) => {
+                    const searchTerm = event.target.value.trim();
                     searchResultsDiv.innerHTML = ''; // Clear previous results
+                    contentDiv.innerHTML = originalContent; // Restore original content before highlighting
 
-                    if (query.length > 0) {
-                        let matchCount = 0;
-                        const allTextElements = document.querySelectorAll('#mind-map-content p, #mind-map-content li, #mind-map-content h3, #mind-map-content h4, #mind-map-content h5');
-                        let firstMatchElement = null;
+                    if (searchTerm.length > 0) {
+                        const regex = new RegExp(`(${searchTerm})`, 'gi');
+                        let matches = 0;
 
-                        allTextElements.forEach(element => {
-                            const originalText = element.innerHTML;
-                            // Use a regular expression with the 'gi' flags for global and case-insensitive search
-                            const regex = new RegExp(`(${query})`, 'gi');
-                            if (originalText.match(regex)) {
-                                matchCount++;
-                                // Replace matches with highlighted span
-                                const newHtml = originalText.replace(regex, `<span class="highlight">$1</span>`);
-                                element.innerHTML = newHtml;
-                                highlightedElements.push(element);
+                        // Find all text nodes within the content
+                        const walker = document.createTreeWalker(contentDiv, NodeFilter.SHOW_TEXT, null, false);
+                        let node;
+                        const textNodesToProcess = [];
 
-                                if (!firstMatchElement) {
-                                    firstMatchElement = element;
+                        while ((node = walker.nextNode())) {
+                            if (node.nodeValue.trim().length > 0 && node.parentNode.tagName !== 'SCRIPT' && node.parentNode.tagName !== 'STYLE') {
+                                textNodesToProcess.push(node);
+                            }
+                        }
+
+                        textNodesToProcess.forEach(textNode => {
+                            const parentElement = textNode.parentNode;
+                            const originalText = textNode.nodeValue;
+                            const newHTML = originalText.replace(regex, (match) => {
+                                matches++;
+                                return `<span class="highlight">${match}</span>`;
+                            });
+
+                            if (newHTML !== originalText) {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = newHTML;
+                                while (tempDiv.firstChild) {
+                                    parentElement.insertBefore(tempDiv.firstChild, textNode);
                                 }
-
-                                // Add a link to the search results
-                                const resultLink = document.createElement('a');
-                                resultLink.href = `#`; // We will scroll to the parent section
-                                resultLink.classList.add('block', 'p-2', 'bg-blue-100', 'rounded-md', 'hover:bg-blue-200', 'transition-colors', 'duration-200', 'text-blue-800');
-
-                                // Find the closest main section title
-                                const closestSection = element.closest('.mind-map-node.level-1');
-                                const sectionTitle = closestSection ? closestSection.querySelector('h2').textContent.trim() : 'قسم غير معرف';
-
-                                resultLink.innerHTML = `موجود في: <span class="font-semibold">${sectionTitle}</span>: ...${element.textContent.substring(Math.max(0, element.textContent.indexOf(query) - 20), element.textContent.indexOf(query) + query.length + 50)}...`;
-
-                                resultLink.addEventListener('click', (e) => {
-                                    e.preventDefault();
-                                    clearHighlights(); // Clear highlights before new search/scroll
-                                    // Re-highlight the clicked result's section
-                                    const clickedSection = element.closest('.mind-map-node.level-1');
-                                    if (clickedSection) {
-                                        // Ensure the section is expanded
-                                        const contentDiv = clickedSection.querySelector('.content-wrapper');
-                                        const toggleBtn = clickedSection.querySelector('.toggle-btn');
-                                        if (contentDiv && contentDiv.classList.contains('hidden')) {
-                                            contentDiv.classList.remove('hidden');
-                                            if (toggleBtn) toggleBtn.textContent = '-';
-                                        }
-
-                                        // Scroll to the specific element
-                                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                        // Temporarily re-highlight the element for visual feedback
-                                        element.innerHTML = originalText.replace(regex, `<span class="highlight">$1</span>`);
-                                        highlightedElements.push(element); // Add back for clearHighlights()
-                                    }
-                                });
-                                searchResultsDiv.appendChild(resultLink);
+                                parentElement.removeChild(textNode);
                             }
                         });
 
-                        if (firstMatchElement) {
-                            firstMatchElement.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        }
-
-                        if (matchCount === 0) {
-                            searchResultsDiv.innerHTML = '<p class="text-gray-600">لا توجد نتائج مطابقة.</p>';
+                        if (matches > 0) {
+                            searchResultsDiv.innerHTML = `<p class="text-blue-700">تم العثور على ${matches} نتيجة لـ "${searchTerm}".</p>`;
+                            // Scroll to the first highlight
+                            const firstHighlight = document.querySelector('.highlight');
+                            if (firstHighlight) {
+                                firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
                         } else {
-                            const countMessage = document.createElement('p');
-                            countMessage.classList.add('text-gray-700', 'font-medium', 'mb-2');
-                            countMessage.textContent = `تم العثور على ${matchCount} نتيجة:`;
-                            searchResultsDiv.prepend(countMessage);
+                            searchResultsDiv.innerHTML = `<p class="text-red-600">لم يتم العثور على نتائج لـ "${searchTerm}".</p>`;
                         }
                     }
                 });
-
-                function clearHighlights() {
-                    highlightedElements.forEach(element => {
-                        element.innerHTML = element.textContent; // Restore original text
-                    });
-                    highlightedElements = [];
-                }
             }
 
-            // Function to setup back to top button
+            // Function for back-to-top button
             function setupBackToTopButton() {
                 const backToTopButton = document.getElementById('back-to-top');
 
                 window.addEventListener('scroll', () => {
-                    if (window.scrollY > 300) { // Show button after scrolling 300px
+                    if (window.scrollY > 300) { // Show button after scrolling down 300px
                         backToTopButton.style.display = 'block';
-                        backToTopButton.style.opacity = '1';
+                        setTimeout(() => backToTopButton.style.opacity = '1', 10); // Small delay for CSS transition
                     } else {
                         backToTopButton.style.opacity = '0';
                         // Use a timeout to hide display property after transition
@@ -1748,10 +816,37 @@
                 });
             }
 
+            // New toggle section function
+            function toggleSection(contentId, toggleButton) {
+                const contentDiv = document.getElementById(contentId);
+                const isHidden = contentDiv.classList.contains('hidden');
+
+                if (isHidden) {
+                    contentDiv.classList.remove('hidden');
+                    toggleButton.textContent = '-';
+                    toggleButton.setAttribute('aria-expanded', 'true');
+                } else {
+                    contentDiv.classList.add('hidden');
+                    toggleButton.textContent = '+';
+                    toggleButton.setAttribute('aria-expanded', 'false');
+                }
+            }
+
             // Initialize all functionalities
             generateTableOfContents();
             setupSearch();
             setupBackToTopButton();
+
+            // Setup collapsible sections using event delegation
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+            toggleHeaders.forEach(header => {
+                const toggleButton = header.querySelector('.toggle-btn');
+                const contentId = header.dataset.target; // Get target content ID from data attribute
+
+                header.addEventListener('click', () => {
+                    toggleSection(contentId, toggleButton);
+                });
+            });
 
             // Initial setup for collapsible sections (all collapsed by default)
             const mainSections = document.querySelectorAll('.mind-map-node.level-1');
@@ -1761,6 +856,7 @@
                 if (contentDiv && toggleButton) {
                     contentDiv.classList.add('hidden'); // Start hidden
                     toggleButton.textContent = '+';
+                    toggleButton.setAttribute('aria-expanded', 'false'); // Set initial ARIA state
                 }
             });
         });
