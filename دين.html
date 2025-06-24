@@ -9,112 +9,211 @@
     <style>
         body {
             font-family: 'Cairo', 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Tailwind blue-gray-100 */
-            color: #2d3748; /* Tailwind gray-800 */
+            background-color: #F5F5DC; /* Beige/Cream */
+            color: #4A4A4A; /* Dark Gray for main text */
             direction: rtl; /* Right-to-left for Arabic */
-        }
-        .container {
-            max-width: 1024px; /* Slightly wider for mind map feel */
+            overflow-x: hidden; /* Prevent horizontal scroll for now */
         }
         h1, h2, h3, h4, h5 {
             font-family: 'Cairo', sans-serif;
+            color: #2E8B57; /* Sea Green for headings */
         }
 
-        /* Mind Map Styling */
-        .mind-map-node {
-            background-color: #ffffff;
-            border-radius: 1rem; /* More rounded corners */
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1.5rem;
+        /* --- Mind Map Specific Styles --- */
+        .mind-map-container {
             position: relative;
-            border: 1px solid #e2e8f0; /* Subtle border */
+            width: 100%;
+            min-height: 1200px; /* Adjust based on content distribution */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 4rem 1rem;
+            box-sizing: border-box;
         }
 
-        .mind-map-node.level-1 {
-            background-color: #e0f2f7; /* Light teal for main topics */
-            border: 2px solid #2bc9f3;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        .central-node {
+            background-color: #2E8B57; /* Sea Green */
+            color: white;
+            border-radius: 9999px; /* Fully rounded/Pill shape */
+            padding: 2rem;
+            text-align: center;
+            font-size: 2rem; /* Slightly larger */
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* Deeper shadow */
+            z-index: 20;
+            position: relative;
+            margin-bottom: 3.5rem; /* More space for branches */
+            width: fit-content;
+            min-width: 280px; /* Ensure it's not too small */
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .central-node:hover {
+            transform: scale(1.05); /* More pronounced scale */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35); /* Stronger shadow on hover */
         }
 
-        .mind-map-node.level-2 {
-            background-color: #f7fafc; /* Lighter background for sub-topics */
-            margin-right: 2.5rem; /* Indent for visual hierarchy */
-            border-left: 4px solid #99c2ff; /* Blue line indicating connection */
-            padding-right: 1.5rem;
+        .main-branch-wrapper {
+            display: flex;
+            flex-wrap: wrap; /* Allows branches to wrap on smaller screens */
+            justify-content: center;
+            gap: 4rem 6rem; /* Increased gap for better visual separation */
+            position: relative;
+            width: 100%; /* Occupy full width */
         }
 
-        .mind-map-node.level-3 {
-            background-color: #ffffff;
-            margin-right: 4rem; /* Further indent */
-            border-left: 2px solid #a3bffa; /* Lighter blue line */
-            padding-right: 1.25rem;
-        }
-
-        /* For the "connection lines" (visual effect, not actual SVG lines) */
-        .mind-map-node.level-1 > .flex::before,
-        .mind-map-node.level-2::before {
-            content: '';
-            position: absolute;
-            top: 2rem; /* Adjust as needed */
-            right: -2rem; /* Position to the left for RTL */
-            width: 2rem; /* Length of the horizontal line */
-            height: 2px;
-            background-color: #99c2ff; /* Color of the line */
+        .main-topic-node {
+            background-color: #D4EDDA; /* Light Green */
+            border: 2px solid #2E8B57; /* Sea Green border */
+            border-radius: 1.5rem; /* More rounded corners */
+            padding: 1.75rem; /* Slightly more padding */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18); /* Stronger shadow */
+            position: relative;
             z-index: 10;
+            width: 350px; /* Wider for better content fit */
+            flex-shrink: 0; /* Prevent shrinking */
+            margin-top: 4.5rem; /* More space from above for branches */
+            transition: all 0.3s ease-in-out;
+            transform-origin: top center;
         }
-        .mind-map-node.level-1 > .flex::before {
-            background-color: #2bc9f3; /* Main topic line color */
+        .main-topic-node:hover {
+            transform: translateY(-10px) scale(1.03); /* More pronounced lift and scale */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
         }
+
+        .sub-topic-node {
+            background-color: #F0FFF0; /* Honeydew - very light green */
+            border: 1px solid #8BC34A; /* Light Green accent */
+            border-radius: 1rem; /* More rounded corners */
+            padding: 1.25rem; /* Slightly more padding */
+            margin-top: 1.25rem; /* More space from parent */
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12); /* Slightly stronger shadow */
+            position: relative;
+            transition: all 0.2s ease-in-out;
+        }
+        .sub-topic-node:hover {
+            transform: translateX(10px); /* More pronounced slide */
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.18); /* Stronger shadow on hover */
+        }
+
+        /* Branching Lines - Adjusting colors to new palette */
+        .main-topic-node::before {
+            background-color: #2E8B57; /* Main topic branch color (Sea Green) */
+        }
+
+        .sub-topic-node::before {
+            background-color: #8BC34A; /* Sub-topic branch color (Light Green accent) */
+        }
+
+        /* Search & TOC */
+        .search-toc-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem; /* Increased gap */
+            width: 100%;
+            max-width: 1024px;
+            margin-top: 3rem; /* More margin */
+            padding: 1.5rem; /* More padding */
+            box-sizing: border-box;
+            background-color: #F8F8F8; /* Light Gray */
+            border-radius: 1.5rem; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+        }
+        @media (min-width: 1024px) {
+            .search-toc-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+        }
+
+        /* Header styling */
+        header h1 {
+            background-color: #B2DFDB; /* Light Teal */
+            border-color: #00695C; /* Darker Teal */
+            color: #00695C; /* Darker Teal */
+        }
+
+        /* Search Section */
+        .search-toc-wrapper > div:first-child { /* Targets the search div */
+            background-color: #E8F5E9; /* Very light green for search background */
+            border-color: #A5D6A7; /* Light Green border */
+        }
+        .search-toc-wrapper label {
+            color: #388E3C; /* Deeper Green for label */
+        }
+        .search-toc-wrapper input {
+            border-color: #A5D6A7; /* Light Green for input border */
+            color: #4A4A4A; /* Dark Gray for input text */
+        }
+        .search-toc-wrapper input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5); /* Green focus ring */
+            border-color: #4CAF50;
+        }
+
+        /* Table of Contents */
+        nav#table-of-contents {
+            background-color: #E0F2F7; /* Another light teal */
+            border-color: #4CAF50; /* Green border */
+        }
+        nav#table-of-contents h2 {
+            color: #388E3C; /* Deeper Green for TOC heading */
+        }
+        nav#table-of-contents ul li a {
+            color: #4CAF50; /* Green for links */
+        }
+        nav#table-of-contents ul li a:hover {
+            color: #2E7D32; /* Darker green on hover */
+        }
+
 
         /* Highlight for search */
         .highlight {
-            background-color: #ffe082; /* Light yellow for highlighting */
-            padding: 0 0.2rem;
-            border-radius: 0.25rem;
+            background-color: #FFECB3; /* Lighter yellow for highlighting */
+            color: #4A4A4A; /* Keep text color */
         }
 
-        /* Scrollbar styles */
+        /* Scrollbar styles (unchanged, but confirming for completeness) */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #e0e0e0;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #888;
+            background: #8BC34A; /* Light Green accent */
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+            background: #689F38; /* Darker green on hover */
         }
 
         /* Back to top button */
         #back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem; /* Position on the left for RTL content */
-            background-color: #2bc9f3;
+            background-color: #4CAF50; /* Green */
             color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 9999px; /* Fully rounded */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: none; /* Hidden by default */
-            cursor: pointer;
-            z-index: 1000;
-            transition: opacity 0.3s ease-in-out;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+            transition: opacity 0.3s ease-in-out, background-color 0.2s ease-in-out;
         }
         #back-to-top:hover {
-            background-color: #22a7d2;
+            background-color: #388E3C; /* Darker green on hover */
+        }
+
+        /* Footer */
+        footer {
+            border-color: #D4EDDA; /* Light green border for footer */
+            color: #616161; /* Medium Gray for footer text */
         }
     </style>
 </head>
 <body class="p-4 sm:p-6 lg:p-8">
     <div class="container mx-auto bg-white shadow-xl rounded-2xl p-6 sm:p-8 lg:p-10 my-8">
         <header class="text-center mb-10">
-            <h1 class="text-4xl sm:text-5xl font-bold text-teal-800 mb-4 rounded-xl p-4 bg-teal-100 border-b-4 border-teal-300">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-4 rounded-xl p-4 border-b-4">
                 خريطة مفاهيم امتحان البجروت في الإسلام
             </h1>
             <p class="text-lg sm:text-xl text-gray-700">
@@ -122,591 +221,1521 @@
             </p>
         </header>
 
-        <div class="mb-8 p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200">
-            <label for="search-input" class="block text-lg font-semibold text-blue-800 mb-2">البحث في الخريطة:</label>
-            <input type="text" id="search-input" placeholder="ادخل كلمة للبحث عنها..." class="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-right">
-            <div id="search-results" class="mt-4 space-y-2"></div>
+        <div class="search-toc-wrapper">
+            <!-- Search Section -->
+            <div class="mb-8 p-4 rounded-lg shadow-sm border w-full lg:w-1/2">
+                <label for="search-input" class="block text-lg font-semibold mb-2">البحث في الخريطة:</label>
+                <input type="text" id="search-input" placeholder="ادخل كلمة للبحث عنها..." class="w-full p-3 border rounded-lg focus:ring-2 text-right">
+                <div id="search-results" class="mt-4 space-y-2"></div>
+            </div>
+
+            <!-- Table of Contents -->
+            <nav id="table-of-contents" class="mb-8 p-4 rounded-lg shadow-sm border w-full lg:w-1/2 lg:sticky lg:top-0 lg:z-50">
+                <h2 class="text-2xl font-bold mb-4">فهرس المحتويات</h2>
+                <ul class="list-none space-y-2 text-lg">
+                    <!-- Links will be generated here by JavaScript -->
+                </ul>
+            </nav>
         </div>
 
-        <nav id="table-of-contents" class="mb-8 p-4 bg-green-50 rounded-lg shadow-sm border border-green-200 sticky top-0 z-50">
-            <h2 class="text-2xl font-bold text-green-800 mb-4">فهرس المحتويات</h2>
-            <ul class="list-none space-y-2 text-lg text-green-700">
-                </ul>
-        </nav>
-
-        <main id="mind-map-content" class="space-y-8">
-            <div id="section-1" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-1-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        1. أحداث القيامة
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-1-content">+</button>
-                </div>
-                <div id="section-1-content" class="content-wrapper space-y-6 mt-4">
-                    <p class="text-gray-700 leading-relaxed">
-                        يوم القيامة هو اليوم الذي يبعث الله فيه الخلائق للحساب والجزاء، وقد سُمي بذلك لأنه لا يوم بعده.
-                    </p>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            ما يسبق البعث
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>النفخة الأولى (نفخة الصعق): يموت كل من في السموات والأرض إلا من شاء الله أن يبقى.</li>
-                            <li>النفخة الثانية (نفخة البعث): صيحة عظيمة توقظ الأموات ليقوموا لرب العالمين حفاة عراة غرلاً غير مختونين، ويُبعثون على ما ماتوا عليه.</li>
-                            <li>المقدار بين النفختين: أربعون (قيل يومًا، قيل شهرًا، قيل سنة).</li>
-                            <li>زمن النفخ: يكون يوم الجمعة.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            تعريف البعث
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: الإرسال أو الإثارة أو الإحياء.</li>
-                            <li>اصطلاحًا: إحياء الموتى حين يُنفخ في الصور النفخة الثانية، فيقوم الناس لرب العالمين حفاة عراة غرلاً.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            كيف يبعث الخلق؟
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>ينزل من السماء قبل النفخة الثانية ماء كالطل أو الظل تنبت منه أجساد الناس.</li>
-                            <li>يبلى جسد الإنسان كله في القبر إلا عجب الذنب، فمنه يركب الخلق يوم القيامة.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            صفة البعث
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>يُبعث الناس من قبورهم عراة حفاة غير مختونين.</li>
-                            <li>يُبعث المحرم مُلبّيًا، والشهيد وجرحه يثغب دمًا (اللون لون الدم، والريح ريح المسك).</li>
-                            <li>أول من تنشق الأرض عنه: النبي محمد صلى الله عليه وسلم.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            خواص الإنسان يوم البعث
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>يخلق خلقًا جديدًا.</li>
-                            <li>لا يموت مهما أصيب أو عُذّب.</li>
-                            <li>يستطيع رؤية الملائكة والجن.</li>
-                        </ul>
-                    </div>
-                </div>
+        <main id="mind-map-content" class="mind-map-container">
+            <!-- Central Node -->
+            <div class="central-node">
+                العلوم الإسلامية: <br> دراسة ومراجعة
             </div>
 
-            <div id="section-2" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-2-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        2. يوم الحشر
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-2-content">+</button>
-                </div>
-                <div id="section-2-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            معنى الحشر
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: الجمع.</li>
-                            <li>اصطلاحًا: جمع الخلائق إلى أرض المحشر للعرض على الله والحساب.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            صفة أرض المحشر
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            أرض بيضاء تميل إلى الحمرة، لا علامة فيها، أو بناء أو أثر.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الذين يحشرون إلى أرض المحشر
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الثقلان (الإنس والجن).</li>
-                            <li>البهائم والوحوش.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            صفة حشر الناس
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>يحشر الناس حفاة، عراة، غرلاً.</li>
-                            <li>الأمر أشد من أن يهمّهم النظر بعضهم إلى بعض.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أهوال يوم الحشر
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>يود الكافر أن له ملك ما في الأرض ليفتدي به.</li>
-                            <li>يحسب الناس من هول ذلك اليوم أنهم سكارى، وما هم بسكارى.</li>
-                            <li>تدنو الشمس من الرؤوس، ويرتفع العرق (يتفاوت مقداره حسب الأعمال).</li>
-                            <li>يفر المرء من أخيه، والولد من والديه، والزوج من زوجته، والكل يقول: نفسي نفسي.</li>
-                            <li>يطول ذلك اليوم، فيظنون أنهم ما لبثوا إلا ساعة.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            كرامة المؤمن في أرض المحشر
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            يُخفف طول يوم المحشر عن المؤمن.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <div class="main-branch-wrapper">
+                <!-- Main Topics will be distributed here -->
 
-            <div id="section-3" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-3-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        3. العرض والحساب
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-3-content">+</button>
-                </div>
-                <div id="section-3-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            معنى العرض والحساب
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>العرض لغةً: الإبراز والظهور.</li>
-                            <li>العرض اصطلاحًا: بروز الخلائق وعرضهم على ربهم في الموقف.</li>
-                            <li>الحساب لغةً: العد.</li>
-                            <li>الحساب اصطلاحًا: تعريف الله الخلائق بمقادير الجزاء على أعمالهم، وتذكيرهم بما نسوه.</li>
-                        </ul>
+                <!-- 1. أحداث القيامة -->
+                <div id="section-1" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-1-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            1. أحداث القيامة
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-1-content">+</button>
                     </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الفهم الصحيح للعرض والحساب (نوعان)
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>حساب عرض: يخص المؤمن، يُسأل عن عمله وعلمه ونعم الله عليه، ويعرف ذنوبه ويعترف بها، فيسترها الله عليه ويغفرها، ويُعطى كتابه بيمينه، ويدخل الجنة. (يُعرف بالحساب اليسير).</li>
-                            <li>الحساب: يخص الكفار وعصاة الموحدين، وقد يطول حسب كثرة الذنوب.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            مدة يوم الحساب
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            قد يظن البعض أنه يوم واحد، لكنه يعد بآلاف السنين.
+                    <div id="section-1-content" class="content-wrapper space-y-4 mt-3">
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            يوم القيامة هو اليوم الذي يبعث الله فيه الخلائق للحساب والجزاء. سمي بذلك لأنه لا يوم بعده، حيث يستقر أهل الجنة في الجنة أبداً، وأهل النار في النار. وقد أخفى الله وقته عن جميع خلقه، وهو الركن الخامس من أركان الإيمان.
                         </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            من يدخل الجنة بغير حساب
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            سبعون ألفًا من أمة محمد صلى الله عليه وسلم.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            مناقشة الحساب
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            من نُوقش الحساب هلك أو عُذّب.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الأمور التي يُسأل عنها العبد
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الصلاة، الحواس وكيف استثمرت، الدين، الحقوق والمظالم.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            كيفية النجاة
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            محاسبة النفس في الدنيا قبل أن تُحاسب.
-                        </p>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                ما يسبق البعث
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>النفخة الأولى (نفخة الصعق/الموت): هي النفخة التي يموت بها كل من في السموات والأرض، إلا من شاء الله أن يبقى.</li>
+                                <li>النفخة الثانية (نفخة البعث/القيام من القبور): هي صيحة عظيمة توقظ جميع الأموات، ثم يحشرون بعدها إلى أرض المحشر.</li>
+                                <li>المسافة بين النفختين: تكون أربعون، وقد بيّن النبي صلى الله عليه وسلم أنها أربعون (سنة، شهراً، يوماً - لم يحدد الراوي أيها).</li>
+                                <li>زمن النفخ: يكون يوم الجمعة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تعريف البعث
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: الإرسال أو الإثارة أو الإحياء.</li>
+                                <li>اصطلاحاً: إحياء الموتى حين يُنفخ في الصور النفخة الثانية، فيقوم الناس لرب العالمين حفاة عراة غُرلاً (غير مختونين)، ويبعثون على ما ماتوا عليه. وقد أجمعت الأمة على أن البعث واقع لا محالة.</li>
+                            </ul>
+                            <p class="text-gray-700 text-sm leading-relaxed mt-1">
+                                فهم واستنتاج: يبعث الإنسان على ما مات عليه؛ فمن مات مسلماً بعث مسلماً، ومن مات كافراً بعث على ذلك.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                كيف يُبعث الخلق؟
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>ينزل ماء من السماء قبل النفخة الثانية، فينبت منه أجساد الناس.</li>
+                                <li>جسد الإنسان كله يبلى في القبر إلا عجب الذنب (طرف العصعص)، فمنه يركب الخلق يوم القيامة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                صفة البعث
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>يُبعث الناس من قبورهم عراة حفاة غير مختونين.</li>
+                                <li>يُبعث المحرم ملبياً، ويبعث الشهيد وجرحه ينزل دماً (اللون لون الدم، والرائحة ريح المسك).</li>
+                                <li>أول من تنشق الأرض عنه يوم القيامة: النبي محمد صلى الله عليه وسلم، فهو سيد ولد آدم يوم القيامة، وأول من تنشق الأرض عنه، وأول شافع.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                خواص الإنسان يوم البعث
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لا يموت مهما أُصيب أو عُذِّب.</li>
+                                <li>يستطيع رؤية الملائكة والجن.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="section-4" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-4-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        4. الميزان
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-4-content">+</button>
+                <!-- 2. يوم الحشر -->
+                <div id="section-2" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-2-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            2. يوم الحشر
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-2-content">+</button>
+                    </div>
+                    <div id="section-2-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                معنى الحشر
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: الجمع.</li>
+                                <li>اصطلاحاً: جمع الخلائق إلى أرض المحشر، للعرض على الله تعالى، والح حساب بين يديه.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                صفة أرض المحشر
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                هي أرض بيضاء تميل إلى الحمرة، لا علامة فيها، أو بناء أو أثر.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الذين يُحشرون إلى أرض المحشر
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الثقلان: الإنس والجن.</li>
+                                <li>البهائم والوحوش.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                صفة حشر الناس
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>يُحشر الناس حفاة، عراة، غُرلاً. وعند سؤال عائشة رضي الله عنها عن نظر الرجال والنساء لبعضهم، أجاب النبي صلى الله عليه وسلم أن الأمر أشد من أن يُهِمَّهم ذلك.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أهوال يوم الحشر
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>يود الكافر أن له ملك ما في الأرض لِيَفتدي به من سوء العذاب.</li>
+                                <li>يُحسب الناس من هول ذلك اليوم سكارى، وما هم بسكارى.</li>
+                                <li>تدنو الشمس من الرؤوس، ويرتفع العرق، فيكون الناس في العرق على قدر أعمالهم؛ فمنهم من يكون العرق إلى كعبيه، ومنهم إلى ركبتيه، ومنهم إلى حقويه، ومنهم من يلجمه العرق إلجاماً.</li>
+                                <li>يفر المرء من أخيه، والولد من والديه، والزوج من زوجته، والكل يقول: نفسي نفسي.</li>
+                                <li>يُطوّل ذلك اليوم، ولذلك يظن الناس أنهم ما لبثوا إلا ساعة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                كرامة المؤمن في أرض المحشر
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                يُخفف طول يوم المحشر عن المؤمن حتى يكون عليه أخف من صلاة مكتوبة يصليها في الدنيا.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div id="section-4-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            تعريف الميزان
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: مأخوذ من وزن، للدلالة على التعديل والاستقامة، أو بيان قدر الشيء وقيمته.</li>
-                            <li>اصطلاحًا: ميزان حقيقي له لسان وكفّتان، توزن فيه أعمال العباد من الخير والشر.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الاعتقاد بالميزان
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            الأمة أجمعت على أنه ميزان حقيقي ذو كفتين ولسان.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            آراء الفقهاء في ماهية الميزان (وحدته وتعدده)
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>المذهب الأول (تعدد الميزان): لكل أحد ميزان على حدة، وقد يكون لأفعال القلوب وأفعال الجوارح.</li>
-                            <li>المذهب الثاني (وحدة الميزان): لكل فرد ميزان خاص به، أو لكل عمل ميزان خاص.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
-            <div id="section-5" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-5-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        5. الحوض
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-5-content">+</button>
-                </div>
-                <div id="section-5-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            معنى الحوض
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: مجمع الماء.</li>
-                            <li>اصطلاحًا: ما جاء به الخبر من أن لنبينا محمد حوضًا ترده أمته يوم القيامة، جعله الله غياثًا لهم.</li>
-                        </ul>
+                <!-- 3. العرض والحساب -->
+                <div id="section-3" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-3-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            3. العرض والحساب
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-3-content">+</button>
                     </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            الفرق بين الحوض والكوثر
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الكوثر: نهر أعده الله لنبيه في الجنة.</li>
-                            <li>الحوض: مجمع الماء في أرض المحشر، وماؤه مستمد من الكوثر.</li>
-                            <li>الكوثر أصل (نهر عظيم جاري)، والحوض فرع (مجمع ماء يصب فيه الكوثر بميزابين).</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            صفة حوض النبي صلى الله عليه وسلم
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>اللون: أبيض من اللبن وأبيض من الورق (الفضة).</li>
-                            <li>السعة: مسيرة شهر.</li>
-                            <li>الطعم: أحلى من العسل.</li>
-                            <li>أثره على الشارب: من شرب منه لا يظمأ بعدها أبدًا.</li>
-                            <li>الرائحة: أطيب من ريح المسك.</li>
-                            <li>المصدر: من الجنة.</li>
-                            <li>مساره: يصب فيه ميزابان من الجنة (أحدهما من ذهب، والآخر من فضة).</li>
-                            <li>آنيته: كنجوم السماء في العدد والنور واللمعان.</li>
-                            <li>الطول والعرض: كما بين صنعاء وأيلة، وعرضه كطوله.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أول زمرة ترد وتشرب من الحوض
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>فقراء المهاجرين.</li>
-                            <li>أهل اليمن.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            من يشرف بالشراب من حوض النبي صلى الله عليه وسلم
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            كل من آمن به ومات على ذلك.
+                    <div id="section-3-content" class="content-wrapper space-y-4 mt-3">
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            يهتم المؤمن بسوء الحساب فيعد له في الدنيا ويحاسب نفسه قبل أن يحاسب.
                         </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            المطرودون عن حوض النبي صلى الله عليه وسلم
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            كل من ارتد عن دين الله، أو أحدث فيه ما لا يرضاه الله.
-                        </p>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                معنى العرض والحساب
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>العرض لغةً: الإبراز والظهور.</li>
+                                <li>العرض اصطلاحاً: بروز الخلائق وعرضهم على ربهم في الموقف.</li>
+                                <li>الحساب لغةً: العد.</li>
+                                <li>الحساب اصطلاحاً: تعريف الله الخلائق مقادير الجزاء على أعمالهم، وتذكيرهم بما قد نسوه.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الفهم الصحيح للعرض والحساب
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>حساب عرض: خاص بالمؤمن، يُسأل عن عمله وعلمه ونعم الله عليه، ويثبّته الله، ويجيب، وإن عُرضت عليه ذنوبه فإنه يعترف بها، ويسترها الله عليه ولا يفضحه، ثم يغفرها له، ويُعطى كتابه بيمينه، ويدخل الجنة. يعرف هذا بـ الحساب اليسير.</li>
+                                <li>الحساب: خاص بالكفار وعصاة الموحدين (كالقاتل والزاني والمرابي)، وقد يطول حسابهم ويعسر بحسب كثرة ذنوبهم. فمنهم من يُخلد في النار (الكفار)، ومنهم من يدخل النار إلى أمد ثم يخرج ويدخل الجنة (العصاة الموحدون).</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                مدة يوم الحساب
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                قد يظن البعض أنه يوم واحد لأنه يُعرف بـ"يوم الحساب"، ولكنها تسمية مجازية، بل يمتد لآلاف السنين.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الذين يدخلون الجنة بغير حساب
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                يدخل من أمة محمد صلى الله عليه وسلم سبعون ألفاً إلى الجنة بغير حساب، وهم الذين لا يَسترقون، ولا يتطيرون، ولا يَكتوون، وعلى ربهم يتوكلون.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                مناقشة الحساب
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                من يناقش الحساب فقد استحق العذاب، أو هلك.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الأمور التي يُسأل عنها العبد يوم الحساب
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الصلاة، الحواس وكيف استثمرت، الدين، الحقوق والمظالم.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                كيفية النجاة
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                محاسبة النفس في الدنيا.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="section-6" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-6-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        6. الصراط المستقيم
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-6-content">+</button>
-                </div>
-                <div id="section-6-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            معنى الصراط المستقيم
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: الطريق.</li>
-                            <li>اصطلاحًا: الجسر الممدود على جهنم، ليعبر الناس عليه إلى الجنة.</li>
-                        </ul>
+                <!-- 4. الميزان -->
+                <div id="section-4" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-4-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            4. الميزان
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-4-content">+</button>
                     </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            مشروعيته
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            ثابت بالكتاب والسنة وإجماع الأمة.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            المارون على الصراط
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            كل مسلم يمر عليه، بينما الكفار والمشركون يدخلون جهنم قبل نصب الصراط.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            هيئة الصراط ووصفه
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>دامس شديد الظلمة.</li>
-                            <li>تحته نار سوداء مظلمة.</li>
-                            <li>يُسمع فيه أصوات الصراخ والعويل.</li>
-                            <li>كل واحد يحمل على ظهره ذنوبه.</li>
-                            <li>أدق وأرفع من الشعرة.</li>
-                            <li>أحدّ من السيف.</li>
-                            <li>على حافتيه شوك مدبب صلب، من حديد وكلاليب.</li>
-                            <li>تزل فيه الأقدام، ولا تستقر.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            مشهد عبور الناس
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            يتفاوت المارون حسب أعمالهم (كالبرق، كالريح، كالطير، شد الرجال، أو زحفًا).
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أول من يعبر الصراط
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            من الأنبياء محمد صلى الله عليه وسلم، ومن الأمم أمته.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            النور الذي يُعطى لأهل الصراط
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            يُعطون من النور ما يناسب أحوالهم وبه يكون المرور.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            ما بعد الصراط (القنطرة)
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>إذا خلص المؤمنون من الصراط، يُحبسون على قنطرة بين الجنة والنار، يتقاصون مظالم كانت بينهم.</li>
-                            <li>القنطرة هي الصراط الخاص بتنقية المؤمنين من الذنوب المتعلقة بالعباد حتى يدخلوا الجنة بلا غل ولا حسد.</li>
-                        </ul>
+                    <div id="section-4-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تعريف الميزان
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: مأخوذ من وزن، للدلالة على التعديل والاستقامة، أو بيان قدر الشيء وقيمته.</li>
+                                <li>اصطلاحاً: ميزان حقيقي له لسان وكفتان، توزن فيه أعمال العباد من الخير والشر.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الاعتقاد بالميزان
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                هو ميزان حقيقي ذو كفتين ولسان، وقد بلغت أحاديثه مبلغ التواتر وأجمع أهل الحق عليه.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                آراء الفقهاء في وحدة الميزان وتعدده
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>القائلون بتعدد الميزان: الأظهر أن هناك موازين يوم القيامة، فقد يكون لكل أحد ميزان على حدة، أو ميزان لأفعال القلوب وميزان لأفعال الجوارح.</li>
+                                <li>القائلون بوحدة الميزان: ذهبوا إلى أن لكل فرد ميزاناً خاصاً به، أو لكل عمل ميزان.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="section-7" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-7-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        7. الجنة ونعيمها
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-7-content">+</button>
-                </div>
-                <div id="section-7-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            تعريف الجنة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>لغةً: البستان العظيم الذي يستر ما بداخله.</li>
-                            <li>اصطلاحًا: دار الخلود والكرامة التي أعدها الله لعباده المؤمنين.</li>
-                        </ul>
-                        <p class="text-gray-700 leading-relaxed mt-2">
-                            الجنة هي دار الخلود والكرامة التي أعدها الله لعباده المؤمنين، فيها ما لا عين رأت، ولا أذن سمعت، ولا خطر على قلب بشر.
-                        </p>
+                <!-- 5. الحوض -->
+                <div id="section-5" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-5-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            5. الحوض
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-5-content">+</button>
                     </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أنواع الجنة (أسمائها)
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الحسنى.</li>
-                            <li>دار السلام.</li>
-                            <li>جنات عدن.</li>
-                            <li>جنة المأوى.</li>
-                            <li>جنات النعيم.</li>
-                            <li>دار المتقين.</li>
-                            <li>جنات الفردوس.</li>
-                            <li>جنة الخلد.</li>
-                            <li>الغرفة.</li>
-                            <li>دار المقامة.</li>
-                            <li>دار القرار.</li>
-                            <li>عليون (أعلى وأفضل الجنات).</li>
-                        </ul>
-                        <p class="text-gray-700 leading-relaxed mt-2">
-                            كل ما وصف في الجنة إنما هو للتقريب العقلي.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            طعام أهل الجنة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>ليس لطعام أهل الجنة أثر بعد أكله (لا يبصقون، لا يتمخطون، لا يتغوطون، لا يبولون، وحاجتهم جشاء ورشح كالمسك).</li>
-                            <li>فواكهها وثمارها في متناول أيديهم متى شاءوا.</li>
-                            <li>كل ما فيها مباح وموجود على مدار الوقت.</li>
-                            <li>من أنواع الفاكهة المذكورة: التين، العنب، الرمان، الطلح (الموز)، البلح (النخيل)، السدر (النبق).</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            لباس أهل الجنة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>الحرير، الذهب، السندس، الإستبرق.</li>
-                            <li>فرشهم بطائنها من إستبرق.</li>
-                            <li>أسرتهم مرفوعة (الأرائك).</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أنهار الجنة وبحارها
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>رأى النبي في الإسراء أربعة أنهار (اثنان باطنان في الجنة، واثنان ظاهران: النيل والفرات).</li>
-                            <li>الكوثر (نهر أعطاه الله لرسوله).</li>
-                            <li>بحار الجنة (ماء، لبن، خمر، عسل).</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            صفات نساء أهل الجنة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>جمعهن جمال خلقي وخلُقي.</li>
-                            <li>مطهرات من الحيض والنفاس وسائر العيوب.</li>
-                            <li>حور (بيض)، عيونهن ضخام.</li>
-                            <li>رقهن كرقة الجلد، في صفائهن كأنهن الياقوت ومرجان.</li>
-                            <li>أتراب (في سن واحدة، كلهن صغار).</li>
-                            <li>لا يوجد بينهن تباغض ولا تحاسد.</li>
-                            <li>أبكار لم يتزوجن قبل ذلك.</li>
-                        </ul>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أعلى نعيم في الجنة
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            رؤية الله عز وجل، ومناجاته، والفوز برضاه.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أدنى أهل الجنة منزلة وأعلى أهل الجنة منزلة
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>أدناهم: رجل يدخل الجنة بعد أهلها، فيُقال له: لك مثل ملك ملك من ملوك الدنيا وعشرة أمثاله، وله ما اشتهت نفسه ولذت عينه.</li>
-                            <li>أعلاهم: أولئك الذين أردت غرس كرامتهم بيدي وختمت عليها، فلا لم تر عين، ولم تسمع أذن، ولم يخطر على قلب بشر.</li>
-                        </ul>
+                    <div id="section-5-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                معنى الحوض
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: مجمع الماء، وجمعه حياض وأحواض.</li>
+                                <li>اصطلاحاً: ما جاء به الخبر من أن لنبينا محمد صلى الله عليه وسلم حوضاً ترد عليه أمته يوم القيامة، جعله الله غياثاً لهم وإكراماً لنبينا محمد.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الفرق بين الحوض والكوثر
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الكوثر: هو النهر الذي أعده الله لنبيه في الجنة.</li>
+                                <li>الحوض: هو مجمع الماء في أرض المحشر، وماؤه مستمد من الكوثر.</li>
+                                <li>الكوثر أصل، وهو نهر جار عظيم، والحوض فرع منه يصب فيه بميزابين.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                صفة حوض النبي صلى الله عليه وسلم
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>اللون: أبيض من اللبن وأبيض من الفضة.</li>
+                                <li>السعة: مسيرة شهر.</li>
+                                <li>الطعم: أحلى من العسل.</li>
+                                <li>أثره على الشارب: من شرب منه لا يظمأ بعدها أبداً.</li>
+                                <li>الرائحة: أطيب من ريح المسك.</li>
+                                <li>المصدر: من الجنة.</li>
+                                <li>مساربه: ميزابان من الجنة، أحدهما من ذهب والآخر من فضة.</li>
+                                <li>آنيته: كنجوم السماء في العدد والنور واللمعان.</li>
+                                <li>الطول والعرض: بعد ما بين طرفيه طولاً كما بين صنعاء وأيلة، وعرضه كطوله.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أول زمرة ترد وتشرب من الحوض
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>صنفان من الناس:</li>
+                                <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                    <li>الفقراء المهاجرون: الشُّعثُ الرُّءوسِ، الدُّنسُ الثِّيابِ، الذين لا ينكحون المتنعّمات ولا تُفتح لهم أبواب السُّدد.</li>
+                                    <li>أهل اليمن.</li>
+                                </ul>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                شرف الشرب من حوض النبي صلى الله عليه وسلم
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                كل من آمن ومات على ذلك يشرب منه، ومن شرب لا يظمأ أبداً.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                المطرودون عن حوض النبي صلى الله عليه وسلم
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                كل من ارتد عن دين الله، أو أحدث فيه ما لا يرضاه ولم يأذن به الله، فهو من المطرودين عنه.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="section-8" class="mind-map-node level-1">
-                <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-8-content">
-                    <h2 class="text-3xl font-bold text-teal-800 border-b-2 border-teal-300 pb-2 flex-grow">
-                        8. سورة الفاتحة وشرحها
-                    </h2>
-                    <button class="toggle-btn text-2xl font-bold text-teal-600 w-8 h-8 rounded-full bg-teal-200 hover:bg-teal-300 focus:outline-none flex items-center justify-center" aria-expanded="false" aria-controls="section-8-content">+</button>
+                <!-- 6. الصراط المستقيم -->
+                <div id="section-6" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-6-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            6. الصراط المستقيم
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-6-content">+</button>
+                    </div>
+                    <div id="section-6-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                معنى الصراط
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: الطريق.</li>
+                                <li>اصطلاحاً: الجسر الممدود على جهنم، ليعبر الناس عليه إلى الجنة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                مشروعيته
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                ثبتت بالكتاب والسنة والإجماع. أجمع أهل السنة والجماعة على إثبات الصراط.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                المارّون على الصراط
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                كل مسلم لا بد أن يمر على الصراط، أما الكفار والمشركون فإنهم يدخلون جهنم قبل نصب الصراط.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                هيئة الصراط ووصفه
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>دامس شديد الظلمة.</li>
+                                <li>تحته نار سوداء مظلمة.</li>
+                                <li>يُسمع فيه أصوات الصراخ والعويل.</li>
+                                <li>كل واحد من الخلق يحمل على ظهره ذنوبه.</li>
+                                <li>أدق وأرفع من الشعرة.</li>
+                                <li>أحدّ من السيف.</li>
+                                <li>على حافتيه شوك مدبب صلب من حديد وكلاليب.</li>
+                                <li>تزل فيه الأقدام، ولا تستقر.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                مشهد عبور الناس على الصراط
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                يتفاوت المارون تفاوتاً عظيماً، كل حسب عمله:
+                            </p>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>منهم من يمر كالبرق.</li>
+                                <li>منهم من يمر كالريح.</li>
+                                <li>منهم من يمر كالطير.</li>
+                                <li>منهم من يشد كشد الرجال.</li>
+                                <li>منهم من يزحف زحفاً كالبقرة.</li>
+                                <li>على حافتيه كلاليب معلقة مأمورة تأخذ من أُمرت به، فمخدوش ناجٍ ومكدوس في النار.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أول من يعبر الصراط
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                من الأنبياء محمد صلى الله عليه وسلم، ومن الأمم أمته.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                النور الذي يعطى لأهل الصراط
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                ينصب الصراط لأتباع الرسل من المؤمنين، ويُلقى عليهم الظلمة، ثم يُعطون من النور ما يناسب أحوالهم، وبه يكون المرور على الصراط. يتفاوت نورهم؛ فمنهم من يُعطى نوراً مثل الجبل، ومنهم مثل النخلة، ومنهم من يرى نوره بيمينه، ومنهم من يُعطى نوره على إبهام قدمه، يضيء مرة ويطفئ مرة.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                ما بعد الصراط
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                إذا خلص المؤمنون من الصراط، يُحبسون على قنطرة (جسر آخر) بين الجنة والنار، يتقاضون مظالم كانت بينهم. هؤلاء لا يرجع أحد منهم إلى النار، لأن مقاصتهم لا تستنفذ حسناتهم، بل تُبقي لهم ما يدخلهم الجنة.
+                            </p>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>القنطرة: هي الصراط الخاص بتنقية المؤمنين من الذنوب المتعلقة بالعباد، حتى يدخلوا الجنة وقلوبهم خالية من الغل والحسد.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div id="section-8-content" class="content-wrapper space-y-6 mt-4">
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            تعريفها
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            أول سورة في القرآن ترتيبًا لا نزولًا، مكية، وآياتها سبع بالإجماع، وتعرف بـ "فاتحة الكتاب".
+
+                <!-- 7. الجنة ونعيمها -->
+                <div id="section-7" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-7-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            7. الجنة ونعيمها
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-7-content">+</button>
+                    </div>
+                    <div id="section-7-content" class="content-wrapper space-y-4 mt-3">
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            الجنة هي دار الخلود والكرامة التي أعدها الله لعباده المؤمنين. وهي الهدف الأسمى لكل مسلم ومؤمن، حيث يُنعم الله عليهم بالدخول إليها، ويتمتعون بنعيمها الذي لا يفنى، ولا يبلى خيره، ولا ينتهي زمانه. وفيها ما لا عين رأت، ولا أذن سمعت، ولا خطر على قلب بشر.
                         </p>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                من مضامين النصوص حول الجنة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الجنة هي الدار التي أعدها الله لعباده المؤمنين.</li>
+                                <li>من دخل الجنة فقد فاز واستحق الخلود فيها.</li>
+                                <li>كل ما وُصف في الجنة مما وُجد في الدنيا، إنما هو مجرد تشابه أسماء.</li>
+                                <li>كل شيء في الجنة مباح، من مأكل ومشرب وملبس وملهاة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تعريف الجنة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: البستان العظيم الذي يستر ما بداخله، مشتقة من مادة "جنن" بمعنى الستر.</li>
+                                <li>اصطلاحاً: دار الخلود والكرامة التي أعدها الله لعباده المؤمنين، وأكرمهم فيها بالنظر إلى وجهه الكريم، وفيها من النعيم المقيم الأبدي ما لا عين رأت، ولا أذن سمعت، ولا خطر على قلب بشر.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أنواع الجنة (أسماء الجنات)
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                الجنات مراتب ومنازل متفاوتة، تختلف كل جنة عن الأخرى من حيث نعيمها:
+                            </p>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الحسنى</li>
+                                <li>دار السلام</li>
+                                <li>جنات عدن</li>
+                                <li>جنة المأوى</li>
+                                <li>جنات النعيم</li>
+                                <li>دار المتقين</li>
+                                <li>جنات الفردوس</li>
+                                <li>جنة الخلد</li>
+                                <li>الغرفة</li>
+                                <li>دار المقامة</li>
+                                <li>دار القرار</li>
+                                <li>عليّون: وهي أعلى وأفضل الجنات.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                من طعام أهل الجنة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>ليس لطعام أهل الجنة أثر بعد أكله، فهم لا يبصقون، ولا يتمخطون، ولا يتغوطون، ولا يبولون، وحاجة أحدهم جشاء ورشح كرشح المسك.</li>
+                                <li>فواكه الجنة وثمارها في متناول أيدي أهل الجنة، متى شاءوا وأنى شاءوا، تقترب الثمرة المطلوبة عند فم من يريدها.</li>
+                                <li>كل ما فيها مباح، موجود على مدار الوقت.</li>
+                                <li>من أنواع الفاكهة المذكورة في القرآن: التين، العنب، الرمان، الطلح (الموز)، البلح (النخيل)، السدر (النبق)، وكل ما خلقه الله لأهل الدنيا من ثمار.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                متاع ولباس أهل الجنة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لباس أهلها: الحرير، الذهب، السندس، والإستبرق.</li>
+                                <li>فُرُشها: مفروشة من إستبرق في أعلى الرتب.</li>
+                                <li>أسرّتها: أي الأرائك، مرفوعة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أنهار الجنة وبحارها
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>أنهار الجنة: رأى النبي صلى الله عليه وسلم في الإسراء أربعة أنهار (اثنان باطنان في الجنة، واثنان ظاهران - النيل والفرات).</li>
+                                <li>الكوثر: من أنهار الجنة، أعطاه الله لرسوله.</li>
+                                <li>بحار الجنة: بحر الماء، بحر اللبن، بحر الخمر، بحر العسل.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                صفات نساء أهل الجنة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>يجمعن بين الجمال الخَلقي والجمال الخُلقي، ومن ذلك:</li>
+                                <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                    <li>مطهرات من الحيض والنفاس وسائر العيوب.</li>
+                                    <li>حور: أي بيض.</li>
+                                    <li>عيونهن ضخام.</li>
+                                    <li>رقيقتهن كرقة الجلد، في صفائهن كأنهن الياقوت، وبياضهن كالمرجان.</li>
+                                    <li>أتراب: أي في سن واحدة، جميعهن صغار لا مسنات أو كبار.</li>
+                                    <li>لا يوجد بينهن تباغض ولا تحاسد.</li>
+                                    <li>أبكار: لم يتزوجن قبل ذلك.</li>
+                                </ul>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أعلى نعيم في الجنة
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                أعلى نعيم هو رؤية الله عز وجل، ومناجاته، والفوز برضاه. فقد وعد الله الذين أحسنوا بالحسنى وزيادة، وبيّن النبي صلى الله عليه وسلم أن المؤمنين سيرون ربهم كما يرون القمر ليلة البدر.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أدنى وأعلى أهل الجنة منزلة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>أدنى أهل الجنة منزلة: رجل يدخل الجنة بعد أن دخل أهلها، فيقال له: أدخل الجنة، فيقول: يا رب كيف وقد نزل الناس منازلهم وأخذوا أخذاتهم؟ فيقال له: أترضى أن يكون لك مثل ملك ملك من ملوك الدنيا؟ فيقول: رضيت. فيقول له: لك ذلك ومثله ومثله... في الخامسة يقول: رضيت، ثم يضاف إليه وعشرة أمثاله، وله ما اشتهت نفسه ولذت عينه.</li>
+                                <li>أعلى أهل الجنة منزلة: أولئك الذين أردت الله غرس كرامتهم بيده وختم عليها، فلم تر عين، ولم تسمع أذن، ولم يخطر على قلب بشر.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أهميتها
-                        </h3>
-                        <ul class="list-disc list-inside mt-3 text-gray-600 space-y-1 pr-4">
-                            <li>حوت معاني القرآن ومقاصده.</li>
-                            <li>تناولت أصول الدين وفروعه (العقيدة، العبادة، التشريع، الاعتقاد باليوم الآخر، الإيمان بصفات الله، الدعاء).</li>
-                            <li>هي أم القرآن وهي أعظم سوره.</li>
-                            <li>فرض الله قراءتها في كل ركعة، وهي ركن من أركان الصلاة.</li>
-                        </ul>
+                </div>
+
+                <!-- 8. سورة الفاتحة وشرحها -->
+                <div id="section-8" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-8-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            8. سورة الفاتحة وشرحها
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-8-content">+</button>
                     </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            فضلها
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            أفضل سورة في القرآن الكريم، ولم يرد مثلها في الكتب السماوية.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            أسماؤها
-                        </h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            الحمد، الأساس، الكافية، الوافية، الشافية، السبع المثاني، أم الكتاب، الفاتحة.
-                        </p>
-                    </div>
-                    <div class="mind-map-node level-2">
-                        <h3 class="text-2xl font-semibold text-blue-700 mb-3 border-b-2 border-blue-200 pb-1">
-                            تفسيرها
-                        </h3>
-                        <div class="space-y-3 mt-4">
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">بسم الله الرحمن الرحيم</h4>
-                                <p class="text-gray-700">
-                                    يرشد العباد إلى أهمية بدء أعمالهم بالبسملة وطلب العون والبركة من الله وحده.
-                                </p>
+                    <div id="section-8-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تعريفها
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                أول سورة في القرآن الكريم ترتيباً لا نزولاً. وهي سورة مكية، وآياتها سبع بالإجماع. وتُعرف بـ فاتحة الكتاب، وتُعرف أيضاً بـ السبع المثاني.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أهميتها
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>حوت معاني القرآن الكريم.</li>
+                                <li>تناولت أصول الدين وفروعه ومقاصده، مثل: العقيدة، العبادة، التشريع، الاعتقاد باليوم الآخر، الإيمان بصفات الله، الدعاء والتوجه إلى الله.</li>
+                                <li>هي أمّ القرآن.</li>
+                                <li>هي من أعظم سور القرآن.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                فضلها
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لم يرد أفضل منها في الكتب السماوية ولا في القرآن الكريم.</li>
+                                <li>فرض الله على كل مسلم قراءتها في كل ركعة يؤديها، وجُعلت ركناً من أركان الصلاة لا تُقبل الصلاة إلا بها. يكررها العبد على الأقل سبع عشرة مرة كل يوم.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                من أسمائها
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الحمد</li>
+                                <li>الأساس</li>
+                                <li>الكافية</li>
+                                <li>الوافية</li>
+                                <li>الشافية</li>
+                                <li>السبع المثاني</li>
+                                <li>أم الكتاب</li>
+                                <li>الفاتحة</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تفسير آيات سورة الفاتحة (من إلى)
+                            </h3>
+                            <div class="space-y-2 mt-2">
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ﴾ (1)</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>بدأ الله تعالى سورة الفاتحة بالبسملة ليرشد العباد إلى أهمية بدء أعمالهم بها، وطلب العون والبركة من الله وحده. حرف الباء يفيد الحصر، أي لا استعانة إلا بالله.</li>
+                                        <li>الحمد: هو الشكر والثناء لله رب الإنس والجن والملائكة والشياطين. يكون الحمد على النعم وغيرها (مثل الابتلاءات).</li>
+                                        <li>الرحمن الرحيم: كلاهما مشتقان من الرحمة على وجه المبالغة.
+                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>الرحمن: أشد مبالغة من الرحيم، يدل على الرحمة الشاملة لجميع الخلائق في الدنيا وللمؤمنين في الآخرة. وهو عائد على الرحمة الذاتية، أي الرحمة صفته.</li>
+                                                <li>الرحيم: ذو الرحمة للمؤمنين خاصة، عائد على الرحمة الفعلية، أي يرحم خلقه برحمته.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ﴾ (2)</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        الحمد هو الثناء بجميل المحاسن للمحمود، مع الرضى القلبي والمحبة. الله هو رب الإنس والجن والملائكة والشياطين.
+                                    </p>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿الرَّحْمَنِ الرَّحِيمِ﴾ (3)</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        (تكرار للآية الأولى معاني الرحمن الرحيم)
+                                    </p>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿مَالِكِ يَوْمِ الدِّينِ﴾ (4)</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        الله هو المالك المتفرد وحده والمتصرف بيوم الدين (يوم الحساب).
+                                    </p>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ﴾ (5)</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        أي نخصك يا الله بالعبادة ونستعين بك على طاعتك. العبادة تشمل كل ما يحبه الله من الأفعال والأقوال الظاهرة والباطنة، وهي مقترنة ومجتمعة مع الاستعانة بالله فقط.
+                                    </p>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ﴾ (6)</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        أي أرشدنا إلى دينك المستقيم، وهو الطريق الموصل إليه سبحانه.
+                                    </p>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلا الضَّالِّينَ﴾ (7)</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        لا تجعلنا من زمرة أعدائك الحائدين عن الصراط المستقيم. وهي طريق من تفضلت عليهم بالجود والأنعام.
+                                    </p>
+                                </div>
                             </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الحمد لله رب العالمين</h4>
-                                <p class="text-gray-700">
-                                    الشكر والثناء لله رب الإنس والجن والملائكة والشياطين. الحمد يكون على النعم وغيرها، والشكر على النعم فقط.
-                                </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. التجويد -->
+                <div id="section-9" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-9-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            9. التجويد
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-9-content">+</button>
+                    </div>
+                    <div id="section-9-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                مفهوم التجويد
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: التحسين والإتقان، الإتيان بالشيء الجيد.</li>
+                                <li>اصطلاحاً: هو علم يُعرف به إخراج كل حرف من مخرجه، متصفاً بصفاته.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                نشأة علم التجويد
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                وصل هذا العلم إلينا من خلال أئمة ثقات، وضعوا أصوله، وقاموا باستنباط أحكامه، وذلك من خلال قراءة النبي صلى الله عليه وسلم المأثورة، وصحابته، والتابعين.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الهدف من هذا العلم
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                الهدف الرئيسي هو حفظ اللسان من الوقوع في اللحن عند قراءة ألفاظ القرآن الكريم، وعند أدائه.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                حكم علم التجويد
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                مراعاة قوانين قراءته فرض عين على كل شخص مكلف.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أهمية علم التجويد
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>توحيد طريقة لفظ مفردات القرآن الكريم على الطريقة التي كانت تُنطق بها من قبل الرسول الأعظم صلى الله عليه وسلم.</li>
+                                <li>يعطي تناسقاً صوتياً جميلاً أثناء قراءة القرآن الكريم، ويشد السامعين ويرغبهم في الاستماع المزيد.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تعريف اللحن وأنواعه
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>اللحن: هو الخطأ والميل والانحراف عن الصواب.</li>
+                                <li>أنواعه:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>اللحن الجليّ: هو الخطأ الذي يطرأ على الألفاظ ويخل بالمعنى المقصود للآية، ومثاله استبدال حرف مكان آخر أو تغيير حركة بأخرى. هذا اللحن محرم باتفاق العلماء.</li>
+                                        <li>اللحن الخفيّ: هو الخطأ الذي لا يغير المعنى ولكن يخالف قواعد التجويد، مثل ترك الغنة أو تقصير المد وغيره. حكم هذا اللحن أنه مكروه. يتعلق هذا اللحن بالخطأ في أحكام التجويد.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. الإعجاز في القرآن -->
+                <div id="section-10" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-10-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            10. الإعجاز في القرآن
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-10-content">+</button>
+                    </div>
+                    <div id="section-10-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تعريف الإعجاز
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: التقصير، الإعياء.</li>
+                                <li>اصطلاحاً: أمر خارق للعادة مقرون بالتحدي، سالم من المعارضة، يُظهره الله على يد رسله عليهم السلام.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                إعجاز القرآن
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>هو العلم الذي يُعرف من خلاله تحدي القرآن للإنس والجن، وإقامة الحجة مع الدليل.</li>
+                                <li>وهو عجز الناس أو الجن عن الإتيان بمثله أو بسورة من مثله.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                وظيفة المعجزة
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                هي الدليل على صدق النبي، وأنه مرسل من الله.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                شروط الإعجاز
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>التحدي: طلب المبارزة والمنازلة.</li>
+                                <li>وجود السبب: الذي يدفع المتحدي إلى المباراة.</li>
+                                <li>عدم وجود مانع: يمنع المباراة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                من وجوه إعجاز القرآن
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>حسن تأليفه وفصاحته وبلاغته الخارقة.</li>
+                                <li>صحة معانيه وفصاحة ألفاظه.</li>
+                                <li>سلطانه على النفوس والعقول.</li>
+                                <li>الروعة التي تلحق قلوب سامعيه وإسماعهم عند سماعه.</li>
+                                <li>القرآن معجز في تاريخه إلى قيام الساعة دون سائر الكتب السماوية.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                فضل القرآن الكريم على اللغة العربية
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                القرآن كتاب دين ودنيا، فيه الأحكام الشرعية والمعاملات الإنسانية، ويُعبر عن ذلك كله بلغة فصحى أخاذة. وكان للقرآن الكريم فضل على اللغة العربية منها:
+                            </p>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>حفظ للغة بالنموذج الأسمى من الفصاحة والبلاغة والبيان، وهو نموذج أعجز العرب.</li>
+                                <li>أحدث فيها علماً لم تكن لتوجد لولاه، كعلم الشريعة والنحو والصرف والفلسفة والمنطق.</li>
+                                <li>جعلها تتفوق على كثير من لغات الأقوام التي جاورها العرب.</li>
+                                <li>حفظ لغة العرب من الضياع.</li>
+                                <li>وسع دائرة اللغة العربية باستخدام ألفاظ دينية جديدة مثل: الصلاة، الصوم، الزكاة.</li>
+                                <li>ضَمِن استمرار اللغة العربية وتطورها.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. شرح وحفظ آيات من سورة البقرة -->
+                <div id="section-11" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-11-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            11. شرح وحفظ آيات من سورة البقرة
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-11-content">+</button>
+                    </div>
+                    <div id="section-11-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                الآيات المختارة للحفظ (من إلى)
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الآيات 1-5: صفات المتقين (يؤمنون بالغيب، يقيمون الصلاة، ينفقون، يؤمنون بما أنزل على النبي وما أنزل قبله، يؤمنون بالآخرة، وهم المفلحون).</li>
+                                <li>الآيات 6-7: صفات الكفار (لا يؤمنون سواء أنذرتهم أم لم تنذرهم، ختم الله على قلوبهم وعلى سمعهم، وعلى أبصارهم غشاوة، ولهم عذاب عظيم).</li>
+                                <li>الآيات 8-12: صفات المنافقين (يقولون آمنا بالله وباليوم الآخر وما هم بمؤمنين، يخادعون الله والذين آمنوا وما يخدعون إلا أنفسهم وما يشعرون، في قلوبهم مرض فزادهم الله مرضاً ولهم عذاب أليم بما كانوا يكذبون، وإذا قيل لهم لا تفسدوا في الأرض قالوا إنما نحن مصلحون، ألا إنهم هم المفسدون ولكن لا يشعرون).</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                شرح آيات من سورة البقرة (من إلى)
+                            </h3>
+                            <div class="space-y-2 mt-2">
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 21: "يَا أَيُّهَا النَّاسُ اعْبُدُوا رَبَّكُمُ الَّذِي خَلَقَكُمْ وَالَّذِينَ مِن قَبْلِكُمْ لَعَلَّكُمْ تَتَّقُونَ"</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>المناسبة: بعد ذكر صفات المؤمنين والكافرين والمنافقين، يذكر الله الأدلة والبراهين على وحدانيته ونعمه على الناس.</li>
+                                        <li>المعنى: نداء إلى الناس كافة لعبادة الله وحده بتوحيده وشكره وطاعته. هو الذي أوجدهم من العدم، وخلق من قبلهم الأمم لتكونوا في زمرة المتقين.</li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 22: "الَّذِي جَعَلَ لَكُمُ الْأَرْضَ فِرَاشًا وَالسَّمَاءَ بِنَاءً وَأَنزَلَ مِنَ السَّمَاءِ مَاءً فَأَخْرَجَ بِهِ مِنَ الثَّمَرَاتِ رِزْقًا لَّكُمْ ۖ فَلَا تَجْعَلُوا لِلَّهِ أَندَادًا وَأَنتُمْ تَعْلَمُونَ"</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>تشير إلى:
+                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>جعل الأرض مهاداً وفراشاً يستقرون وتفترشون عليها.</li>
+                                                <li>جعل السماء سقفاً مرفوعاً للأرض كهيئة القبة.</li>
+                                                <li>أنزل مطراً من السحاب بقدرته فأخرج به أنواع الثمار والخضار والفواكه رزقاً لهم.</li>
+                                                <li>يوصي الله الناس ألا يتخذوا شركاء مع الله في العبادة، وأنتم تعلمون أن الأصنام لا تخلق ولا ترزق.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 23: "وَإِن كُنتُمْ فِي رَيْبٍ مِّمَّا نَزَّلْنَا عَلَىٰ عَبْدِنَا فَأْتُوا بِسُورَةٍ مِّن مِّثْلِهِ وَادْعُوا شُهَدَاءَكُم مِّن دُونِ اللَّهِ إِن كُنتُمْ صَادِقِينَ"</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        إن كنتم أيها الناس في شك من صدق القرآن وعجز بيانه ونظمه، فأتوا بسورة واحدة مثل هذا القرآن، واستعينوا بمن شئتم غير الله، كالفصحاء والعباقرة، إن كنتم صادقين في زعمكم أنه مختلق.
+                                    </p>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 24: "فَإِن لَّمْ تَفْعَلُوا وَلَن تَفْعَلُوا فَاتَّقُوا النَّارَ الَّتِي وَقُودُهَا النَّاسُ وَالْحِجَارَةُ ۖ أُعِدَّتْ لِلْكَافِرِينَ"</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>المعنى: إن لم تقدروا على الإتيان بمثل سورة، ولن تقدروا في المستقبل، فخافوا عذاب الله واحذروا نار جهنم التي وقودها الكفار والأصنام التي عبدوها من دون الله.</li>
+                                        <li>ملاحظة: جملة "وَلَن تَفْعَلُوا" اعتراضية للإشارة إلى عجز البشر في الحاضر والمستقبل. الكفار والأصنام سيكونون وقوداً للنار.</li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 25: "وَبَشِّرِ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ أَنَّ لَهُمْ جَنَّاتٍ تَجْرِي مِن تَحْتِهَا الْأَنْهَارُ ۖ كُلَّمَا رُزِقُوا مِنْهَا مِن ثَمَرَةٍ رِّزْقًا ۙ قَالُوا هَٰذَا الَّذِي رُزِقْنَا مِن قَبْلُ ۖ وَأُتُوا بِهِ مُتَشَابِهًا ۖ وَلَهُمْ فِيهَا أَزْوَاجٌ مُّطَهَّرَةٌ ۖ وَهُمْ فِيهَا خَالِدُونَ"</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>المبشّر: النبي محمد صلى الله عليه وسلم.</li>
+                                        <li>صفات المؤمنين: المؤمنون بالله (المتقون)، جمعوا بين الإيمان والعمل الصالح.</li>
+                                        <li>صفة الجنات: جنات متعددة (تدل على الكثرة)، تجري من تحتها الأنهار (بساتين ومساكن تجري الأنهار من تحت قصورها)، الله يكفيهم رزقهم في الجنة، كلما رزقوا من ثمرة رزقاً قالوا: هذا الذي رزقنا من قبل (يظنون أن الطعام الآتي هو ذات الطعام الأول)، ولكن متشابه في الشكل مختلف في الطعم.</li>
+                                        <li>الأزواج: زوجات من الحور العين، مطهرات من الأقذار والأدناس الحسية والمعنوية. أنشأهن الله أبكاراً.</li>
+                                        <li>يعيش أهل الجنة حياة خالدة بلا انقطاع.</li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 26: "إِنَّ اللَّهَ لَا يَسْتَحْيِي أَن يَضْرِبَ مَثَلًا مَّا بَعُوضَةً فَمَا فَوْقَهَا ۚ فَأَمَّا الَّذِينَ آمَنُوا فَيَعْلَمُونَ أَنَّهُ الْحَقُّ مِن رَّبِّهِمْ ۖ وَأَمَّا الَّذِينَ كَفَرُوا فَيَقُولُونَ مَاذَا أَرَادَ اللَّهُ بِهَٰذَا مَثَلًا ۘ يُضِلُّ بِهِ كَثِيرًا وَيَهْدِي بِهِ كَثِيرًا ۚ وَمَا يُضِلُّ بِهِ إِلَّا الْفَاسِقِينَ"</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>سبب النزول: لما ذكر الله الذباب والعنكبوت في كتابه وضرب للمشركين المثل، ضحكت اليهود وقالوا: كلام الله فأنزل الله هذه الآية.</li>
+                                        <li>المعنى: الله لا يمتنع أن يضرب مثلاً بأي شيء، كبعوضة أو أصغر منها. المؤمنون يعلمون أن ذلك حق من ربهم. أما الكفار فيقولون: ماذا أراد الله بهذا المثل؟. فيرد الله عليهم أنه يضل بهذا المثل كثيراً من الكافرين، ويهدي به كثيراً من المؤمنين، وما يضل به إلا الخارجين عن طاعة الله.</li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 27: "الَّذِينَ يَنقُضُونَ عَهْدَ اللَّهِ مِن بَعْدِ مِيثَاقِهِ وَيَقْطَعُونَ مَا أَمَرَ اللَّهُ بِهِ أَن يُوصَلَ وَيُفْسِدُونَ فِي الْأَرْضِ ۚ أُولَٰئِكَ هُمُ الْخَاسِرُونَ"</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>أوصاف الفاسقين:
+                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>ينقضون كل عهد وميثاق من الإيمان بالله والتصديق بالرسل.</li>
+                                                <li>يقطعون صلة الأرحام.</li>
+                                                <li>الإفساد في الأرض بالمعاصي.</li>
+                                                <li>استبدالهم الضلالة بالهدى، لذلك فهم فاسقون.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 28: "كَيْفَ تَكْفُرُونَ بِاللَّهِ وَكُنتُمْ أَمْوَاتًا فَأَحْيَاكُمْ ۖ ثُمَّ يُمِيتُكُمْ ثُمَّ يُحْيِيكُمْ ثُمَّ إِلَيْهِ تُرْجَعُونَ"</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        المعنى: كيف تجحدون الخالق وقد كنتم في العدم نطفاً في أصلاب الآباء وأرحام الأمهات، فأخرجكم إلى الدنيا، ثم أماتكم عند انقضاء الآجال، ثم يحييكم بالبعث من القبور، ثم إليه ترجعون للحساب والجزاء.
+                                    </p>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 29: "هُوَ الَّذِي خَلَقَ لَكُم مَّا فِي الْأَرْضِ جَمِيعًا ثُمَّ اسْتَوَىٰ إِلَى السَّمَاءِ فَسَوَّاهُنَّ سَبْعَ سَمَاوَاتٍ ۚ وَهُوَ بِكُلِّ شَيْءٍ عَلِيمٌ"</h4>
+                                    <p class="text-gray-700 text-sm">
+                                        المعنى: الله خلق لكم الأرض وما فيها لتنتفعوا بكل ما فيها. ثم وجه إرادته إلى السماء فصيّرهن وقضاهن سبع سماوات، فأحكم بناءها. وهو عالم بكل ما خلق.
+                                    </p>
+                                </div>
                             </div>
-                            <div class="mind-map-node level-3">
-                                <h4 class="text-xl font-medium text-indigo-700 mb-2">الرحمن الرحيم</h4>
-                                <p class="text-gray-700">
-                                    الله عظيم الرحمة ودائم الرحمة. الرحمن ذو الرحمة الشاملة لجميع الخلائق في الدنيا، وللمؤمنين في الآخرة....
-                                </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. الهجرة إلى يثرب -->
+                <div id="section-12" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-12-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            12. الهجرة إلى يثرب
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-12-content">+</button>
+                    </div>
+                    <div id="section-12-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                المرحلة الأولى: هجرة المسلمين إلى المدينة
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                أمر النبي صلى الله عليه وسلم أصحابه بالهجرة إلى المدينة رحمة بهم وعطفاً عليهم، حفاظاً على دينهم. فاستجابوا لأمره تاركين أهلهم وأموالهم وبيوتهم.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                المرحلة الثانية: هجرة الرسول صلى الله عليه وسلم إلى المدينة المنورة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>مؤامرة دار الندوة:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>رأى النبي صلى الله عليه وسلم في المنام أن دار هجرته هي المدينة.</li>
+                                        <li>أُذن للنبي صلى الله عليه وسلم بالهجرة، فاجتمع المشركون في دار الندوة ليمنعوه. اتفقوا على أن يأتي شباب أقوياء من كل قبيلة وينتظرونه أمام داره، فإذا خرج ضربوه ضربة رجل واحد ليتفرق دمه بين القبائل.</li>
+                                        <li>أخبر جبريل النبي صلى الله عليه وسلم بأمرهم.</li>
+                                    </ul>
+                                </li>
+                                <li>خرج النبي صلى الله عليه وسلم من بيته وشباب المشركين ينتظرونه، فأخذ حفنة من التراب ونثرها على رؤوسهم وهو يتلو آيات من سورة يس.</li>
+                                <li>ذهب إلى بيت أبي بكر، وخرجا إلى غار ثور، واختفيا فيه ثلاثة أيام.</li>
+                                <li>أول فدائي في الإسلام: علي كرم الله وجهه، بنومه في فراش النبي.</li>
+                                <li>عبد الله بن أبي بكر: تكفل بنقل أخبار أهل مكة إليهما طيلة مكوثهما بالغار.</li>
+                                <li>عامر بن فهيرة (راعي أغنام أبي بكر): كان يمسح آثار أقدام عبد الله بن أبي بكر.</li>
+                                <li>أسماء بنت أبي بكر: كانت تأتي لهما بالطعام كل يوم، وشقت نطاقها لوضع الطعام، فلقبها النبي بـ"ذات النطاقين".</li>
+                                <li>عبد الله بن أريقط: كان دليلهما في الصحراء، وكان كافراً.</li>
+                                <li>قريش أعلنت مائة ناقة لمن يأتي بالنبي وصاحبه حياً أو ميتاً.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                وصوله إلى المدينة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>في الطريق تعرض لهم سراقة بن مالك طمعاً في الجائزة، لكنه لم يستطع الوصول إليهما ورجع حامياً لهما.</li>
+                                <li>وصل النبي صلى الله عليه وسلم وصاحبه إلى قباء يوم الاثنين الثاني عشر من شهر ربيع الأول.</li>
+                                <li>أقام في قباء أربعة عشر يوماً، وأسس خلالها مسجد قباء.</li>
+                                <li>ثم سار إلى المدينة، وكانت الناقة تبرك في مكان مسجده الآن (المسجد النبوي).</li>
+                                <li>نزل في المدينة على أبي أيوب الأنصاري، ومكث عنده سبعة أشهر حتى بني مسجده وحجرات أمهات المؤمنين.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أهمية المسجد
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                كان أول ما حرص عليه الرسول في قباء والمدينة، لأنه مكان اجتماع المسلمين والمدرسة الأولى في الإسلام.
+                            </p>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                المرحلة الثالثة: ما بعد الهجرة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>سمي المسلمون القادمون من مكة بـ المهاجرين.</li>
+                                <li>سمي المسلمون من أهل المدينة بـ الأنصار.</li>
+                                <li>سميت يثرب بـ دار الهجرة، والمدينة النبوية، ومدينة الرسول المنورة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أسباب الهجرة من مكة إلى المدينة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>البحث عن الأمن والأمان: بسبب الاضطهاد الذي سببته قريش له وللمسلمين، ومحاولة قتله والتخلص منه.</li>
+                                <li>الحصار الاقتصادي: الذي فرضه الكفار على الرسول ومن معه، حتى ضاق الأمر بالمسلمين وأكلوا أوراق الأشجار.</li>
+                                <li>استعداد أهل المدينة: كان أهل المدينة على استعداد تام للدين الإسلامي بعدما زاد حبهم للرسول قبل رؤيتهم له، بالإضافة إلى أن المدينة ستوفر له ولأصحابه الأمن.</li>
+                                <li>إقامة الدولة الإسلامية: رأى النبي أنه لا بد من تحقيق رسالته ونشر الدين الإسلامي، وهذا يتطلب وجود حصن قوي لتكوين مملكة إسلامية تحميها قوة عسكرية، فكان لا بد من مكان آمن.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                ما نتعلمه من قصة الهجرة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الصبر والإصرار على الحق.</li>
+                                <li>التوكل على الله.</li>
+                                <li>التخطيط للهجرة أو لأي عمل.</li>
+                                <li>حسن اختيار الصحبة.</li>
+                                <li>السرية في العمل.</li>
+                                <li>انتصار الحق على الباطل.</li>
+                                <li>الله يجعل الخير والصلاح والفلاح لمن يهاجر في سبيله.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                النبي صلى الله عليه وسلم في المدينة
+                            </h3>
+                            <div class="space-y-2 mt-2">
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">استقبال الرسول صلى الله عليه وسلم</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>خرج أهل المدينة جميعهم لاستقباله، والفرح يغمرهم، ورددوا "طلع البدر علينا". هذا الحب العميق كان قبل رؤيتهم له.</li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">في ضيافة أبي أيوب الأنصاري</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>كان الجميع يطمع في استضافة النبي.</li>
+                                        <li>حط النبي في ضواحي المدينة أربعة أيام، وبنى مسجده الأول مسجد قباء.</li>
+                                        <li>أسرع سادات وأشراف أهل يثرب لاستضافته، لكن النبي كان يقول: "دعوها فإنها مأمورة".</li>
+                                        <li>قدر الله أن بركت الناقة عند بيت أبي أيوب الأنصاري رضي الله عنه. أقام النبي صلى الله عليه وسلم في ضيافته سبعة أشهر، حتى بني المسجد وبيوت أمهات المؤمنين.</li>
+                                        <li>النبي صلى الله عليه وسلم اختار السكن في الطابق الأرضي لسهولة استقبال الزوار، رغم رغبة أبي أيوب في أن يكون في الطابق العلوي.</li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">المؤاخاة بين الأوس والخزرج</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>قبل الإسلام، كان العرب يعيشون في تناحر على أمور تافهة. حرب بعاث مزقت القبيلتين قبل خمس سنوات من هجرة النبي.</li>
+                                        <li>سعى النبي صلى الله عليه وسلم إلى صلة الأمة بعضها ببعض برفع شعار المؤاخاة، وإحلال رابطة الإخاء والدين محل رابطة القبيلة والعصبية.</li>
+                                        <li>تطبيق المؤاخاة:
+                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>بين المهاجرين والأنصار.</li>
+                                                <li>بين بعض القبائل والمهاجرين.</li>
+                                                <li>قرب بين الأوس والخزرج.</li>
+                                                <li>آخى بين العرب والموالي (مثل حمزة وزيد، وأبي الدرداء وسلمان الفارسي).</li>
+                                            </ul>
+                                        </li>
+                                        <li>نتائج هذا الإخاء:
+                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>أسس النبي أسرة إسلامية واحدة، فلا حمية إلا للإسلام.</li>
+                                                <li>سقطت فوارق النسب واللون والوطن، وتحقق مفهوم "لا فضل لعربي على أعجمي إلا بالتقوى".</li>
+                                                <li>ضرب المسلمون المثل الأعلى في التعاون والاتحاد.</li>
+                                                <li>وحدة المدينة بعد أن كانت ساحة للحروب.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">بناء المسجد</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>المسجد هو أول ما حرص عليه الرسول صلى الله عليه وسلم بعد هجرته إلى المدينة.</li>
+                                        <li>ليظهر فيه شعائر الإسلام، وتقام فيه الصلوات.</li>
+                                        <li>ليكون مركزاً تشاورياً في شتى أمور الدنيا والآخرة.</li>
+                                        <li>ليتخذ مركزاً لاستقبال الوفود والملوك والسفراء.</li>
+                                        <li>ليكون مقراً للحكومة الإسلامية.</li>
+                                        <li>اشترى النبي صلى الله عليه وسلم أرض المسجد، وشارك في بنائه بنفسه كأي عامل من أصحابه.</li>
+                                    </ul>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">المعاهدة بين المسلمين واليهود</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>وثيقة أظهرت حرص النبي صلى الله عليه وسلم على بناء روابط وصلة بين الأمة الإسلامية وغيرها من الأمم التي تدين بدين آخر.</li>
+                                        <li>أقرهم على دينهم، وضمن لهم أموالهم.</li>
+                                        <li>كان أساس المعاهدة الأخوة في السلم والدفاع عن المدينة وقت الحرب.</li>
+                                        <li>بعض بنود المعاهدة الخاصة باليهود:
+                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>يهود بني عوف أمة مع المؤمنين، لليهود دينهم وللمسلمين دينهم ومواليهم وأنفسهم.</li>
+                                                <li>على اليهود نفقتهم، وعلى المسلمين نفقتهم.</li>
+                                                <li>بينهم النصر على من حارب أهل هذه الصحيفة.</li>
+                                                <li>بينهم النصح والنصيحة والبر دون الإثم.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 13. كل مادة الحديث -->
+                <div id="section-13" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-13-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            13. كل مادة الحديث
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-13-content">+</button>
+                    </div>
+                    <div id="section-13-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                علم مصطلح الحديث
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>يهتم بالقواعد والضوابط التي يُخضع لها متن وسند الحديث الشريف، وبعد تمحيصهما ودراستهما، يتم تبين قبول الحديث أو رده.</li>
+                                <li>تعريف علم مصطلح الحديث: هو العلم الذي يُعرف به أحوال السند والمتن، من حيث القبول والرد.</li>
+                                <li>أقسام علم مصطلح الحديث:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>علم رواية الحديث: يدرس اتصال السند وكيفية تلقي الحديث عن رجاله، ويبحث في أحوال رواته ضبطاً وعدالة، وعلاقته بالسند اتصالاً وانقطاعاً. يركز على ألفاظ الرسول صلى الله عليه وسلم من حيث صحة ودقة صدورها عنه.</li>
+                                        <li>علم دراية الحديث: يبحث عن المعنى الذي يُفهم من ألفاظ الحديث (المتن) والمراد منها، وفقاً لقواعد اللغة وضوابط الشريعة، بالإضافة إلى أحوال الرسول صلى الله عليه وسلم. يركز على متن الحديث من حيث دلالاتها المتعلقة بالمفهوم والمراد منها.</li>
+                                    </ul>
+                                </li>
+                                <li>فائدة وأهمية علم مصطلح الحديث: يساعد على معرفة ما يجب قبوله أو رده من الراوي والمروي، بهدف تنقية الأدلة الحديثية والتخلص من الأحاديث الضعيفة.</li>
+                                <li>أهدافه:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>إعطاء الدارس مفاتيح المعرفة ليعرف ما يقبل من الأحاديث وما يرد.</li>
+                                        <li>القدرة على إدراك المنهجية التي سلكها العلماء لإثبات الحديث وتنقيته.</li>
+                                        <li>تحقيق معاني المتون وفهم مضامينها.</li>
+                                    </ul>
+                                </li>
+                                <li>السند والمتن:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>مثال: حديث "لا يزال الناس بخير ما عجلوا الفطر".</li>
+                                        <li>السند: هم سلسلة رواة الحديث الذين تحملوا الحديث من أول السند حتى وصوله إلى الرسول صلى الله عليه وسلم. في المثال يشمل الإمام البخاري، عبد الله بن يوسف، مالك، أبو حازم، وسهل بن سعد.</li>
+                                        <li>المتن: هو كلام الرسول صلى الله عليه وسلم أو فعله، أو هو ما انتهى إليه السند. في المثال هو "لا يزال الناس بخير ما عجلوا الفطر".</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أقسام الحديث، من حيث حال الرواة
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                الحديث يقسم، باعتبار قبوله ورده، إلى قسمين:
+                            </p>
+                            <div class="space-y-2 mt-2">
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">الحديث المقبول</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>هو الذي يُحتج به ويُعمل به، وهو الصحيح والحسن.</li>
+                                    </ul>
+                                    <div class="space-y-1 mt-1">
+                                        <div class="sub-topic-node-level-5">
+                                            <h5 class="text-base font-medium text-green-700 mb-1">أولاً: الحديث الصحيح</h5>
+                                            <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>لغةً: ضد السقيم.</li>
+                                                <li>اصطلاحاً: هو ما اتصل سنده بنقل العدل الضابط، عن مثله إلى منتهاه، من غير شذوذ ولا علة.</li>
+                                                <li>شروطه الخمسة:
+                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                        <li>اتصال السند: كل راوٍ أخذ الحديث عمن فوقه من أول السند إلى منتهاه.</li>
+                                                        <li>عدالة الرواة: كل راوٍ مسلم، بالغ، عاقل، غير فاسق، وغير مخروم المروءة.
+                                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                                <li>شروط العدالة: الإسلام، البلوغ، العقل، أن يكون غير فاسق، وأن يكون غير مخروم المروءة.</li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>ضبط الرواة: كل راوٍ كان تام الضبط.
+                                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                                <li>أقسام الضبط: ضبط الصدر (حفظ ما سمعه)، ضبط الكتاب (حفظ ما كتبه).</li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>عدم الشذوذ: مخالفة الثقة لمن هو أوثق منه.</li>
+                                                        <li>عدم العلة: مراعاة العرف السائد بشرط ألا يخالف الشرع.</li>
+                                                    </ul>
+                                                </li>
+                                                <li>حكمه: وجوب العمل به بالإجماع.</li>
+                                                <li>أقسامه:
+                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                        <li>الصحيح لذاته: ما اشتمل على الشروط الخمسة.</li>
+                                                        <li>الصحيح لغيره: الحديث الذي لا توجد له طرق صحيحة بذاتها، بل يتقوى بطريق آخر حسن فيرتقي إلى درجة الحديث الصحيح. الصحيح لغيره أقل درجة من الصحيح لذاته.</li>
+                                                    </ul>
+                                                </li>
+                                                <li>مراتبه:
+                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                        <li>ما اتفق عليه الشيخان (البخاري ومسلم).</li>
+                                                        <li>ما انفرد به الإمام البخاري.</li>
+                                                        <li>ما انفرد به الإمام مسلم.</li>
+                                                        <li>ما كان على شرطهما ولم يخرجاه.</li>
+                                                        <li>ما كان على شرط البخاري ولم يخرجه.</li>
+                                                        <li>ما كان على شرط مسلم ولم يخرجه.</li>
+                                                        <li>ما كان صحيحاً عند غيرهما وليس على شرط واحد منهما.</li>
+                                                    </ul>
+                                                </li>
+                                                <li>مظان الحديث الصحيح: صحيح البخاري، صحيح مسلم، موطأ مالك وغيرها.</li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-topic-node-level-5">
+                                            <h5 class="text-base font-medium text-green-700 mb-1">ثانياً: الحديث الحسن</h5>
+                                            <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>لغةً: صفة مشبهة من الحسن بمعنى الجمال.</li>
+                                                <li>اصطلاحاً: هو ما اتصل سنده بنقل العدل خفيف الضبط، عن مثله إلى منتهاه، من غير شذوذ ولا علة.</li>
+                                                <li>شروطه الخمسة: نفس شروط الصحيح، لكن الضبط في الحسن أقل من الضبط في الصحيح.</li>
+                                                <li>حكمه: كالصحيح في الاحتجاج به، وإن كان دونه في القوة.</li>
+                                                <li>أقسامه:
+                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                        <li>الحسن لذاته: ما اشتمل على الشروط الخمسة.</li>
+                                                        <li>الحسن لغيره: هو الضعيف إذا تعددت طرقه، ولم يكن سبب ضعفه فسق الراوي أو كذبه. الحسن لغيره أقل درجة من الحسن لذاته.</li>
+                                                    </ul>
+                                                </li>
+                                                <li>مظان الحديث الحسن: سنن الترمذي، سنن أبي داود، سنن الدارقطني.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sub-topic-node-level-4">
+                                    <h4 class="text-lg font-medium text-green-800 mb-1">القسم الثاني: الحديث المردود (المرفوض)</h4>
+                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>لغةً: المرفوض.</li>
+                                        <li>اصطلاحاً: هو ما فقد شرطاً (أو أكثر) من شروط القبول، أي لم تجتمع فيه شروط القبول جميعها. يشمل الحديث الضعيف بأقسامه.</li>
+                                    </ul>
+                                    <div class="space-y-1 mt-1">
+                                        <div class="sub-topic-node-level-5">
+                                            <h5 class="text-base font-medium text-green-700 mb-1">أولاً: الحديث الضعيف</h5>
+                                            <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>لغةً: مأخوذ من الضعف، ويراد به: خلاف القوة.</li>
+                                                <li>اصطلاحاً: هو الحديث الذي لم تجتمع فيه صفات الحديث الصحيح أو الحسن.</li>
+                                                <li>أسباب ضعفه:
+                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                        <li>عدم وجود اتصال في السند.</li>
+                                                        <li>عدم عدالة الرواة أو بعضهم.</li>
+                                                        <li>عدم ضبط الرواة أو بعضهم.</li>
+                                                        <li>وجود الشذوذ.</li>
+                                                        <li>وجود العلة القادحة.</li>
+                                                    </ul>
+                                                </li>
+                                                <li>حكم العمل بالحديث الضعيف:
+                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                        <li>المذهب الأول: لا يُعمل به مطلقاً.</li>
+                                                        <li>المذهب الثاني: يُعمل به مطلقاً بشروط: أن يكون الضعف غير شديد، ألا يتعارض مع حديث آخر، ألا يكون في الباب حديث غيره.</li>
+                                                        <li>المذهب الثالث: يُعمل به بقيود، في فضائل الأعمال، والترغيب والترهيب، والقصص، والمواعظ. لا يُعمل به في العقائد، الأحكام (الحلال والحرام)، الفرض والواجب.</li>
+                                                    </ul>
+                                                </li>
+                                                <li>تفاوت الحديث الضعيف: يتفاوت حسب ضعف الرواة، فمنه الضعيف، والضعيف جداً، والواهي، وأشد أنواعه ضعفاً الموضوع.</li>
+                                                <li>مظان الحديث الضعيف: كتاب الضعفاء للعقيلي، ميزان الاعتدال للذهبي، كتاب العلل للدارقطني.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 14. من مادة التهذيب: صلة الأرحام أو إصلاح ذات البين -->
+                <div id="section-14" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-14-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            14. من مادة التهذيب: صلة الأرحام أو إصلاح ذات البين
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-14-content">+</button>
+                    </div>
+                    <div id="section-14-content" class="content-wrapper space-y-4 mt-3">
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            سأتناول الموضوعين كما وردا في المصادر:
+                        </p>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أ. صلة الأرحام
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                صلة الرحم هي إحدى الروابط الاجتماعية التي حث الله عليها في كتابه وسنة نبيه.
+                            </p>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>مفهوم صلة الرحم:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>لغةً: صلة تعني الوصل، والرحم اسم جامع لكل الأقارب.</li>
+                                        <li>اصطلاحاً: زيارة الأقارب وتفقد أحوالهم، والبر بهم، ومشاركتهم أفراحهم وأتراحهم، حتى وإن أساءوا.</li>
+                                    </ul>
+                                </li>
+                                <li>من هم الأرحام؟
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>هم الأقارب من النسب، لا من الرضاع، من جهة الأب والأم.</li>
+                                        <li>تنويه: أقارب الزوجين ليسوا أرحاماً للآخر، لكن ينبغي الإحسان إليهم لأنه من حسن العشرة.</li>
+                                    </ul>
+                                </li>
+                                <li>حكم صلة الرحم:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>واجبة على كل مسلم ومسلمة، وقطيعة الرحم تعتبر معصية وذنباً كبيراً.</li>
+                                    </ul>
+                                </li>
+                                <li>أهمية صلة الرحم:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>أولى الله صلة الرحم مكانة عالية، فاشتق اسمها من اسمه الرحمن، وجعل منزلتها عند عرشه، واعتبرت ثمرة من ثمرات خشيته.</li>
+                                    </ul>
+                                </li>
+                                <li>فضل صلة الرحم:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>من علامات الإيمان.</li>
+                                        <li>سبب للبركة في الرزق والعمر.</li>
+                                        <li>سبب لصلة الله تعالى وإكرامه.</li>
+                                        <li>من أسباب دخول الجنة.</li>
+                                        <li>الإسلام استحب تقديم الفضل للأرحام على غيرهم.</li>
+                                    </ul>
+                                </li>
+                                <li>عواقب قطع الرحم:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>تعتبر الإساءة إلى الأرحام أو التهرب من أداء حقوقهم صفة من صفات الخاسرين، ومن كبائر الذنوب.</li>
+                                        <li>قاطع الرحم ملعون.</li>
+                                        <li>قاطع الرحم تعجل له العقوبة في الدنيا، وتنقطع صلته بالله.</li>
+                                        <li>الحرمان من دخول الجنة.</li>
+                                    </ul>
+                                </li>
+                                <li>من أسباب قطيعة الرحم:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>كثرة العتاب الشديد بين الأقارب.</li>
+                                        <li>ضعف الوازع الديني والجهل بعواقب القطيعة.</li>
+                                        <li>التكلف الزائد في إكرامهم.</li>
+                                        <li>تأخير قسمة الميراث.</li>
+                                        <li>الشراكة بين الأقارب التي تفضي إلى الاختلاف.</li>
+                                        <li>طلاق الأقارب وما يترتب عليه من خلافات.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                ب. إصلاح ذات البين
+                            </h3>
+                            <p class="text-gray-700 text-sm leading-relaxed">
+                                رغّب الإسلام في جمع القلوب والإصلاح بين الناس، وجعل الأخوة أمراً مرغوباً فيه. الشريعة أمرت بكل ما يقرب بين المسلمين ونهت عن كل ما يسيء العلاقة ويقطع المودة.
+                            </p>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>نصوص شرعية تدعو إلى إصلاح ذات البين:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>القرآن الكريم:
+                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>﴿إِنَّمَا الْمُؤْمِنُونَ إِخْوَةٌ فَأَصْلِحُوا بَيْنَ أَخَوَيْكُمْ ۚ وَاتَّقُوا اللَّهَ لَعَلَّكُمْ تُرْحَمُونَ﴾.</li>
+                                                <li>﴿وَأَصْلِحُوا ذَاتَ بَيْنِكُمْ﴾.</li>
+                                            </ul>
+                                        </li>
+                                        <li>السنة النبوية:
+                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>"ألا أخبركم بأفضل من درجة الصيام والصلاة والصدقة؟ قالوا: بلى، قال: إصلاح ذات البين؛ فإن فساد ذات البين هي الحالقة".</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>سبل إصلاح ذات البين:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>توفر النية الصادقة.</li>
+                                        <li>اعتماد معايير العدل وتقوى الله.</li>
+                                        <li>اعتماد آداب النصح واختيار العبارات المناسبة.</li>
+                                        <li>حفظ خصوصيات الأطراف وعدم إفشاء الأسرار.</li>
+                                        <li>المصالحة في العدل والوقوف بنفس المسافة بين المتخاصمين.</li>
+                                        <li>انتهاج الحوار لتقريب وجهات النظر.</li>
+                                        <li>الوعظ والإرشاد بتوضيح فضل الإصلاح وعواقب الإفساد.</li>
+                                        <li>القضاء أو التحكيم عند استلزام الإصلاح لذلك.</li>
+                                    </ul>
+                                </li>
+                                <li>شروط المصلح بين الناس:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>العلم الكافي بسبل الإصلاح.</li>
+                                        <li>السيرة الحسنة والأخلاق القويمة.</li>
+                                        <li>الإخلاص في مساعي الصلح وعدم وجود مسعى دنيوي.</li>
+                                    </ul>
+                                </li>
+                                <li>الآثار المترتبة على إفساد ذات البين:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>ضياع جذوة الالتزام بالدين وانعدام أثره، فهو "الحالقة" التي تحلق الدين كما يُحلق الشعر.</li>
+                                        <li>تسمم العلاقات الاجتماعية وتفكك روابط الألفة والمحبة، وانهيار المجتمع.</li>
+                                        <li>توتر الفرد وقلقه.</li>
+                                        <li>نيل غضب الله وسخطه، والعذاب يوم القيامة.</li>
+                                    </ul>
+                                </li>
+                                <li>ما يجب مراعاته في جلسة الصلح:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>تحديد أساسيات التصالح.</li>
+                                        <li>توضيح أهمية الصلح.</li>
+                                        <li>الموضوعية.</li>
+                                        <li>الابتعاد عن الأنانية.</li>
+                                        <li>الاستماع للآخرين.</li>
+                                        <li>التعاطف مع الجميع.</li>
+                                        <li>استخدام الكلمات بحرص.</li>
+                                        <li>التصرف بحكمة.</li>
+                                    </ul>
+                                </li>
+                                <li>من فوائد الصلح بين المتخاصمين:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>حلول المحبة والألفة مكان القطيعة والكراهية.</li>
+                                        <li>غرس الفضيلة (العفو والمغفرة).</li>
+                                        <li>كسب الحسنات ورفع الدرجات.</li>
+                                        <li>استقامة حياة المجتمع والتفرغ للعمل المثمر.</li>
+                                        <li>طمأنينة القلوب وسعادتها، وحصول الراحة من الغل والشحناء والحقد.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 15. من مادة الفقه: الزكاة -->
+                <div id="section-15" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-15-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            15. من مادة الفقه: الزكاة
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-15-content">+</button>
+                    </div>
+                    <div id="section-15-content" class="content-wrapper space-y-4 mt-3">
+                        <p class="text-gray-700 text-sm leading-relaxed">
+                            الزكاة عبادة مالية خالصة لوجه الله، ترفع الأحقاد وتجمع الأمة وتوحد صفوفها.
+                        </p>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                تعريف الزكاة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>لغةً: تطلق على معنيين أصليين: النماء والبركة والزيادة، والطهارة.</li>
+                                <li>اصطلاحاً: اسم صريح لأخذ شيء مخصوص، من مال مخصوص، على أوصاف مخصوصة، لطائفة مخصوصة.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                أصناف المال الذي تجب فيه الزكاة
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>أولاً: النقدان:
+                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                        <li>المراد بهما: الذهب والفضة، وكذلك النقود العادية (الشاقل، الدينار، الدولار، اليورو وغيرها).</li>
+                                        <li>شروط الزكاة فيهما: أن يكونا تحت ملك صاحبهما.</li>
+                                        <li>النصاب:
+                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>الذهب: يبلغ قدره 85 جراماً.</li>
+                                                <li>الفضة: تبلغ قدره 595 جراماً.</li>
+                                            </ul>
+                                        </li>
+                                        <li>مقدار الزكاة: 2.5% (ربع العشر) من قيمة المال الذي وصل النصاب.
+                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>مثال: لو كان مع شخص مبلغ 10000 شاقل وبلغ النصاب، تكون زكاته 250 شاقلاً (2.5% من 10000).</li>
+                                            </ul>
+                                        </li>
+                                        <li>زكاة حُلي المرأة:
+                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
+                                                <li>لا زكاة في الحُلي المباح من الذهب أو الفضة الخاص بزينة المرأة، طالما لم يكن بالغاً من الكثرة إلى حد الإسراف.</li>
+                                                <li>لا زكاة في خاتم الفضة للرجل. السبب: هذه الأشياء مُعدة للزينة والاستعمال وليست للنماء.</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- This section was incomplete in the provided text. I'll add a placeholder comment. -->
+                                <li>... (بقية أصناف المال الذي تجب فيه الزكاة غير مكتملة في النص الأصلي)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 16. حفظ الأحاديث الأربعة وشرحها -->
+                <div id="section-16" class="main-topic-node">
+                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-16-content">
+                        <h2 class="text-2xl font-bold flex-grow">
+                            16. حفظ الأحاديث الأربعة وشرحها
+                        </h2>
+                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-16-content">+</button>
+                    </div>
+                    <div id="section-16-content" class="content-wrapper space-y-4 mt-3">
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                1. أهل القرآن هم أهل الله
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الحديث: "إن لله أهلين من الناس".</li>
+                                <li>راوي الحديث: أنس بن مالك.</li>
+                                <li>شرح: حفظة القرآن العاملون به.</li>
+                                <li>ما يستفاد: تلاوة القرآن بتدبر وعمل.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                2. حب الرسول من الإيمان
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الحديث: "لا يؤمن أحدكم حتى أكون أحب إليه".</li>
+                                <li>راوي الحديث: أنس بن مالك، أبو هريرة.</li>
+                                <li>أنواع المحبة: إجلال، شفقة، مشاكلة.</li>
+                                <li>فوائد: وجوب محبة الرسول وتقديمها.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                3. المرأة تُنكح لأربع
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الحديث: "تنكح المرأة لأربع".</li>
+                                <li>راوي الحديث: أبو هريرة.</li>
+                                <li>الصفات المطلوبة: الخلق والدين أهمها.</li>
+                                <li>أحكام: نبذ غير الصالحة، مسؤولية الرجل.</li>
+                            </ul>
+                        </div>
+                        <div class="sub-topic-node">
+                            <h3 class="text-xl font-semibold text-green-700 mb-2">
+                                4. فضل الصلاة على النبي
+                            </h3>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
+                                <li>الحديث: "إذا سمعتم المؤذن فقولوا".</li>
+                                <li>راوي الحديث: عبد الله بن عمرو.</li>
+                                <li>شرح: الترديد، فضل الصلاة، سؤال الوسيلة.</li>
+                                <li>ما يؤخذ: الترديد، الصلاة بعد الأذان.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
+
+        <footer class="text-center mt-12 pt-6 border-t-2 text-gray-500 text-sm">
+            <p>تم تصميم هذه الخريطة لمساعدتك في مراجعة امتحان البجروت في الإسلام.</p>
+            <p class="mt-2 text-gray-600 text-xs">
+                &copy; 2025 All rights reserved to AbdullahZaid-ggg.
+            </p>
+        </footer>
     </div>
 
+    <!-- Back to Top Button -->
     <button id="back-to-top">
         العودة للأعلى
     </button>
@@ -716,10 +1745,10 @@
             // Function to generate Table of Contents
             function generateTableOfContents() {
                 const tocList = document.querySelector('#table-of-contents ul');
-                const mainSections = document.querySelectorAll('.mind-map-node.level-1 h2');
+                const mainSections = document.querySelectorAll('.main-topic-node h2'); // Target main topic nodes
 
                 mainSections.forEach((sectionTitle, index) => {
-                    const sectionId = sectionTitle.closest('.mind-map-node.level-1').id;
+                    const sectionId = sectionTitle.closest('.main-topic-node').id;
                     const listItem = document.createElement('li');
                     const link = document.createElement('a');
                     link.href = `#${sectionId}`;
@@ -752,7 +1781,13 @@
                         const textNodesToProcess = [];
 
                         while ((node = walker.nextNode())) {
-                            if (node.nodeValue.trim().length > 0 && node.parentNode.tagName !== 'SCRIPT' && node.parentNode.tagName !== 'STYLE') {
+                            // Exclude script and style elements, and their content
+                            if (node.nodeValue.trim().length > 0 && 
+                                node.parentNode.tagName !== 'SCRIPT' && 
+                                node.parentNode.tagName !== 'STYLE' &&
+                                !node.parentNode.classList.contains('central-node') && /* Exclude central node text */
+                                !node.parentNode.closest('.toggle-btn') /* Exclude toggle buttons */
+                            ) {
                                 textNodesToProcess.push(node);
                             }
                         }
@@ -776,7 +1811,7 @@
                         });
 
                         if (matches > 0) {
-                            searchResultsDiv.innerHTML = `<p class="text-blue-700">تم العثور على ${matches} نتيجة لـ "${searchTerm}".</p>`;
+                            searchResultsDiv.innerHTML = `<p class="text-green-700">تم العثور على ${matches} نتيجة لـ "${searchTerm}".</p>`;
                             // Scroll to the first highlight
                             const firstHighlight = document.querySelector('.highlight');
                             if (firstHighlight) {
@@ -849,14 +1884,13 @@
             });
 
             // Initial setup for collapsible sections (all collapsed by default)
-            const mainSections = document.querySelectorAll('.mind-map-node.level-1');
-            mainSections.forEach(section => {
-                const contentDiv = section.querySelector('.content-wrapper');
-                const toggleButton = section.querySelector('.toggle-btn');
-                if (contentDiv && toggleButton) {
-                    contentDiv.classList.add('hidden'); // Start hidden
+            const allContentWrappers = document.querySelectorAll('.content-wrapper');
+            allContentWrappers.forEach(wrapper => {
+                wrapper.classList.add('hidden');
+                const toggleButton = wrapper.closest('.main-topic-node, .sub-topic-node')?.querySelector('.toggle-btn');
+                if (toggleButton) {
                     toggleButton.textContent = '+';
-                    toggleButton.setAttribute('aria-expanded', 'false'); // Set initial ARIA state
+                    toggleButton.setAttribute('aria-expanded', 'false');
                 }
             });
         });
