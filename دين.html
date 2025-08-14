@@ -3,1897 +3,939 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خريطة مفاهيم امتحان البجروت في الإسلام</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>موقع حفظ الكلمات</title>
     <style>
         body {
-            font-family: 'Cairo', 'Inter', sans-serif;
-            background-color: #F5F5DC; /* Beige/Cream */
-            color: #4A4A4A; /* Dark Gray for main text */
-            direction: rtl; /* Right-to-left for Arabic */
-            overflow-x: hidden; /* Prevent horizontal scroll for now */
-        }
-        h1, h2, h3, h4, h5 {
-            font-family: 'Cairo', sans-serif;
-            color: #2E8B57; /* Sea Green for headings */
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            text-align: right;
         }
 
-        /* --- Mind Map Specific Styles --- */
-        .mind-map-container {
-            position: relative;
+        header {
+            background-color: #5a7d9a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        #flashcard-container {
+            perspective: 1000px;
             width: 100%;
-            min-height: 1200px; /* Adjust based on content distribution */
+            height: 200px;
+        }
+
+        #flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        #flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        #flashcard-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-            padding: 4rem 1rem;
-            box-sizing: border-box;
-        }
-
-        .central-node {
-            background-color: #2E8B57; /* Sea Green */
-            color: white;
-            border-radius: 9999px; /* Fully rounded/Pill shape */
-            padding: 2rem;
+            font-size: 24px;
+            padding: 20px;
             text-align: center;
-            font-size: 2rem; /* Slightly larger */
-            font-weight: bold;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* Deeper shadow */
-            z-index: 20;
-            position: relative;
-            margin-bottom: 3.5rem; /* More space for branches */
-            width: fit-content;
-            min-width: 280px; /* Ensure it's not too small */
-            transition: all 0.3s ease-in-out;
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+            background-color: #e2f0fb;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .controls button, #start-exam-btn, #submit-exam-btn {
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
         }
-        .central-node:hover {
-            transform: scale(1.05); /* More pronounced scale */
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35); /* Stronger shadow on hover */
-        }
-
-        .main-branch-wrapper {
-            display: flex;
-            flex-wrap: wrap; /* Allows branches to wrap on smaller screens */
-            justify-content: center;
-            gap: 4rem 6rem; /* Increased gap for better visual separation */
-            position: relative;
-            width: 100%; /* Occupy full width */
-        }
-
-        .main-topic-node {
-            background-color: #D4EDDA; /* Light Green */
-            border: 2px solid #2E8B57; /* Sea Green border */
-            border-radius: 1.5rem; /* More rounded corners */
-            padding: 1.75rem; /* Slightly more padding */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18); /* Stronger shadow */
-            position: relative;
-            z-index: 10;
-            width: 350px; /* Wider for better content fit */
-            flex-shrink: 0; /* Prevent shrinking */
-            margin-top: 4.5rem; /* More space from above for branches */
-            transition: all 0.3s ease-in-out;
-            transform-origin: top center;
-        }
-        .main-topic-node:hover {
-            transform: translateY(-10px) scale(1.03); /* More pronounced lift and scale */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
-        }
-
-        .sub-topic-node {
-            background-color: #F0FFF0; /* Honeydew - very light green */
-            border: 1px solid #8BC34A; /* Light Green accent */
-            border-radius: 1rem; /* More rounded corners */
-            padding: 1.25rem; /* Slightly more padding */
-            margin-top: 1.25rem; /* More space from parent */
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12); /* Slightly stronger shadow */
-            position: relative;
-            transition: all 0.2s ease-in-out;
-        }
-        .sub-topic-node:hover {
-            transform: translateX(10px); /* More pronounced slide */
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.18); /* Stronger shadow on hover */
-        }
-
-        /* Branching Lines - Adjusting colors to new palette */
-        .main-topic-node::before {
-            background-color: #2E8B57; /* Main topic branch color (Sea Green) */
-        }
-
-        .sub-topic-node::before {
-            background-color: #8BC34A; /* Sub-topic branch color (Light Green accent) */
-        }
-
-        /* Search & TOC */
-        .search-toc-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem; /* Increased gap */
-            width: 100%;
-            max-width: 1024px;
-            margin-top: 3rem; /* More margin */
-            padding: 1.5rem; /* More padding */
-            box-sizing: border-box;
-            background-color: #F8F8F8; /* Light Gray */
-            border-radius: 1.5rem; /* Rounded corners */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Subtle shadow */
-        }
-        @media (min-width: 1024px) {
-            .search-toc-wrapper {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: flex-start;
-            }
-        }
-
-        /* Header styling */
-        header h1 {
-            background-color: #B2DFDB; /* Light Teal */
-            border-color: #00695C; /* Darker Teal */
-            color: #00695C; /* Darker Teal */
-        }
-
-        /* Search Section */
-        .search-toc-wrapper > div:first-child { /* Targets the search div */
-            background-color: #E8F5E9; /* Very light green for search background */
-            border-color: #A5D6A7; /* Light Green border */
-        }
-        .search-toc-wrapper label {
-            color: #388E3C; /* Deeper Green for label */
-        }
-        .search-toc-wrapper input {
-            border-color: #A5D6A7; /* Light Green for input border */
-            color: #4A4A4A; /* Dark Gray for input text */
-        }
-        .search-toc-wrapper input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5); /* Green focus ring */
-            border-color: #4CAF50;
-        }
-
-        /* Table of Contents */
-        nav#table-of-contents {
-            background-color: #E0F2F7; /* Another light teal */
-            border-color: #4CAF50; /* Green border */
-        }
-        nav#table-of-contents h2 {
-            color: #388E3C; /* Deeper Green for TOC heading */
-        }
-        nav#table-of-contents ul li a {
-            color: #4CAF50; /* Green for links */
-        }
-        nav#table-of-contents ul li a:hover {
-            color: #2E7D32; /* Darker green on hover */
-        }
-
-
-        /* Highlight for search */
-        .highlight {
-            background-color: #FFECB3; /* Lighter yellow for highlighting */
-            color: #4A4A4A; /* Keep text color */
-        }
-
-        /* Scrollbar styles (unchanged, but confirming for completeness) */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #e0e0e0;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #8BC34A; /* Light Green accent */
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #689F38; /* Darker green on hover */
-        }
-
-        /* Back to top button */
-        #back-to-top {
-            background-color: #4CAF50; /* Green */
+        
+        .controls button:not(#flip-btn):not(#pronounce-btn) {
+            background-color: #5a7d9a;
             color: white;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow */
-            transition: opacity 0.3s ease-in-out, background-color 0.2s ease-in-out;
-        }
-        #back-to-top:hover {
-            background-color: #388E3C; /* Darker green on hover */
         }
 
-        /* Footer */
-        footer {
-            border-color: #D4EDDA; /* Light green border for footer */
-            color: #616161; /* Medium Gray for footer text */
+        .controls button:not(#flip-btn):not(#pronounce-btn):hover {
+            background-color: #4a6a81;
+        }
+        
+        #flashcard-actions {
+            margin-top: 15px;
+            display: none;
+            justify-content: center;
+        }
+        
+        #flashcard-actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        #easy-btn { background-color: #28a745; }
+        #easy-btn:hover { background-color: #218838; }
+        #fifty-fifty-btn { background-color: #ffc107; }
+        #fifty-fifty-btn:hover { background-color: #e0a800; }
+        #hard-btn { background-color: #dc3545; }
+        #hard-btn:hover { background-color: #c82333; }
+        #unknown-btn { background-color: #17a2b8; }
+        #unknown-btn:hover { background-color: #138496; }
+
+        .exam-question {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .exam-question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .incorrect {
+            color: red;
         }
     </style>
 </head>
-<body class="p-4 sm:p-6 lg:p-8">
-    <div class="container mx-auto bg-white shadow-xl rounded-2xl p-6 sm:p-8 lg:p-10 my-8">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl sm:text-5xl font-bold mb-4 rounded-xl p-4 border-b-4">
-                خريطة مفاهيم امتحان البجروت في الإسلام
-            </h1>
-            <p class="text-lg sm:text-xl text-gray-700">
-                استعد لامتحانك مع هذه الخريطة المفاهيمية المنظمة.
-            </p>
-        </header>
+<body>
 
-        <div class="search-toc-wrapper">
-            <!-- Search Section -->
-            <div class="mb-8 p-4 rounded-lg shadow-sm border w-full lg:w-1/2">
-                <label for="search-input" class="block text-lg font-semibold mb-2">البحث في الخريطة:</label>
-                <input type="text" id="search-input" placeholder="ادخل كلمة للبحث عنها..." class="w-full p-3 border rounded-lg focus:ring-2 text-right">
-                <div id="search-results" class="mt-4 space-y-2"></div>
-            </div>
+    <header>
+        <h1>موقع حفظ الكلمات</h1>
+        <p>استخدم البطاقات التعليمية والاختبارات لحفظ الكلمات ومعانيها.</p>
+    </header>
 
-            <!-- Table of Contents -->
-            <nav id="table-of-contents" class="mb-8 p-4 rounded-lg shadow-sm border w-full lg:w-1/2 lg:sticky lg:top-0 lg:z-50">
-                <h2 class="text-2xl font-bold mb-4">فهرس المحتويات</h2>
-                <ul class="list-none space-y-2 text-lg">
-                    <!-- Links will be generated here by JavaScript -->
-                </ul>
-            </nav>
-        </div>
-
-        <main id="mind-map-content" class="mind-map-container">
-            <!-- Central Node -->
-            <div class="central-node">
-                العلوم الإسلامية: <br> دراسة ومراجعة
-            </div>
-
-            <div class="main-branch-wrapper">
-                <!-- Main Topics will be distributed here -->
-
-                <!-- 1. أحداث القيامة -->
-                <div id="section-1" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-1-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            1. أحداث القيامة
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-1-content">+</button>
-                    </div>
-                    <div id="section-1-content" class="content-wrapper space-y-4 mt-3">
-                        <p class="text-gray-700 text-sm leading-relaxed">
-                            يوم القيامة هو اليوم الذي يبعث الله فيه الخلائق للحساب والجزاء. سمي بذلك لأنه لا يوم بعده، حيث يستقر أهل الجنة في الجنة أبداً، وأهل النار في النار. وقد أخفى الله وقته عن جميع خلقه، وهو الركن الخامس من أركان الإيمان.
-                        </p>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                ما يسبق البعث
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>النفخة الأولى (نفخة الصعق/الموت): هي النفخة التي يموت بها كل من في السموات والأرض، إلا من شاء الله أن يبقى.</li>
-                                <li>النفخة الثانية (نفخة البعث/القيام من القبور): هي صيحة عظيمة توقظ جميع الأموات، ثم يحشرون بعدها إلى أرض المحشر.</li>
-                                <li>المسافة بين النفختين: تكون أربعون، وقد بيّن النبي صلى الله عليه وسلم أنها أربعون (سنة، شهراً، يوماً - لم يحدد الراوي أيها).</li>
-                                <li>زمن النفخ: يكون يوم الجمعة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تعريف البعث
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: الإرسال أو الإثارة أو الإحياء.</li>
-                                <li>اصطلاحاً: إحياء الموتى حين يُنفخ في الصور النفخة الثانية، فيقوم الناس لرب العالمين حفاة عراة غُرلاً (غير مختونين)، ويبعثون على ما ماتوا عليه. وقد أجمعت الأمة على أن البعث واقع لا محالة.</li>
-                            </ul>
-                            <p class="text-gray-700 text-sm leading-relaxed mt-1">
-                                فهم واستنتاج: يبعث الإنسان على ما مات عليه؛ فمن مات مسلماً بعث مسلماً، ومن مات كافراً بعث على ذلك.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                كيف يُبعث الخلق؟
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>ينزل ماء من السماء قبل النفخة الثانية، فينبت منه أجساد الناس.</li>
-                                <li>جسد الإنسان كله يبلى في القبر إلا عجب الذنب (طرف العصعص)، فمنه يركب الخلق يوم القيامة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                صفة البعث
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>يُبعث الناس من قبورهم عراة حفاة غير مختونين.</li>
-                                <li>يُبعث المحرم ملبياً، ويبعث الشهيد وجرحه ينزل دماً (اللون لون الدم، والرائحة ريح المسك).</li>
-                                <li>أول من تنشق الأرض عنه يوم القيامة: النبي محمد صلى الله عليه وسلم، فهو سيد ولد آدم يوم القيامة، وأول من تنشق الأرض عنه، وأول شافع.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                خواص الإنسان يوم البعث
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لا يموت مهما أُصيب أو عُذِّب.</li>
-                                <li>يستطيع رؤية الملائكة والجن.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. يوم الحشر -->
-                <div id="section-2" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-2-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            2. يوم الحشر
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-2-content">+</button>
-                    </div>
-                    <div id="section-2-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                معنى الحشر
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: الجمع.</li>
-                                <li>اصطلاحاً: جمع الخلائق إلى أرض المحشر، للعرض على الله تعالى، والح حساب بين يديه.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                صفة أرض المحشر
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                هي أرض بيضاء تميل إلى الحمرة، لا علامة فيها، أو بناء أو أثر.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الذين يُحشرون إلى أرض المحشر
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الثقلان: الإنس والجن.</li>
-                                <li>البهائم والوحوش.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                صفة حشر الناس
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>يُحشر الناس حفاة، عراة، غُرلاً. وعند سؤال عائشة رضي الله عنها عن نظر الرجال والنساء لبعضهم، أجاب النبي صلى الله عليه وسلم أن الأمر أشد من أن يُهِمَّهم ذلك.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أهوال يوم الحشر
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>يود الكافر أن له ملك ما في الأرض لِيَفتدي به من سوء العذاب.</li>
-                                <li>يُحسب الناس من هول ذلك اليوم سكارى، وما هم بسكارى.</li>
-                                <li>تدنو الشمس من الرؤوس، ويرتفع العرق، فيكون الناس في العرق على قدر أعمالهم؛ فمنهم من يكون العرق إلى كعبيه، ومنهم إلى ركبتيه، ومنهم إلى حقويه، ومنهم من يلجمه العرق إلجاماً.</li>
-                                <li>يفر المرء من أخيه، والولد من والديه، والزوج من زوجته، والكل يقول: نفسي نفسي.</li>
-                                <li>يُطوّل ذلك اليوم، ولذلك يظن الناس أنهم ما لبثوا إلا ساعة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                كرامة المؤمن في أرض المحشر
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                يُخفف طول يوم المحشر عن المؤمن حتى يكون عليه أخف من صلاة مكتوبة يصليها في الدنيا.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. العرض والحساب -->
-                <div id="section-3" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-3-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            3. العرض والحساب
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-3-content">+</button>
-                    </div>
-                    <div id="section-3-content" class="content-wrapper space-y-4 mt-3">
-                        <p class="text-gray-700 text-sm leading-relaxed">
-                            يهتم المؤمن بسوء الحساب فيعد له في الدنيا ويحاسب نفسه قبل أن يحاسب.
-                        </p>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                معنى العرض والحساب
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>العرض لغةً: الإبراز والظهور.</li>
-                                <li>العرض اصطلاحاً: بروز الخلائق وعرضهم على ربهم في الموقف.</li>
-                                <li>الحساب لغةً: العد.</li>
-                                <li>الحساب اصطلاحاً: تعريف الله الخلائق مقادير الجزاء على أعمالهم، وتذكيرهم بما قد نسوه.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الفهم الصحيح للعرض والحساب
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>حساب عرض: خاص بالمؤمن، يُسأل عن عمله وعلمه ونعم الله عليه، ويثبّته الله، ويجيب، وإن عُرضت عليه ذنوبه فإنه يعترف بها، ويسترها الله عليه ولا يفضحه، ثم يغفرها له، ويُعطى كتابه بيمينه، ويدخل الجنة. يعرف هذا بـ الحساب اليسير.</li>
-                                <li>الحساب: خاص بالكفار وعصاة الموحدين (كالقاتل والزاني والمرابي)، وقد يطول حسابهم ويعسر بحسب كثرة ذنوبهم. فمنهم من يُخلد في النار (الكفار)، ومنهم من يدخل النار إلى أمد ثم يخرج ويدخل الجنة (العصاة الموحدون).</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                مدة يوم الحساب
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                قد يظن البعض أنه يوم واحد لأنه يُعرف بـ"يوم الحساب"، ولكنها تسمية مجازية، بل يمتد لآلاف السنين.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الذين يدخلون الجنة بغير حساب
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                يدخل من أمة محمد صلى الله عليه وسلم سبعون ألفاً إلى الجنة بغير حساب، وهم الذين لا يَسترقون، ولا يتطيرون، ولا يَكتوون، وعلى ربهم يتوكلون.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                مناقشة الحساب
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                من يناقش الحساب فقد استحق العذاب، أو هلك.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الأمور التي يُسأل عنها العبد يوم الحساب
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الصلاة، الحواس وكيف استثمرت، الدين، الحقوق والمظالم.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                كيفية النجاة
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                محاسبة النفس في الدنيا.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. الميزان -->
-                <div id="section-4" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-4-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            4. الميزان
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-4-content">+</button>
-                    </div>
-                    <div id="section-4-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تعريف الميزان
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: مأخوذ من وزن، للدلالة على التعديل والاستقامة، أو بيان قدر الشيء وقيمته.</li>
-                                <li>اصطلاحاً: ميزان حقيقي له لسان وكفتان، توزن فيه أعمال العباد من الخير والشر.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الاعتقاد بالميزان
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                هو ميزان حقيقي ذو كفتين ولسان، وقد بلغت أحاديثه مبلغ التواتر وأجمع أهل الحق عليه.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                آراء الفقهاء في وحدة الميزان وتعدده
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>القائلون بتعدد الميزان: الأظهر أن هناك موازين يوم القيامة، فقد يكون لكل أحد ميزان على حدة، أو ميزان لأفعال القلوب وميزان لأفعال الجوارح.</li>
-                                <li>القائلون بوحدة الميزان: ذهبوا إلى أن لكل فرد ميزاناً خاصاً به، أو لكل عمل ميزان.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. الحوض -->
-                <div id="section-5" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-5-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            5. الحوض
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-5-content">+</button>
-                    </div>
-                    <div id="section-5-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                معنى الحوض
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: مجمع الماء، وجمعه حياض وأحواض.</li>
-                                <li>اصطلاحاً: ما جاء به الخبر من أن لنبينا محمد صلى الله عليه وسلم حوضاً ترد عليه أمته يوم القيامة، جعله الله غياثاً لهم وإكراماً لنبينا محمد.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الفرق بين الحوض والكوثر
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الكوثر: هو النهر الذي أعده الله لنبيه في الجنة.</li>
-                                <li>الحوض: هو مجمع الماء في أرض المحشر، وماؤه مستمد من الكوثر.</li>
-                                <li>الكوثر أصل، وهو نهر جار عظيم، والحوض فرع منه يصب فيه بميزابين.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                صفة حوض النبي صلى الله عليه وسلم
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>اللون: أبيض من اللبن وأبيض من الفضة.</li>
-                                <li>السعة: مسيرة شهر.</li>
-                                <li>الطعم: أحلى من العسل.</li>
-                                <li>أثره على الشارب: من شرب منه لا يظمأ بعدها أبداً.</li>
-                                <li>الرائحة: أطيب من ريح المسك.</li>
-                                <li>المصدر: من الجنة.</li>
-                                <li>مساربه: ميزابان من الجنة، أحدهما من ذهب والآخر من فضة.</li>
-                                <li>آنيته: كنجوم السماء في العدد والنور واللمعان.</li>
-                                <li>الطول والعرض: بعد ما بين طرفيه طولاً كما بين صنعاء وأيلة، وعرضه كطوله.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أول زمرة ترد وتشرب من الحوض
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>صنفان من الناس:</li>
-                                <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                    <li>الفقراء المهاجرون: الشُّعثُ الرُّءوسِ، الدُّنسُ الثِّيابِ، الذين لا ينكحون المتنعّمات ولا تُفتح لهم أبواب السُّدد.</li>
-                                    <li>أهل اليمن.</li>
-                                </ul>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                شرف الشرب من حوض النبي صلى الله عليه وسلم
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                كل من آمن ومات على ذلك يشرب منه، ومن شرب لا يظمأ أبداً.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                المطرودون عن حوض النبي صلى الله عليه وسلم
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                كل من ارتد عن دين الله، أو أحدث فيه ما لا يرضاه ولم يأذن به الله، فهو من المطرودين عنه.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. الصراط المستقيم -->
-                <div id="section-6" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-6-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            6. الصراط المستقيم
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-6-content">+</button>
-                    </div>
-                    <div id="section-6-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                معنى الصراط
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: الطريق.</li>
-                                <li>اصطلاحاً: الجسر الممدود على جهنم، ليعبر الناس عليه إلى الجنة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                مشروعيته
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                ثبتت بالكتاب والسنة والإجماع. أجمع أهل السنة والجماعة على إثبات الصراط.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                المارّون على الصراط
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                كل مسلم لا بد أن يمر على الصراط، أما الكفار والمشركون فإنهم يدخلون جهنم قبل نصب الصراط.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                هيئة الصراط ووصفه
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>دامس شديد الظلمة.</li>
-                                <li>تحته نار سوداء مظلمة.</li>
-                                <li>يُسمع فيه أصوات الصراخ والعويل.</li>
-                                <li>كل واحد من الخلق يحمل على ظهره ذنوبه.</li>
-                                <li>أدق وأرفع من الشعرة.</li>
-                                <li>أحدّ من السيف.</li>
-                                <li>على حافتيه شوك مدبب صلب من حديد وكلاليب.</li>
-                                <li>تزل فيه الأقدام، ولا تستقر.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                مشهد عبور الناس على الصراط
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                يتفاوت المارون تفاوتاً عظيماً، كل حسب عمله:
-                            </p>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>منهم من يمر كالبرق.</li>
-                                <li>منهم من يمر كالريح.</li>
-                                <li>منهم من يمر كالطير.</li>
-                                <li>منهم من يشد كشد الرجال.</li>
-                                <li>منهم من يزحف زحفاً كالبقرة.</li>
-                                <li>على حافتيه كلاليب معلقة مأمورة تأخذ من أُمرت به، فمخدوش ناجٍ ومكدوس في النار.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أول من يعبر الصراط
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                من الأنبياء محمد صلى الله عليه وسلم، ومن الأمم أمته.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                النور الذي يعطى لأهل الصراط
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                ينصب الصراط لأتباع الرسل من المؤمنين، ويُلقى عليهم الظلمة، ثم يُعطون من النور ما يناسب أحوالهم، وبه يكون المرور على الصراط. يتفاوت نورهم؛ فمنهم من يُعطى نوراً مثل الجبل، ومنهم مثل النخلة، ومنهم من يرى نوره بيمينه، ومنهم من يُعطى نوره على إبهام قدمه، يضيء مرة ويطفئ مرة.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                ما بعد الصراط
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                إذا خلص المؤمنون من الصراط، يُحبسون على قنطرة (جسر آخر) بين الجنة والنار، يتقاضون مظالم كانت بينهم. هؤلاء لا يرجع أحد منهم إلى النار، لأن مقاصتهم لا تستنفذ حسناتهم، بل تُبقي لهم ما يدخلهم الجنة.
-                            </p>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>القنطرة: هي الصراط الخاص بتنقية المؤمنين من الذنوب المتعلقة بالعباد، حتى يدخلوا الجنة وقلوبهم خالية من الغل والحسد.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 7. الجنة ونعيمها -->
-                <div id="section-7" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-7-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            7. الجنة ونعيمها
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-7-content">+</button>
-                    </div>
-                    <div id="section-7-content" class="content-wrapper space-y-4 mt-3">
-                        <p class="text-gray-700 text-sm leading-relaxed">
-                            الجنة هي دار الخلود والكرامة التي أعدها الله لعباده المؤمنين. وهي الهدف الأسمى لكل مسلم ومؤمن، حيث يُنعم الله عليهم بالدخول إليها، ويتمتعون بنعيمها الذي لا يفنى، ولا يبلى خيره، ولا ينتهي زمانه. وفيها ما لا عين رأت، ولا أذن سمعت، ولا خطر على قلب بشر.
-                        </p>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                من مضامين النصوص حول الجنة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الجنة هي الدار التي أعدها الله لعباده المؤمنين.</li>
-                                <li>من دخل الجنة فقد فاز واستحق الخلود فيها.</li>
-                                <li>كل ما وُصف في الجنة مما وُجد في الدنيا، إنما هو مجرد تشابه أسماء.</li>
-                                <li>كل شيء في الجنة مباح، من مأكل ومشرب وملبس وملهاة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تعريف الجنة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: البستان العظيم الذي يستر ما بداخله، مشتقة من مادة "جنن" بمعنى الستر.</li>
-                                <li>اصطلاحاً: دار الخلود والكرامة التي أعدها الله لعباده المؤمنين، وأكرمهم فيها بالنظر إلى وجهه الكريم، وفيها من النعيم المقيم الأبدي ما لا عين رأت، ولا أذن سمعت، ولا خطر على قلب بشر.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أنواع الجنة (أسماء الجنات)
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                الجنات مراتب ومنازل متفاوتة، تختلف كل جنة عن الأخرى من حيث نعيمها:
-                            </p>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الحسنى</li>
-                                <li>دار السلام</li>
-                                <li>جنات عدن</li>
-                                <li>جنة المأوى</li>
-                                <li>جنات النعيم</li>
-                                <li>دار المتقين</li>
-                                <li>جنات الفردوس</li>
-                                <li>جنة الخلد</li>
-                                <li>الغرفة</li>
-                                <li>دار المقامة</li>
-                                <li>دار القرار</li>
-                                <li>عليّون: وهي أعلى وأفضل الجنات.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                من طعام أهل الجنة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>ليس لطعام أهل الجنة أثر بعد أكله، فهم لا يبصقون، ولا يتمخطون، ولا يتغوطون، ولا يبولون، وحاجة أحدهم جشاء ورشح كرشح المسك.</li>
-                                <li>فواكه الجنة وثمارها في متناول أيدي أهل الجنة، متى شاءوا وأنى شاءوا، تقترب الثمرة المطلوبة عند فم من يريدها.</li>
-                                <li>كل ما فيها مباح، موجود على مدار الوقت.</li>
-                                <li>من أنواع الفاكهة المذكورة في القرآن: التين، العنب، الرمان، الطلح (الموز)، البلح (النخيل)، السدر (النبق)، وكل ما خلقه الله لأهل الدنيا من ثمار.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                متاع ولباس أهل الجنة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لباس أهلها: الحرير، الذهب، السندس، والإستبرق.</li>
-                                <li>فُرُشها: مفروشة من إستبرق في أعلى الرتب.</li>
-                                <li>أسرّتها: أي الأرائك، مرفوعة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أنهار الجنة وبحارها
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>أنهار الجنة: رأى النبي صلى الله عليه وسلم في الإسراء أربعة أنهار (اثنان باطنان في الجنة، واثنان ظاهران - النيل والفرات).</li>
-                                <li>الكوثر: من أنهار الجنة، أعطاه الله لرسوله.</li>
-                                <li>بحار الجنة: بحر الماء، بحر اللبن، بحر الخمر، بحر العسل.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                صفات نساء أهل الجنة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>يجمعن بين الجمال الخَلقي والجمال الخُلقي، ومن ذلك:</li>
-                                <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                    <li>مطهرات من الحيض والنفاس وسائر العيوب.</li>
-                                    <li>حور: أي بيض.</li>
-                                    <li>عيونهن ضخام.</li>
-                                    <li>رقيقتهن كرقة الجلد، في صفائهن كأنهن الياقوت، وبياضهن كالمرجان.</li>
-                                    <li>أتراب: أي في سن واحدة، جميعهن صغار لا مسنات أو كبار.</li>
-                                    <li>لا يوجد بينهن تباغض ولا تحاسد.</li>
-                                    <li>أبكار: لم يتزوجن قبل ذلك.</li>
-                                </ul>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أعلى نعيم في الجنة
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                أعلى نعيم هو رؤية الله عز وجل، ومناجاته، والفوز برضاه. فقد وعد الله الذين أحسنوا بالحسنى وزيادة، وبيّن النبي صلى الله عليه وسلم أن المؤمنين سيرون ربهم كما يرون القمر ليلة البدر.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أدنى وأعلى أهل الجنة منزلة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>أدنى أهل الجنة منزلة: رجل يدخل الجنة بعد أن دخل أهلها، فيقال له: أدخل الجنة، فيقول: يا رب كيف وقد نزل الناس منازلهم وأخذوا أخذاتهم؟ فيقال له: أترضى أن يكون لك مثل ملك ملك من ملوك الدنيا؟ فيقول: رضيت. فيقول له: لك ذلك ومثله ومثله... في الخامسة يقول: رضيت، ثم يضاف إليه وعشرة أمثاله، وله ما اشتهت نفسه ولذت عينه.</li>
-                                <li>أعلى أهل الجنة منزلة: أولئك الذين أردت الله غرس كرامتهم بيده وختم عليها، فلم تر عين، ولم تسمع أذن، ولم يخطر على قلب بشر.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 8. سورة الفاتحة وشرحها -->
-                <div id="section-8" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-8-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            8. سورة الفاتحة وشرحها
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-8-content">+</button>
-                    </div>
-                    <div id="section-8-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تعريفها
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                أول سورة في القرآن الكريم ترتيباً لا نزولاً. وهي سورة مكية، وآياتها سبع بالإجماع. وتُعرف بـ فاتحة الكتاب، وتُعرف أيضاً بـ السبع المثاني.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أهميتها
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>حوت معاني القرآن الكريم.</li>
-                                <li>تناولت أصول الدين وفروعه ومقاصده، مثل: العقيدة، العبادة، التشريع، الاعتقاد باليوم الآخر، الإيمان بصفات الله، الدعاء والتوجه إلى الله.</li>
-                                <li>هي أمّ القرآن.</li>
-                                <li>هي من أعظم سور القرآن.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                فضلها
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لم يرد أفضل منها في الكتب السماوية ولا في القرآن الكريم.</li>
-                                <li>فرض الله على كل مسلم قراءتها في كل ركعة يؤديها، وجُعلت ركناً من أركان الصلاة لا تُقبل الصلاة إلا بها. يكررها العبد على الأقل سبع عشرة مرة كل يوم.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                من أسمائها
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الحمد</li>
-                                <li>الأساس</li>
-                                <li>الكافية</li>
-                                <li>الوافية</li>
-                                <li>الشافية</li>
-                                <li>السبع المثاني</li>
-                                <li>أم الكتاب</li>
-                                <li>الفاتحة</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تفسير آيات سورة الفاتحة (من إلى)
-                            </h3>
-                            <div class="space-y-2 mt-2">
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ﴾ (1)</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>بدأ الله تعالى سورة الفاتحة بالبسملة ليرشد العباد إلى أهمية بدء أعمالهم بها، وطلب العون والبركة من الله وحده. حرف الباء يفيد الحصر، أي لا استعانة إلا بالله.</li>
-                                        <li>الحمد: هو الشكر والثناء لله رب الإنس والجن والملائكة والشياطين. يكون الحمد على النعم وغيرها (مثل الابتلاءات).</li>
-                                        <li>الرحمن الرحيم: كلاهما مشتقان من الرحمة على وجه المبالغة.
-                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>الرحمن: أشد مبالغة من الرحيم، يدل على الرحمة الشاملة لجميع الخلائق في الدنيا وللمؤمنين في الآخرة. وهو عائد على الرحمة الذاتية، أي الرحمة صفته.</li>
-                                                <li>الرحيم: ذو الرحمة للمؤمنين خاصة، عائد على الرحمة الفعلية، أي يرحم خلقه برحمته.</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ﴾ (2)</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        الحمد هو الثناء بجميل المحاسن للمحمود، مع الرضى القلبي والمحبة. الله هو رب الإنس والجن والملائكة والشياطين.
-                                    </p>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿الرَّحْمَنِ الرَّحِيمِ﴾ (3)</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        (تكرار للآية الأولى معاني الرحمن الرحيم)
-                                    </p>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿مَالِكِ يَوْمِ الدِّينِ﴾ (4)</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        الله هو المالك المتفرد وحده والمتصرف بيوم الدين (يوم الحساب).
-                                    </p>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ﴾ (5)</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        أي نخصك يا الله بالعبادة ونستعين بك على طاعتك. العبادة تشمل كل ما يحبه الله من الأفعال والأقوال الظاهرة والباطنة، وهي مقترنة ومجتمعة مع الاستعانة بالله فقط.
-                                    </p>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ﴾ (6)</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        أي أرشدنا إلى دينك المستقيم، وهو الطريق الموصل إليه سبحانه.
-                                    </p>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">﴿صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلا الضَّالِّينَ﴾ (7)</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        لا تجعلنا من زمرة أعدائك الحائدين عن الصراط المستقيم. وهي طريق من تفضلت عليهم بالجود والأنعام.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 9. التجويد -->
-                <div id="section-9" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-9-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            9. التجويد
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-9-content">+</button>
-                    </div>
-                    <div id="section-9-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                مفهوم التجويد
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: التحسين والإتقان، الإتيان بالشيء الجيد.</li>
-                                <li>اصطلاحاً: هو علم يُعرف به إخراج كل حرف من مخرجه، متصفاً بصفاته.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                نشأة علم التجويد
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                وصل هذا العلم إلينا من خلال أئمة ثقات، وضعوا أصوله، وقاموا باستنباط أحكامه، وذلك من خلال قراءة النبي صلى الله عليه وسلم المأثورة، وصحابته، والتابعين.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الهدف من هذا العلم
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                الهدف الرئيسي هو حفظ اللسان من الوقوع في اللحن عند قراءة ألفاظ القرآن الكريم، وعند أدائه.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                حكم علم التجويد
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                مراعاة قوانين قراءته فرض عين على كل شخص مكلف.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أهمية علم التجويد
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>توحيد طريقة لفظ مفردات القرآن الكريم على الطريقة التي كانت تُنطق بها من قبل الرسول الأعظم صلى الله عليه وسلم.</li>
-                                <li>يعطي تناسقاً صوتياً جميلاً أثناء قراءة القرآن الكريم، ويشد السامعين ويرغبهم في الاستماع المزيد.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تعريف اللحن وأنواعه
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>اللحن: هو الخطأ والميل والانحراف عن الصواب.</li>
-                                <li>أنواعه:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>اللحن الجليّ: هو الخطأ الذي يطرأ على الألفاظ ويخل بالمعنى المقصود للآية، ومثاله استبدال حرف مكان آخر أو تغيير حركة بأخرى. هذا اللحن محرم باتفاق العلماء.</li>
-                                        <li>اللحن الخفيّ: هو الخطأ الذي لا يغير المعنى ولكن يخالف قواعد التجويد، مثل ترك الغنة أو تقصير المد وغيره. حكم هذا اللحن أنه مكروه. يتعلق هذا اللحن بالخطأ في أحكام التجويد.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 10. الإعجاز في القرآن -->
-                <div id="section-10" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-10-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            10. الإعجاز في القرآن
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-10-content">+</button>
-                    </div>
-                    <div id="section-10-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تعريف الإعجاز
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: التقصير، الإعياء.</li>
-                                <li>اصطلاحاً: أمر خارق للعادة مقرون بالتحدي، سالم من المعارضة، يُظهره الله على يد رسله عليهم السلام.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                إعجاز القرآن
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>هو العلم الذي يُعرف من خلاله تحدي القرآن للإنس والجن، وإقامة الحجة مع الدليل.</li>
-                                <li>وهو عجز الناس أو الجن عن الإتيان بمثله أو بسورة من مثله.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                وظيفة المعجزة
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                هي الدليل على صدق النبي، وأنه مرسل من الله.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                شروط الإعجاز
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>التحدي: طلب المبارزة والمنازلة.</li>
-                                <li>وجود السبب: الذي يدفع المتحدي إلى المباراة.</li>
-                                <li>عدم وجود مانع: يمنع المباراة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                من وجوه إعجاز القرآن
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>حسن تأليفه وفصاحته وبلاغته الخارقة.</li>
-                                <li>صحة معانيه وفصاحة ألفاظه.</li>
-                                <li>سلطانه على النفوس والعقول.</li>
-                                <li>الروعة التي تلحق قلوب سامعيه وإسماعهم عند سماعه.</li>
-                                <li>القرآن معجز في تاريخه إلى قيام الساعة دون سائر الكتب السماوية.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                فضل القرآن الكريم على اللغة العربية
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                القرآن كتاب دين ودنيا، فيه الأحكام الشرعية والمعاملات الإنسانية، ويُعبر عن ذلك كله بلغة فصحى أخاذة. وكان للقرآن الكريم فضل على اللغة العربية منها:
-                            </p>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>حفظ للغة بالنموذج الأسمى من الفصاحة والبلاغة والبيان، وهو نموذج أعجز العرب.</li>
-                                <li>أحدث فيها علماً لم تكن لتوجد لولاه، كعلم الشريعة والنحو والصرف والفلسفة والمنطق.</li>
-                                <li>جعلها تتفوق على كثير من لغات الأقوام التي جاورها العرب.</li>
-                                <li>حفظ لغة العرب من الضياع.</li>
-                                <li>وسع دائرة اللغة العربية باستخدام ألفاظ دينية جديدة مثل: الصلاة، الصوم، الزكاة.</li>
-                                <li>ضَمِن استمرار اللغة العربية وتطورها.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 11. شرح وحفظ آيات من سورة البقرة -->
-                <div id="section-11" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-11-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            11. شرح وحفظ آيات من سورة البقرة
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-11-content">+</button>
-                    </div>
-                    <div id="section-11-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                الآيات المختارة للحفظ (من إلى)
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الآيات 1-5: صفات المتقين (يؤمنون بالغيب، يقيمون الصلاة، ينفقون، يؤمنون بما أنزل على النبي وما أنزل قبله، يؤمنون بالآخرة، وهم المفلحون).</li>
-                                <li>الآيات 6-7: صفات الكفار (لا يؤمنون سواء أنذرتهم أم لم تنذرهم، ختم الله على قلوبهم وعلى سمعهم، وعلى أبصارهم غشاوة، ولهم عذاب عظيم).</li>
-                                <li>الآيات 8-12: صفات المنافقين (يقولون آمنا بالله وباليوم الآخر وما هم بمؤمنين، يخادعون الله والذين آمنوا وما يخدعون إلا أنفسهم وما يشعرون، في قلوبهم مرض فزادهم الله مرضاً ولهم عذاب أليم بما كانوا يكذبون، وإذا قيل لهم لا تفسدوا في الأرض قالوا إنما نحن مصلحون، ألا إنهم هم المفسدون ولكن لا يشعرون).</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                شرح آيات من سورة البقرة (من إلى)
-                            </h3>
-                            <div class="space-y-2 mt-2">
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 21: "يَا أَيُّهَا النَّاسُ اعْبُدُوا رَبَّكُمُ الَّذِي خَلَقَكُمْ وَالَّذِينَ مِن قَبْلِكُمْ لَعَلَّكُمْ تَتَّقُونَ"</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>المناسبة: بعد ذكر صفات المؤمنين والكافرين والمنافقين، يذكر الله الأدلة والبراهين على وحدانيته ونعمه على الناس.</li>
-                                        <li>المعنى: نداء إلى الناس كافة لعبادة الله وحده بتوحيده وشكره وطاعته. هو الذي أوجدهم من العدم، وخلق من قبلهم الأمم لتكونوا في زمرة المتقين.</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 22: "الَّذِي جَعَلَ لَكُمُ الْأَرْضَ فِرَاشًا وَالسَّمَاءَ بِنَاءً وَأَنزَلَ مِنَ السَّمَاءِ مَاءً فَأَخْرَجَ بِهِ مِنَ الثَّمَرَاتِ رِزْقًا لَّكُمْ ۖ فَلَا تَجْعَلُوا لِلَّهِ أَندَادًا وَأَنتُمْ تَعْلَمُونَ"</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>تشير إلى:
-                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>جعل الأرض مهاداً وفراشاً يستقرون وتفترشون عليها.</li>
-                                                <li>جعل السماء سقفاً مرفوعاً للأرض كهيئة القبة.</li>
-                                                <li>أنزل مطراً من السحاب بقدرته فأخرج به أنواع الثمار والخضار والفواكه رزقاً لهم.</li>
-                                                <li>يوصي الله الناس ألا يتخذوا شركاء مع الله في العبادة، وأنتم تعلمون أن الأصنام لا تخلق ولا ترزق.</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 23: "وَإِن كُنتُمْ فِي رَيْبٍ مِّمَّا نَزَّلْنَا عَلَىٰ عَبْدِنَا فَأْتُوا بِسُورَةٍ مِّن مِّثْلِهِ وَادْعُوا شُهَدَاءَكُم مِّن دُونِ اللَّهِ إِن كُنتُمْ صَادِقِينَ"</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        إن كنتم أيها الناس في شك من صدق القرآن وعجز بيانه ونظمه، فأتوا بسورة واحدة مثل هذا القرآن، واستعينوا بمن شئتم غير الله، كالفصحاء والعباقرة، إن كنتم صادقين في زعمكم أنه مختلق.
-                                    </p>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 24: "فَإِن لَّمْ تَفْعَلُوا وَلَن تَفْعَلُوا فَاتَّقُوا النَّارَ الَّتِي وَقُودُهَا النَّاسُ وَالْحِجَارَةُ ۖ أُعِدَّتْ لِلْكَافِرِينَ"</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>المعنى: إن لم تقدروا على الإتيان بمثل سورة، ولن تقدروا في المستقبل، فخافوا عذاب الله واحذروا نار جهنم التي وقودها الكفار والأصنام التي عبدوها من دون الله.</li>
-                                        <li>ملاحظة: جملة "وَلَن تَفْعَلُوا" اعتراضية للإشارة إلى عجز البشر في الحاضر والمستقبل. الكفار والأصنام سيكونون وقوداً للنار.</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 25: "وَبَشِّرِ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ أَنَّ لَهُمْ جَنَّاتٍ تَجْرِي مِن تَحْتِهَا الْأَنْهَارُ ۖ كُلَّمَا رُزِقُوا مِنْهَا مِن ثَمَرَةٍ رِّزْقًا ۙ قَالُوا هَٰذَا الَّذِي رُزِقْنَا مِن قَبْلُ ۖ وَأُتُوا بِهِ مُتَشَابِهًا ۖ وَلَهُمْ فِيهَا أَزْوَاجٌ مُّطَهَّرَةٌ ۖ وَهُمْ فِيهَا خَالِدُونَ"</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>المبشّر: النبي محمد صلى الله عليه وسلم.</li>
-                                        <li>صفات المؤمنين: المؤمنون بالله (المتقون)، جمعوا بين الإيمان والعمل الصالح.</li>
-                                        <li>صفة الجنات: جنات متعددة (تدل على الكثرة)، تجري من تحتها الأنهار (بساتين ومساكن تجري الأنهار من تحت قصورها)، الله يكفيهم رزقهم في الجنة، كلما رزقوا من ثمرة رزقاً قالوا: هذا الذي رزقنا من قبل (يظنون أن الطعام الآتي هو ذات الطعام الأول)، ولكن متشابه في الشكل مختلف في الطعم.</li>
-                                        <li>الأزواج: زوجات من الحور العين، مطهرات من الأقذار والأدناس الحسية والمعنوية. أنشأهن الله أبكاراً.</li>
-                                        <li>يعيش أهل الجنة حياة خالدة بلا انقطاع.</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 26: "إِنَّ اللَّهَ لَا يَسْتَحْيِي أَن يَضْرِبَ مَثَلًا مَّا بَعُوضَةً فَمَا فَوْقَهَا ۚ فَأَمَّا الَّذِينَ آمَنُوا فَيَعْلَمُونَ أَنَّهُ الْحَقُّ مِن رَّبِّهِمْ ۖ وَأَمَّا الَّذِينَ كَفَرُوا فَيَقُولُونَ مَاذَا أَرَادَ اللَّهُ بِهَٰذَا مَثَلًا ۘ يُضِلُّ بِهِ كَثِيرًا وَيَهْدِي بِهِ كَثِيرًا ۚ وَمَا يُضِلُّ بِهِ إِلَّا الْفَاسِقِينَ"</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>سبب النزول: لما ذكر الله الذباب والعنكبوت في كتابه وضرب للمشركين المثل، ضحكت اليهود وقالوا: كلام الله فأنزل الله هذه الآية.</li>
-                                        <li>المعنى: الله لا يمتنع أن يضرب مثلاً بأي شيء، كبعوضة أو أصغر منها. المؤمنون يعلمون أن ذلك حق من ربهم. أما الكفار فيقولون: ماذا أراد الله بهذا المثل؟. فيرد الله عليهم أنه يضل بهذا المثل كثيراً من الكافرين، ويهدي به كثيراً من المؤمنين، وما يضل به إلا الخارجين عن طاعة الله.</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 27: "الَّذِينَ يَنقُضُونَ عَهْدَ اللَّهِ مِن بَعْدِ مِيثَاقِهِ وَيَقْطَعُونَ مَا أَمَرَ اللَّهُ بِهِ أَن يُوصَلَ وَيُفْسِدُونَ فِي الْأَرْضِ ۚ أُولَٰئِكَ هُمُ الْخَاسِرُونَ"</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>أوصاف الفاسقين:
-                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>ينقضون كل عهد وميثاق من الإيمان بالله والتصديق بالرسل.</li>
-                                                <li>يقطعون صلة الأرحام.</li>
-                                                <li>الإفساد في الأرض بالمعاصي.</li>
-                                                <li>استبدالهم الضلالة بالهدى، لذلك فهم فاسقون.</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 28: "كَيْفَ تَكْفُرُونَ بِاللَّهِ وَكُنتُمْ أَمْوَاتًا فَأَحْيَاكُمْ ۖ ثُمَّ يُمِيتُكُمْ ثُمَّ يُحْيِيكُمْ ثُمَّ إِلَيْهِ تُرْجَعُونَ"</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        المعنى: كيف تجحدون الخالق وقد كنتم في العدم نطفاً في أصلاب الآباء وأرحام الأمهات، فأخرجكم إلى الدنيا، ثم أماتكم عند انقضاء الآجال، ثم يحييكم بالبعث من القبور، ثم إليه ترجعون للحساب والجزاء.
-                                    </p>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الآية 29: "هُوَ الَّذِي خَلَقَ لَكُم مَّا فِي الْأَرْضِ جَمِيعًا ثُمَّ اسْتَوَىٰ إِلَى السَّمَاءِ فَسَوَّاهُنَّ سَبْعَ سَمَاوَاتٍ ۚ وَهُوَ بِكُلِّ شَيْءٍ عَلِيمٌ"</h4>
-                                    <p class="text-gray-700 text-sm">
-                                        المعنى: الله خلق لكم الأرض وما فيها لتنتفعوا بكل ما فيها. ثم وجه إرادته إلى السماء فصيّرهن وقضاهن سبع سماوات، فأحكم بناءها. وهو عالم بكل ما خلق.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 12. الهجرة إلى يثرب -->
-                <div id="section-12" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-12-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            12. الهجرة إلى يثرب
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-12-content">+</button>
-                    </div>
-                    <div id="section-12-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                المرحلة الأولى: هجرة المسلمين إلى المدينة
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                أمر النبي صلى الله عليه وسلم أصحابه بالهجرة إلى المدينة رحمة بهم وعطفاً عليهم، حفاظاً على دينهم. فاستجابوا لأمره تاركين أهلهم وأموالهم وبيوتهم.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                المرحلة الثانية: هجرة الرسول صلى الله عليه وسلم إلى المدينة المنورة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>مؤامرة دار الندوة:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>رأى النبي صلى الله عليه وسلم في المنام أن دار هجرته هي المدينة.</li>
-                                        <li>أُذن للنبي صلى الله عليه وسلم بالهجرة، فاجتمع المشركون في دار الندوة ليمنعوه. اتفقوا على أن يأتي شباب أقوياء من كل قبيلة وينتظرونه أمام داره، فإذا خرج ضربوه ضربة رجل واحد ليتفرق دمه بين القبائل.</li>
-                                        <li>أخبر جبريل النبي صلى الله عليه وسلم بأمرهم.</li>
-                                    </ul>
-                                </li>
-                                <li>خرج النبي صلى الله عليه وسلم من بيته وشباب المشركين ينتظرونه، فأخذ حفنة من التراب ونثرها على رؤوسهم وهو يتلو آيات من سورة يس.</li>
-                                <li>ذهب إلى بيت أبي بكر، وخرجا إلى غار ثور، واختفيا فيه ثلاثة أيام.</li>
-                                <li>أول فدائي في الإسلام: علي كرم الله وجهه، بنومه في فراش النبي.</li>
-                                <li>عبد الله بن أبي بكر: تكفل بنقل أخبار أهل مكة إليهما طيلة مكوثهما بالغار.</li>
-                                <li>عامر بن فهيرة (راعي أغنام أبي بكر): كان يمسح آثار أقدام عبد الله بن أبي بكر.</li>
-                                <li>أسماء بنت أبي بكر: كانت تأتي لهما بالطعام كل يوم، وشقت نطاقها لوضع الطعام، فلقبها النبي بـ"ذات النطاقين".</li>
-                                <li>عبد الله بن أريقط: كان دليلهما في الصحراء، وكان كافراً.</li>
-                                <li>قريش أعلنت مائة ناقة لمن يأتي بالنبي وصاحبه حياً أو ميتاً.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                وصوله إلى المدينة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>في الطريق تعرض لهم سراقة بن مالك طمعاً في الجائزة، لكنه لم يستطع الوصول إليهما ورجع حامياً لهما.</li>
-                                <li>وصل النبي صلى الله عليه وسلم وصاحبه إلى قباء يوم الاثنين الثاني عشر من شهر ربيع الأول.</li>
-                                <li>أقام في قباء أربعة عشر يوماً، وأسس خلالها مسجد قباء.</li>
-                                <li>ثم سار إلى المدينة، وكانت الناقة تبرك في مكان مسجده الآن (المسجد النبوي).</li>
-                                <li>نزل في المدينة على أبي أيوب الأنصاري، ومكث عنده سبعة أشهر حتى بني مسجده وحجرات أمهات المؤمنين.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أهمية المسجد
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                كان أول ما حرص عليه الرسول في قباء والمدينة، لأنه مكان اجتماع المسلمين والمدرسة الأولى في الإسلام.
-                            </p>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                المرحلة الثالثة: ما بعد الهجرة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>سمي المسلمون القادمون من مكة بـ المهاجرين.</li>
-                                <li>سمي المسلمون من أهل المدينة بـ الأنصار.</li>
-                                <li>سميت يثرب بـ دار الهجرة، والمدينة النبوية، ومدينة الرسول المنورة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أسباب الهجرة من مكة إلى المدينة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>البحث عن الأمن والأمان: بسبب الاضطهاد الذي سببته قريش له وللمسلمين، ومحاولة قتله والتخلص منه.</li>
-                                <li>الحصار الاقتصادي: الذي فرضه الكفار على الرسول ومن معه، حتى ضاق الأمر بالمسلمين وأكلوا أوراق الأشجار.</li>
-                                <li>استعداد أهل المدينة: كان أهل المدينة على استعداد تام للدين الإسلامي بعدما زاد حبهم للرسول قبل رؤيتهم له، بالإضافة إلى أن المدينة ستوفر له ولأصحابه الأمن.</li>
-                                <li>إقامة الدولة الإسلامية: رأى النبي أنه لا بد من تحقيق رسالته ونشر الدين الإسلامي، وهذا يتطلب وجود حصن قوي لتكوين مملكة إسلامية تحميها قوة عسكرية، فكان لا بد من مكان آمن.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                ما نتعلمه من قصة الهجرة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الصبر والإصرار على الحق.</li>
-                                <li>التوكل على الله.</li>
-                                <li>التخطيط للهجرة أو لأي عمل.</li>
-                                <li>حسن اختيار الصحبة.</li>
-                                <li>السرية في العمل.</li>
-                                <li>انتصار الحق على الباطل.</li>
-                                <li>الله يجعل الخير والصلاح والفلاح لمن يهاجر في سبيله.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                النبي صلى الله عليه وسلم في المدينة
-                            </h3>
-                            <div class="space-y-2 mt-2">
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">استقبال الرسول صلى الله عليه وسلم</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>خرج أهل المدينة جميعهم لاستقباله، والفرح يغمرهم، ورددوا "طلع البدر علينا". هذا الحب العميق كان قبل رؤيتهم له.</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">في ضيافة أبي أيوب الأنصاري</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>كان الجميع يطمع في استضافة النبي.</li>
-                                        <li>حط النبي في ضواحي المدينة أربعة أيام، وبنى مسجده الأول مسجد قباء.</li>
-                                        <li>أسرع سادات وأشراف أهل يثرب لاستضافته، لكن النبي كان يقول: "دعوها فإنها مأمورة".</li>
-                                        <li>قدر الله أن بركت الناقة عند بيت أبي أيوب الأنصاري رضي الله عنه. أقام النبي صلى الله عليه وسلم في ضيافته سبعة أشهر، حتى بني المسجد وبيوت أمهات المؤمنين.</li>
-                                        <li>النبي صلى الله عليه وسلم اختار السكن في الطابق الأرضي لسهولة استقبال الزوار، رغم رغبة أبي أيوب في أن يكون في الطابق العلوي.</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">المؤاخاة بين الأوس والخزرج</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>قبل الإسلام، كان العرب يعيشون في تناحر على أمور تافهة. حرب بعاث مزقت القبيلتين قبل خمس سنوات من هجرة النبي.</li>
-                                        <li>سعى النبي صلى الله عليه وسلم إلى صلة الأمة بعضها ببعض برفع شعار المؤاخاة، وإحلال رابطة الإخاء والدين محل رابطة القبيلة والعصبية.</li>
-                                        <li>تطبيق المؤاخاة:
-                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>بين المهاجرين والأنصار.</li>
-                                                <li>بين بعض القبائل والمهاجرين.</li>
-                                                <li>قرب بين الأوس والخزرج.</li>
-                                                <li>آخى بين العرب والموالي (مثل حمزة وزيد، وأبي الدرداء وسلمان الفارسي).</li>
-                                            </ul>
-                                        </li>
-                                        <li>نتائج هذا الإخاء:
-                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>أسس النبي أسرة إسلامية واحدة، فلا حمية إلا للإسلام.</li>
-                                                <li>سقطت فوارق النسب واللون والوطن، وتحقق مفهوم "لا فضل لعربي على أعجمي إلا بالتقوى".</li>
-                                                <li>ضرب المسلمون المثل الأعلى في التعاون والاتحاد.</li>
-                                                <li>وحدة المدينة بعد أن كانت ساحة للحروب.</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">بناء المسجد</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>المسجد هو أول ما حرص عليه الرسول صلى الله عليه وسلم بعد هجرته إلى المدينة.</li>
-                                        <li>ليظهر فيه شعائر الإسلام، وتقام فيه الصلوات.</li>
-                                        <li>ليكون مركزاً تشاورياً في شتى أمور الدنيا والآخرة.</li>
-                                        <li>ليتخذ مركزاً لاستقبال الوفود والملوك والسفراء.</li>
-                                        <li>ليكون مقراً للحكومة الإسلامية.</li>
-                                        <li>اشترى النبي صلى الله عليه وسلم أرض المسجد، وشارك في بنائه بنفسه كأي عامل من أصحابه.</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">المعاهدة بين المسلمين واليهود</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>وثيقة أظهرت حرص النبي صلى الله عليه وسلم على بناء روابط وصلة بين الأمة الإسلامية وغيرها من الأمم التي تدين بدين آخر.</li>
-                                        <li>أقرهم على دينهم، وضمن لهم أموالهم.</li>
-                                        <li>كان أساس المعاهدة الأخوة في السلم والدفاع عن المدينة وقت الحرب.</li>
-                                        <li>بعض بنود المعاهدة الخاصة باليهود:
-                                            <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>يهود بني عوف أمة مع المؤمنين، لليهود دينهم وللمسلمين دينهم ومواليهم وأنفسهم.</li>
-                                                <li>على اليهود نفقتهم، وعلى المسلمين نفقتهم.</li>
-                                                <li>بينهم النصر على من حارب أهل هذه الصحيفة.</li>
-                                                <li>بينهم النصح والنصيحة والبر دون الإثم.</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 13. كل مادة الحديث -->
-                <div id="section-13" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-13-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            13. كل مادة الحديث
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-13-content">+</button>
-                    </div>
-                    <div id="section-13-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                علم مصطلح الحديث
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>يهتم بالقواعد والضوابط التي يُخضع لها متن وسند الحديث الشريف، وبعد تمحيصهما ودراستهما، يتم تبين قبول الحديث أو رده.</li>
-                                <li>تعريف علم مصطلح الحديث: هو العلم الذي يُعرف به أحوال السند والمتن، من حيث القبول والرد.</li>
-                                <li>أقسام علم مصطلح الحديث:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>علم رواية الحديث: يدرس اتصال السند وكيفية تلقي الحديث عن رجاله، ويبحث في أحوال رواته ضبطاً وعدالة، وعلاقته بالسند اتصالاً وانقطاعاً. يركز على ألفاظ الرسول صلى الله عليه وسلم من حيث صحة ودقة صدورها عنه.</li>
-                                        <li>علم دراية الحديث: يبحث عن المعنى الذي يُفهم من ألفاظ الحديث (المتن) والمراد منها، وفقاً لقواعد اللغة وضوابط الشريعة، بالإضافة إلى أحوال الرسول صلى الله عليه وسلم. يركز على متن الحديث من حيث دلالاتها المتعلقة بالمفهوم والمراد منها.</li>
-                                    </ul>
-                                </li>
-                                <li>فائدة وأهمية علم مصطلح الحديث: يساعد على معرفة ما يجب قبوله أو رده من الراوي والمروي، بهدف تنقية الأدلة الحديثية والتخلص من الأحاديث الضعيفة.</li>
-                                <li>أهدافه:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>إعطاء الدارس مفاتيح المعرفة ليعرف ما يقبل من الأحاديث وما يرد.</li>
-                                        <li>القدرة على إدراك المنهجية التي سلكها العلماء لإثبات الحديث وتنقيته.</li>
-                                        <li>تحقيق معاني المتون وفهم مضامينها.</li>
-                                    </ul>
-                                </li>
-                                <li>السند والمتن:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>مثال: حديث "لا يزال الناس بخير ما عجلوا الفطر".</li>
-                                        <li>السند: هم سلسلة رواة الحديث الذين تحملوا الحديث من أول السند حتى وصوله إلى الرسول صلى الله عليه وسلم. في المثال يشمل الإمام البخاري، عبد الله بن يوسف، مالك، أبو حازم، وسهل بن سعد.</li>
-                                        <li>المتن: هو كلام الرسول صلى الله عليه وسلم أو فعله، أو هو ما انتهى إليه السند. في المثال هو "لا يزال الناس بخير ما عجلوا الفطر".</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أقسام الحديث، من حيث حال الرواة
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                الحديث يقسم، باعتبار قبوله ورده، إلى قسمين:
-                            </p>
-                            <div class="space-y-2 mt-2">
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">الحديث المقبول</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>هو الذي يُحتج به ويُعمل به، وهو الصحيح والحسن.</li>
-                                    </ul>
-                                    <div class="space-y-1 mt-1">
-                                        <div class="sub-topic-node-level-5">
-                                            <h5 class="text-base font-medium text-green-700 mb-1">أولاً: الحديث الصحيح</h5>
-                                            <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>لغةً: ضد السقيم.</li>
-                                                <li>اصطلاحاً: هو ما اتصل سنده بنقل العدل الضابط، عن مثله إلى منتهاه، من غير شذوذ ولا علة.</li>
-                                                <li>شروطه الخمسة:
-                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                        <li>اتصال السند: كل راوٍ أخذ الحديث عمن فوقه من أول السند إلى منتهاه.</li>
-                                                        <li>عدالة الرواة: كل راوٍ مسلم، بالغ، عاقل، غير فاسق، وغير مخروم المروءة.
-                                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                                <li>شروط العدالة: الإسلام، البلوغ، العقل، أن يكون غير فاسق، وأن يكون غير مخروم المروءة.</li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>ضبط الرواة: كل راوٍ كان تام الضبط.
-                                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                                <li>أقسام الضبط: ضبط الصدر (حفظ ما سمعه)، ضبط الكتاب (حفظ ما كتبه).</li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>عدم الشذوذ: مخالفة الثقة لمن هو أوثق منه.</li>
-                                                        <li>عدم العلة: مراعاة العرف السائد بشرط ألا يخالف الشرع.</li>
-                                                    </ul>
-                                                </li>
-                                                <li>حكمه: وجوب العمل به بالإجماع.</li>
-                                                <li>أقسامه:
-                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                        <li>الصحيح لذاته: ما اشتمل على الشروط الخمسة.</li>
-                                                        <li>الصحيح لغيره: الحديث الذي لا توجد له طرق صحيحة بذاتها، بل يتقوى بطريق آخر حسن فيرتقي إلى درجة الحديث الصحيح. الصحيح لغيره أقل درجة من الصحيح لذاته.</li>
-                                                    </ul>
-                                                </li>
-                                                <li>مراتبه:
-                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                        <li>ما اتفق عليه الشيخان (البخاري ومسلم).</li>
-                                                        <li>ما انفرد به الإمام البخاري.</li>
-                                                        <li>ما انفرد به الإمام مسلم.</li>
-                                                        <li>ما كان على شرطهما ولم يخرجاه.</li>
-                                                        <li>ما كان على شرط البخاري ولم يخرجه.</li>
-                                                        <li>ما كان على شرط مسلم ولم يخرجه.</li>
-                                                        <li>ما كان صحيحاً عند غيرهما وليس على شرط واحد منهما.</li>
-                                                    </ul>
-                                                </li>
-                                                <li>مظان الحديث الصحيح: صحيح البخاري، صحيح مسلم، موطأ مالك وغيرها.</li>
-                                            </ul>
-                                        </div>
-                                        <div class="sub-topic-node-level-5">
-                                            <h5 class="text-base font-medium text-green-700 mb-1">ثانياً: الحديث الحسن</h5>
-                                            <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>لغةً: صفة مشبهة من الحسن بمعنى الجمال.</li>
-                                                <li>اصطلاحاً: هو ما اتصل سنده بنقل العدل خفيف الضبط، عن مثله إلى منتهاه، من غير شذوذ ولا علة.</li>
-                                                <li>شروطه الخمسة: نفس شروط الصحيح، لكن الضبط في الحسن أقل من الضبط في الصحيح.</li>
-                                                <li>حكمه: كالصحيح في الاحتجاج به، وإن كان دونه في القوة.</li>
-                                                <li>أقسامه:
-                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                        <li>الحسن لذاته: ما اشتمل على الشروط الخمسة.</li>
-                                                        <li>الحسن لغيره: هو الضعيف إذا تعددت طرقه، ولم يكن سبب ضعفه فسق الراوي أو كذبه. الحسن لغيره أقل درجة من الحسن لذاته.</li>
-                                                    </ul>
-                                                </li>
-                                                <li>مظان الحديث الحسن: سنن الترمذي، سنن أبي داود، سنن الدارقطني.</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="sub-topic-node-level-4">
-                                    <h4 class="text-lg font-medium text-green-800 mb-1">القسم الثاني: الحديث المردود (المرفوض)</h4>
-                                    <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>لغةً: المرفوض.</li>
-                                        <li>اصطلاحاً: هو ما فقد شرطاً (أو أكثر) من شروط القبول، أي لم تجتمع فيه شروط القبول جميعها. يشمل الحديث الضعيف بأقسامه.</li>
-                                    </ul>
-                                    <div class="space-y-1 mt-1">
-                                        <div class="sub-topic-node-level-5">
-                                            <h5 class="text-base font-medium text-green-700 mb-1">أولاً: الحديث الضعيف</h5>
-                                            <ul class="list-disc list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>لغةً: مأخوذ من الضعف، ويراد به: خلاف القوة.</li>
-                                                <li>اصطلاحاً: هو الحديث الذي لم تجتمع فيه صفات الحديث الصحيح أو الحسن.</li>
-                                                <li>أسباب ضعفه:
-                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                        <li>عدم وجود اتصال في السند.</li>
-                                                        <li>عدم عدالة الرواة أو بعضهم.</li>
-                                                        <li>عدم ضبط الرواة أو بعضهم.</li>
-                                                        <li>وجود الشذوذ.</li>
-                                                        <li>وجود العلة القادحة.</li>
-                                                    </ul>
-                                                </li>
-                                                <li>حكم العمل بالحديث الضعيف:
-                                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                        <li>المذهب الأول: لا يُعمل به مطلقاً.</li>
-                                                        <li>المذهب الثاني: يُعمل به مطلقاً بشروط: أن يكون الضعف غير شديد، ألا يتعارض مع حديث آخر، ألا يكون في الباب حديث غيره.</li>
-                                                        <li>المذهب الثالث: يُعمل به بقيود، في فضائل الأعمال، والترغيب والترهيب، والقصص، والمواعظ. لا يُعمل به في العقائد، الأحكام (الحلال والحرام)، الفرض والواجب.</li>
-                                                    </ul>
-                                                </li>
-                                                <li>تفاوت الحديث الضعيف: يتفاوت حسب ضعف الرواة، فمنه الضعيف، والضعيف جداً، والواهي، وأشد أنواعه ضعفاً الموضوع.</li>
-                                                <li>مظان الحديث الضعيف: كتاب الضعفاء للعقيلي، ميزان الاعتدال للذهبي، كتاب العلل للدارقطني.</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 14. من مادة التهذيب: صلة الأرحام أو إصلاح ذات البين -->
-                <div id="section-14" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-14-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            14. من مادة التهذيب: صلة الأرحام أو إصلاح ذات البين
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-14-content">+</button>
-                    </div>
-                    <div id="section-14-content" class="content-wrapper space-y-4 mt-3">
-                        <p class="text-gray-700 text-sm leading-relaxed">
-                            سأتناول الموضوعين كما وردا في المصادر:
-                        </p>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أ. صلة الأرحام
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                صلة الرحم هي إحدى الروابط الاجتماعية التي حث الله عليها في كتابه وسنة نبيه.
-                            </p>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>مفهوم صلة الرحم:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>لغةً: صلة تعني الوصل، والرحم اسم جامع لكل الأقارب.</li>
-                                        <li>اصطلاحاً: زيارة الأقارب وتفقد أحوالهم، والبر بهم، ومشاركتهم أفراحهم وأتراحهم، حتى وإن أساءوا.</li>
-                                    </ul>
-                                </li>
-                                <li>من هم الأرحام؟
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>هم الأقارب من النسب، لا من الرضاع، من جهة الأب والأم.</li>
-                                        <li>تنويه: أقارب الزوجين ليسوا أرحاماً للآخر، لكن ينبغي الإحسان إليهم لأنه من حسن العشرة.</li>
-                                    </ul>
-                                </li>
-                                <li>حكم صلة الرحم:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>واجبة على كل مسلم ومسلمة، وقطيعة الرحم تعتبر معصية وذنباً كبيراً.</li>
-                                    </ul>
-                                </li>
-                                <li>أهمية صلة الرحم:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>أولى الله صلة الرحم مكانة عالية، فاشتق اسمها من اسمه الرحمن، وجعل منزلتها عند عرشه، واعتبرت ثمرة من ثمرات خشيته.</li>
-                                    </ul>
-                                </li>
-                                <li>فضل صلة الرحم:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>من علامات الإيمان.</li>
-                                        <li>سبب للبركة في الرزق والعمر.</li>
-                                        <li>سبب لصلة الله تعالى وإكرامه.</li>
-                                        <li>من أسباب دخول الجنة.</li>
-                                        <li>الإسلام استحب تقديم الفضل للأرحام على غيرهم.</li>
-                                    </ul>
-                                </li>
-                                <li>عواقب قطع الرحم:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>تعتبر الإساءة إلى الأرحام أو التهرب من أداء حقوقهم صفة من صفات الخاسرين، ومن كبائر الذنوب.</li>
-                                        <li>قاطع الرحم ملعون.</li>
-                                        <li>قاطع الرحم تعجل له العقوبة في الدنيا، وتنقطع صلته بالله.</li>
-                                        <li>الحرمان من دخول الجنة.</li>
-                                    </ul>
-                                </li>
-                                <li>من أسباب قطيعة الرحم:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>كثرة العتاب الشديد بين الأقارب.</li>
-                                        <li>ضعف الوازع الديني والجهل بعواقب القطيعة.</li>
-                                        <li>التكلف الزائد في إكرامهم.</li>
-                                        <li>تأخير قسمة الميراث.</li>
-                                        <li>الشراكة بين الأقارب التي تفضي إلى الاختلاف.</li>
-                                        <li>طلاق الأقارب وما يترتب عليه من خلافات.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                ب. إصلاح ذات البين
-                            </h3>
-                            <p class="text-gray-700 text-sm leading-relaxed">
-                                رغّب الإسلام في جمع القلوب والإصلاح بين الناس، وجعل الأخوة أمراً مرغوباً فيه. الشريعة أمرت بكل ما يقرب بين المسلمين ونهت عن كل ما يسيء العلاقة ويقطع المودة.
-                            </p>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>نصوص شرعية تدعو إلى إصلاح ذات البين:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>القرآن الكريم:
-                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>﴿إِنَّمَا الْمُؤْمِنُونَ إِخْوَةٌ فَأَصْلِحُوا بَيْنَ أَخَوَيْكُمْ ۚ وَاتَّقُوا اللَّهَ لَعَلَّكُمْ تُرْحَمُونَ﴾.</li>
-                                                <li>﴿وَأَصْلِحُوا ذَاتَ بَيْنِكُمْ﴾.</li>
-                                            </ul>
-                                        </li>
-                                        <li>السنة النبوية:
-                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>"ألا أخبركم بأفضل من درجة الصيام والصلاة والصدقة؟ قالوا: بلى، قال: إصلاح ذات البين؛ فإن فساد ذات البين هي الحالقة".</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>سبل إصلاح ذات البين:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>توفر النية الصادقة.</li>
-                                        <li>اعتماد معايير العدل وتقوى الله.</li>
-                                        <li>اعتماد آداب النصح واختيار العبارات المناسبة.</li>
-                                        <li>حفظ خصوصيات الأطراف وعدم إفشاء الأسرار.</li>
-                                        <li>المصالحة في العدل والوقوف بنفس المسافة بين المتخاصمين.</li>
-                                        <li>انتهاج الحوار لتقريب وجهات النظر.</li>
-                                        <li>الوعظ والإرشاد بتوضيح فضل الإصلاح وعواقب الإفساد.</li>
-                                        <li>القضاء أو التحكيم عند استلزام الإصلاح لذلك.</li>
-                                    </ul>
-                                </li>
-                                <li>شروط المصلح بين الناس:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>العلم الكافي بسبل الإصلاح.</li>
-                                        <li>السيرة الحسنة والأخلاق القويمة.</li>
-                                        <li>الإخلاص في مساعي الصلح وعدم وجود مسعى دنيوي.</li>
-                                    </ul>
-                                </li>
-                                <li>الآثار المترتبة على إفساد ذات البين:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>ضياع جذوة الالتزام بالدين وانعدام أثره، فهو "الحالقة" التي تحلق الدين كما يُحلق الشعر.</li>
-                                        <li>تسمم العلاقات الاجتماعية وتفكك روابط الألفة والمحبة، وانهيار المجتمع.</li>
-                                        <li>توتر الفرد وقلقه.</li>
-                                        <li>نيل غضب الله وسخطه، والعذاب يوم القيامة.</li>
-                                    </ul>
-                                </li>
-                                <li>ما يجب مراعاته في جلسة الصلح:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>تحديد أساسيات التصالح.</li>
-                                        <li>توضيح أهمية الصلح.</li>
-                                        <li>الموضوعية.</li>
-                                        <li>الابتعاد عن الأنانية.</li>
-                                        <li>الاستماع للآخرين.</li>
-                                        <li>التعاطف مع الجميع.</li>
-                                        <li>استخدام الكلمات بحرص.</li>
-                                        <li>التصرف بحكمة.</li>
-                                    </ul>
-                                </li>
-                                <li>من فوائد الصلح بين المتخاصمين:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>حلول المحبة والألفة مكان القطيعة والكراهية.</li>
-                                        <li>غرس الفضيلة (العفو والمغفرة).</li>
-                                        <li>كسب الحسنات ورفع الدرجات.</li>
-                                        <li>استقامة حياة المجتمع والتفرغ للعمل المثمر.</li>
-                                        <li>طمأنينة القلوب وسعادتها، وحصول الراحة من الغل والشحناء والحقد.</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 15. من مادة الفقه: الزكاة -->
-                <div id="section-15" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-15-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            15. من مادة الفقه: الزكاة
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-15-content">+</button>
-                    </div>
-                    <div id="section-15-content" class="content-wrapper space-y-4 mt-3">
-                        <p class="text-gray-700 text-sm leading-relaxed">
-                            الزكاة عبادة مالية خالصة لوجه الله، ترفع الأحقاد وتجمع الأمة وتوحد صفوفها.
-                        </p>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                تعريف الزكاة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>لغةً: تطلق على معنيين أصليين: النماء والبركة والزيادة، والطهارة.</li>
-                                <li>اصطلاحاً: اسم صريح لأخذ شيء مخصوص، من مال مخصوص، على أوصاف مخصوصة، لطائفة مخصوصة.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                أصناف المال الذي تجب فيه الزكاة
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>أولاً: النقدان:
-                                    <ul class="list-circle list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                        <li>المراد بهما: الذهب والفضة، وكذلك النقود العادية (الشاقل، الدينار، الدولار، اليورو وغيرها).</li>
-                                        <li>شروط الزكاة فيهما: أن يكونا تحت ملك صاحبهما.</li>
-                                        <li>النصاب:
-                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>الذهب: يبلغ قدره 85 جراماً.</li>
-                                                <li>الفضة: تبلغ قدره 595 جراماً.</li>
-                                            </ul>
-                                        </li>
-                                        <li>مقدار الزكاة: 2.5% (ربع العشر) من قيمة المال الذي وصل النصاب.
-                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>مثال: لو كان مع شخص مبلغ 10000 شاقل وبلغ النصاب، تكون زكاته 250 شاقلاً (2.5% من 10000).</li>
-                                            </ul>
-                                        </li>
-                                        <li>زكاة حُلي المرأة:
-                                            <ul class="list-dash list-inside mt-1 text-gray-600 text-sm space-y-1 pr-4">
-                                                <li>لا زكاة في الحُلي المباح من الذهب أو الفضة الخاص بزينة المرأة، طالما لم يكن بالغاً من الكثرة إلى حد الإسراف.</li>
-                                                <li>لا زكاة في خاتم الفضة للرجل. السبب: هذه الأشياء مُعدة للزينة والاستعمال وليست للنماء.</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <!-- This section was incomplete in the provided text. I'll add a placeholder comment. -->
-                                <li>... (بقية أصناف المال الذي تجب فيه الزكاة غير مكتملة في النص الأصلي)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 16. حفظ الأحاديث الأربعة وشرحها -->
-                <div id="section-16" class="main-topic-node">
-                    <div class="flex justify-between items-center mb-4 cursor-pointer toggle-header" data-target="section-16-content">
-                        <h2 class="text-2xl font-bold flex-grow">
-                            16. حفظ الأحاديث الأربعة وشرحها
-                        </h2>
-                        <button class="toggle-btn text-xl font-bold w-7 h-7 rounded-full bg-green-200 hover:bg-green-300 focus:outline-none flex items-center justify-center text-green-700" aria-expanded="false" aria-controls="section-16-content">+</button>
-                    </div>
-                    <div id="section-16-content" class="content-wrapper space-y-4 mt-3">
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                1. أهل القرآن هم أهل الله
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الحديث: "إن لله أهلين من الناس".</li>
-                                <li>راوي الحديث: أنس بن مالك.</li>
-                                <li>شرح: حفظة القرآن العاملون به.</li>
-                                <li>ما يستفاد: تلاوة القرآن بتدبر وعمل.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                2. حب الرسول من الإيمان
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الحديث: "لا يؤمن أحدكم حتى أكون أحب إليه".</li>
-                                <li>راوي الحديث: أنس بن مالك، أبو هريرة.</li>
-                                <li>أنواع المحبة: إجلال، شفقة، مشاكلة.</li>
-                                <li>فوائد: وجوب محبة الرسول وتقديمها.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                3. المرأة تُنكح لأربع
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الحديث: "تنكح المرأة لأربع".</li>
-                                <li>راوي الحديث: أبو هريرة.</li>
-                                <li>الصفات المطلوبة: الخلق والدين أهمها.</li>
-                                <li>أحكام: نبذ غير الصالحة، مسؤولية الرجل.</li>
-                            </ul>
-                        </div>
-                        <div class="sub-topic-node">
-                            <h3 class="text-xl font-semibold text-green-700 mb-2">
-                                4. فضل الصلاة على النبي
-                            </h3>
-                            <ul class="list-disc list-inside mt-2 text-gray-600 text-sm space-y-1 pr-4">
-                                <li>الحديث: "إذا سمعتم المؤذن فقولوا".</li>
-                                <li>راوي الحديث: عبد الله بن عمرو.</li>
-                                <li>شرح: الترديد، فضل الصلاة، سؤال الوسيلة.</li>
-                                <li>ما يؤخذ: الترديد، الصلاة بعد الأذان.</li>
-                            </ul>
-                        </div>
-                    </div>
+    <main>
+        <section id="flashcard-section">
+            <h2>بطاقات تعليمية</h2>
+            <div id="flashcard-container">
+                <div id="flashcard">
+                    <div id="flashcard-content"></div>
                 </div>
             </div>
-        </main>
+            <div class="controls">
+                <button id="prev-btn">السابق</button>
+                <button id="flip-btn">اقلب البطاقة</button>
+                <button id="pronounce-btn">نطق</button>
+                <button id="next-btn">التالي</button>
+            </div>
+            
+            <div id="flashcard-actions">
+                <button id="easy-btn">سهلة</button>
+                <button id="fifty-fifty-btn">50/50</button>
+                <button id="hard-btn">صعبة</button>
+                <button id="unknown-btn">لا أعرفها</button>
+            </div>
+        </section>
 
-        <footer class="text-center mt-12 pt-6 border-t-2 text-gray-500 text-sm">
-            <p>تم تصميم هذه الخريطة لمساعدتك في مراجعة امتحان البجروت في الإسلام.</p>
-            <p class="mt-2 text-gray-600 text-xs">
-                &copy; 2025 All rights reserved to AbdullahZaid-ggg.
-            </p>
-        </footer>
-    </div>
+        <section id="exam-section">
+            <h2>قسم الاختبار</h2>
+            <div id="exam-container">
+                <p>اضغط على "بدء الاختبار" للبدء.</p>
+                <div id="exam-questions"></div>
+                <div id="exam-results" style="display:none;"></div>
+            </div>
+            <button id="start-exam-btn">بدء الاختبار</button>
+            <button id="submit-exam-btn" style="display:none;">إرسال الإجابات</button>
+        </section>
+    </main>
 
-    <!-- Back to Top Button -->
-    <button id="back-to-top">
-        العودة للأعلى
-    </button>
+    <footer>
+        <p>&copy; 2024 موقع حفظ الكلمات</p>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Function to generate Table of Contents
-            function generateTableOfContents() {
-                const tocList = document.querySelector('#table-of-contents ul');
-                const mainSections = document.querySelectorAll('.main-topic-node h2'); // Target main topic nodes
+        const words = [
+            { word: "A great deal", meaning: "كمية كبيرة من", status: 0 },
+            { word: "Abandon", meaning: "يترك، يهجر", status: 0 },
+            { word: "Abhor", meaning: "يبغض", status: 0 },
+            { word: "Ability", meaning: "قدرة", status: 0 },
+            { word: "Abnormality", meaning: "شذوذ، غرابة", status: 0 },
+            { word: "Absence", meaning: "غياب، فقدان", status: 0 },
+            { word: "Absolute", meaning: "مطلق", status: 0 },
+            { word: "Absorb", meaning: "يمتص، يستوعب", status: 0 },
+            { word: "Abundance (plenty)", meaning: "وفرة", status: 0 },
+            { word: "Abuse", meaning: "سوء استعمال", status: 0 },
+            { word: "Accelerate", meaning: "يسرع، يتسارع", status: 0 },
+            { word: "Accept", meaning: "يقبل، يوافق", status: 0 },
+            { word: "Access", meaning: "دخول، وصول", status: 0 },
+            { word: "Accident", meaning: "حادث", status: 0 },
+            { word: "Acclaim", meaning: "مدح، استحسان", status: 0 },
+            { word: "Accompany (escort)", meaning: "يرافق، يلازم", status: 0 },
+            { word: "Accomplish (achieve)", meaning: "ينجز، يتم", status: 0 },
+            { word: "Account (description)", meaning: "وصف، حساب", status: 0 },
+            { word: "Account for", meaning: "مسؤول عن", status: 0 },
+            { word: "Accumulate (congregate)", meaning: "يتراكم", status: 0 },
+            { word: "Accurately (exactly, precisely)", meaning: "بدقة", status: 0 },
+            { word: "Accuse (charge)", meaning: "يتهم", status: 0 },
+            { word: "Acknowledge", meaning: "يعترف بـ", status: 0 },
+            { word: "Acquire (obtain)", meaning: "يكتسب، يحصل", status: 0 },
+            { word: "Acute", meaning: "حاد", status: 0 },
+            { word: "Adapt (adjust)", meaning: "يتأقلم، يتكيف", status: 0 },
+            { word: "Administration", meaning: "إدارة", status: 0 },
+            { word: "Admire", meaning: "يعجب بـ", status: 0 },
+            { word: "Adolescence", meaning: "سن المراهقة", status: 0 },
+            { word: "Adopt", meaning: "يتبنى، يختار", status: 0 },
+            { word: "Advance (progress)", meaning: "يتقدم", status: 0 },
+            { word: "Advantage (benefit)", meaning: "ميزة، ايجابية، منفعة", status: 0 },
+            { word: "Adversary (enemy, foe, opponent)", meaning: "خصم، عدو", status: 0 },
+            { word: "Advertisement", meaning: "دعاية، إعلان", status: 0 },
+            { word: "Advise (counsel)", meaning: "ينصح", status: 0 },
+            { word: "Affect (influence)", meaning: "يؤثر على", status: 0 },
+            { word: "Affluence (wealth)", meaning: "ثراء، غنى، وفرة", status: 0 },
+            { word: "Afford", meaning: "تحمل، منح", status: 0 },
+            { word: "Aggravate", meaning: "يفاقم، يضعد", status: 0 },
+            { word: "Aggressive (violent)", meaning: "عدائي، عنيف", status: 0 },
+            { word: "Agonize", meaning: "يحتضر، يناضل", status: 0 },
+            { word: "Agriculture", meaning: "زراعة", status: 0 },
+            { word: "Aim (goal, target)", meaning: "هدف", status: 0 },
+            { word: "Akin (kindred)", meaning: "قريب (قرابة عائلية)", status: 0 },
+            { word: "Alarm", meaning: "تنبيه، إنذار", status: 0 },
+            { word: "Alien (foreign)", meaning: "غريب، أجنبي", status: 0 },
+            { word: "Allow (permit)", meaning: "يسمح", status: 0 },
+            { word: "Alter (change, convert)", meaning: "يغير، يدمج", status: 0 },
+            { word: "Analyze", meaning: "يحلل", status: 0 },
+            { word: "Ancestor (forerunner, predecessor)", meaning: "سلف، جد", status: 0 },
+            { word: "Ancient (antique, old)", meaning: "قديم", status: 0 },
+            { word: "Annual (yearly)", meaning: "سنوي", status: 0 },
+            { word: "Anticipate (expect, predict, foretell)", meaning: "يتنبأ، يتوقع", status: 0 },
+            { word: "Appeal", meaning: "يناشد، يستأنف", status: 0 },
+            { word: "Applaud", meaning: "يصفق، يمدح", status: 0 },
+            { word: "Apply", meaning: "يطبق، ينفذ", status: 0 },
+            { word: "Appreciate", meaning: "يقدر، يقيم", status: 0 },
+            { word: "Appropriate (suitable, proper)", meaning: "ملائم، مناسب", status: 0 },
+            { word: "Approve", meaning: "يصادق، يوافق", status: 0 },
+            { word: "Approximately (almost, nearly, roughly)", meaning: "تقريباً", status: 0 },
+            { word: "Arouse", meaning: "يثير، يستحث", status: 0 },
+            { word: "Artificial (unnatural, synthetic)", meaning: "اصطناعي", status: 0 },
+            { word: "Aspect", meaning: "جانب", status: 0 },
+            { word: "Aspiration (ambition)", meaning: "طموح", status: 0 },
+            { word: "Assassination", meaning: "اغتيال", status: 0 },
+            { word: "Assemble (gather)", meaning: "يحشد، يجمع", status: 0 },
+            { word: "Astonish", meaning: "يذهل، مدهش", status: 0 },
+            { word: "Attack (assault, onslaught)", meaning: "هجوم، يهاجم", status: 0 },
+            { word: "Authentic (genuine)", meaning: "أصلي", status: 0 },
+            { word: "Authorize (permit, empower, allow)", meaning: "يخوّل، يسمح", status: 0 },
+            { word: "Average (mean)", meaning: "معدل", status: 0 },
+            { word: "Baffle", meaning: "حيرة، ارتباك", status: 0 },
+            { word: "Bail", meaning: "كفالة", status: 0 },
+            { word: "Balance", meaning: "توازن", status: 0 },
+            { word: "Ban (prohibition)", meaning: "منع، حظر", status: 0 },
+            { word: "Barely (hardly)", meaning: "بالكاد، بصعوبة", status: 0 },
+            { word: "Barrier (obstacle)", meaning: "حاجز، عائق", status: 0 },
+            { word: "Base", meaning: "أساس، قاعدة", status: 0 },
+            { word: "Beg", meaning: "يتسول، يستجدي", status: 0 },
+            { word: "Beverage", meaning: "مشروب", status: 0 },
+            { word: "Bewilder", meaning: "يربك، يذهل", status: 0 },
+            { word: "Bitter", meaning: "لاذع، مر", status: 0 },
+            { word: "Bizarre (strange)", meaning: "غريب", status: 0 },
+            { word: "Blame", meaning: "يلوم", status: 0 },
+            { word: "Block", meaning: "حاجز، عقبة", status: 0 },
+            { word: "Boil", meaning: "يغلي", status: 0 },
+            { word: "Bold (brave)", meaning: "جريء", status: 0 },
+            { word: "Boost", meaning: "يرفع، يدعم، دفعة", status: 0 },
+            { word: "Borrow (loan)", meaning: "يستعير، يقترض", status: 0 },
+            { word: "Breach (violate)", meaning: "يخرق", status: 0 },
+            { word: "Breed", meaning: "يربي، يتكاثر", status: 0 },
+            { word: "Brief (concise, short)", meaning: "موجز، مختصر", status: 0 },
+            { word: "Brisk (quick, fast)", meaning: "سريع، نشيط", status: 0 },
+            { word: "Brutal (cruel)", meaning: "قاس، وحشي", status: 0 },
+            { word: "Burden", meaning: "عبء", status: 0 },
+            { word: "By means of", meaning: "بواسطة", status: 0 },
+            { word: "Calculate", meaning: "يحسب", status: 0 },
+            { word: "Camouflage (disguise)", meaning: "تمويه", status: 0 },
+            { word: "Campaign", meaning: "حملة عسكرية", status: 0 },
+            { word: "Cancel (abolish, revoke)", meaning: "يلغي، يحذف", status: 0 },
+            { word: "Cancer", meaning: "سرطان", status: 0 },
+            { word: "Candidate (nominee)", meaning: "مرشح", status: 0 },
+            { word: "Capable", meaning: "قادر على، مؤهل", status: 0 },
+            { word: "Capacity (ability, aptitude)", meaning: "قدرة، سعة", status: 0 },
+            { word: "Capture", meaning: "يأسر، يلتقط", status: 0 },
+            { word: "Career (profession)", meaning: "مهنة", status: 0 },
+            { word: "Carve", meaning: "ينحت، ينقش", status: 0 },
+            { word: "Catastrophe", meaning: "كارثة", status: 0 },
+            { word: "Category", meaning: "فئة", status: 0 },
+            { word: "Caution", meaning: "حذر", status: 0 },
+            { word: "Cease (stop, halt)", meaning: "يتوقف", status: 0 },
+            { word: "Celebrated (famous, renowned, notable)", meaning: "مشهور", status: 0 },
+            { word: "Ceremony", meaning: "احتفال، مراسم", status: 0 },
+            { word: "Certain (specific, particular)", meaning: "محدد، معين", status: 0 },
+            { word: "Certification", meaning: "شهادة", status: 0 },
+            { word: "Character (figure)", meaning: "شخصية", status: 0 },
+            { word: "Characteristic (feature)", meaning: "ميزة، صفة", status: 0 },
+            { word: "Chief (main, major)", meaning: "أساسي، رئيسي", status: 0 },
+            { word: "Chronic", meaning: "مزمن، دائم", status: 0 },
+            { word: "Circumstances", meaning: "ظروف", status: 0 },
+            { word: "Citizen (inhabitant, resident)", meaning: "مواطن", status: 0 },
+            { word: "Civilian", meaning: "مدني", status: 0 },
+            { word: "Claim", meaning: "يطالب", status: 0 },
+            { word: "Clarify", meaning: "يوضح", status: 0 },
+            { word: "Climate", meaning: "مناخ", status: 0 },
+            { word: "Coast", meaning: "ساحل", status: 0 },
+            { word: "Coexist", meaning: "يتعايش", status: 0 },
+            { word: "Colleague", meaning: "زميل", status: 0 },
+            { word: "Combine (integrate)", meaning: "يدمج، يوحد", status: 0 },
+            { word: "Command", meaning: "قيادة، إشراف", status: 0 },
+            { word: "Commercial", meaning: "تجاري", status: 0 },
+            { word: "Commit (execute)", meaning: "يرتكب، ينفذ", status: 0 },
+            { word: "Common (shared)", meaning: "شائع، مشترك", status: 0 },
+            { word: "Compensate", meaning: "يعوض", status: 0 },
+            { word: "Complain", meaning: "يتذمر، يشكو", status: 0 },
+            { word: "Complicate", meaning: "يعقد", status: 0 },
+            { word: "Compliment", meaning: "مدح، إطراء", status: 0 },
+            { word: "Compose", meaning: "يؤلف، يؤلف", status: 0 },
+            { word: "Comprehension", meaning: "فهم، إدراك", status: 0 },
+            { word: "Concentration (focus)", meaning: "تركيز", status: 0 },
+            { word: "Concept (notion, idea)", meaning: "فكرة، مفهوم", status: 0 },
+            { word: "Concern", meaning: "قلق", status: 0 },
+            { word: "Conclude (deduce)", meaning: "يستنتج", status: 0 },
+            { word: "Concur (agree)", meaning: "يتفق، يلتقي", status: 0 },
+            { word: "Condemn (denounce)", meaning: "يستنكر، شجب", status: 0 },
+            { word: "Confidence", meaning: "ثقة", status: 0 },
+            { word: "Confirm (approve)", meaning: "صادق على، يؤكد", status: 0 },
+            { word: "Confrontation", meaning: "مواجهة", status: 0 },
+            { word: "Congratulate", meaning: "يهنئ، يبارك", status: 0 },
+            { word: "Conquer (occupy)", meaning: "يحتل", status: 0 },
+            { word: "Conscious (aware)", meaning: "واع، مدرك", status: 0 },
+            { word: "Consecutive", meaning: "متعاقب، متتابع", status: 0 },
+            { word: "Consent (agree)", meaning: "يوافق", status: 0 },
+            { word: "Consequence", meaning: "عاقبة، نتيجة", status: 0 },
+            { word: "Conservative", meaning: "محافظ", status: 0 },
+            { word: "Consider (regard)", meaning: "أخذ بعين الاعتبار", status: 0 },
+            { word: "Consist of (composed)", meaning: "يتألف، يتكون من", status: 0 },
+            { word: "Constitute (compose, make-up, form)", meaning: "يشكل، يكون", status: 0 },
+            { word: "Consume", meaning: "يستهلك", status: 0 },
+            { word: "Content", meaning: "محتوى، فحوى", status: 0 },
+            { word: "Contradict", meaning: "يتناقض", status: 0 },
+            { word: "Contribute", meaning: "يساهم", status: 0 },
+            { word: "Controversy", meaning: "جدال", status: 0 },
+            { word: "Convict", meaning: "يدين، يحكم على", status: 0 },
+            { word: "Cooperate (collaborate)", meaning: "يتعاون", status: 0 },
+            { word: "Cope", meaning: "يجابه، يواجه", status: 0 },
+            { word: "Correspond", meaning: "يتوافق، يتلاءم", status: 0 },
+            { word: "Corrosion", meaning: "تآكل", status: 0 },
+            { word: "Corruption", meaning: "فساد", status: 0 },
+            { word: "Counterpart", meaning: "نظير، مطابق", status: 0 },
+            { word: "Countryside", meaning: "ضاحية، ريف", status: 0 },
+            { word: "Courage (bravery)", meaning: "شجاعة", status: 0 },
+            { word: "Creature", meaning: "كائن، مخلوق", status: 0 },
+            { word: "Criticize", meaning: "ينتقد", status: 0 },
+            { word: "Cultivate (grow, raise)", meaning: "يفلح", status: 0 },
+            { word: "Currently", meaning: "حالياً", status: 0 },
+            { word: "Curse", meaning: "لعنة، بلاه", status: 0 },
+            { word: "Dairy", meaning: "ألبان", status: 0 },
+            { word: "Damage (harm)", meaning: "ضرر", status: 0 },
+            { word: "Danger (peril, hazard)", meaning: "خطر", status: 0 },
+            { word: "Data", meaning: "معطيات، حقائق", status: 0 },
+            { word: "Deaf", meaning: "أصم، أطرش", status: 0 },
+            { word: "Deal", meaning: "يتعامل، صفقة", status: 0 },
+            { word: "Debate (discuss, argue)", meaning: "يناقش", status: 0 },
+            { word: "Debt", meaning: "دين", status: 0 },
+            { word: "Decade (10 years)", meaning: "عقد (10 سنوات)", status: 0 },
+            { word: "Decay", meaning: "انحلال، تآكل", status: 0 },
+            { word: "Declaration", meaning: "تصريح، إعلان", status: 0 },
+            { word: "Decline (drop, decrease)", meaning: "ينخفض، يهبط", status: 0 },
+            { word: "Defeat", meaning: "يهزم", status: 0 },
+            { word: "Defend", meaning: "يدافع عن، يحمي", status: 0 },
+            { word: "Definition", meaning: "تعريف", status: 0 },
+            { word: "Delay (postpone)", meaning: "يؤجل", status: 0 },
+            { word: "Deliberately", meaning: "عمداً، عن قصد", status: 0 },
+            { word: "Demolish (ruin, wreck)", meaning: "يدمر، يهدم", status: 0 },
+            { word: "Departure (leaving)", meaning: "مغادرة، رحيل", status: 0 },
+            { word: "Depend", meaning: "يعتمد على، يتعلق بـ", status: 0 },
+            { word: "Destination", meaning: "غاية، وجهة", status: 0 },
+            { word: "Detect", meaning: "يميز، يكتشف", status: 0 },
+            { word: "Entertainment", meaning: "تسلية", status: 0 },
+            { word: "Environment", meaning: "بيئة", status: 0 },
+            { word: "Equality", meaning: "مساواة", status: 0 },
+            { word: "Essential (vital, crucial, necessary)", meaning: "جوهري، أساسي", status: 0 },
+            { word: "Establish (found, institute)", meaning: "يؤسس، ينشئ", status: 0 },
+            { word: "Eventual (final)", meaning: "نهائي", status: 0 },
+            { word: "Evolution", meaning: "تطور، ارتقاء", status: 0 },
+            { word: "Exaggerate", meaning: "يبالغ", status: 0 },
+            { word: "Examine (check)", meaning: "يمتحن، يفحص", status: 0 },
+            { word: "Except (else than, but)", meaning: "باستثناء، ماعدا", status: 0 },
+            { word: "Exclude", meaning: "يستثني، يستبعد", status: 0 },
+            { word: "Exhausted", meaning: "منهك", status: 0 },
+            { word: "Exist", meaning: "موجود، قائم", status: 0 },
+            { word: "Expansion", meaning: "توسع، انتشار", status: 0 },
+            { word: "Experiment", meaning: "تجربة", status: 0 },
+            { word: "Expose (reveal)", meaning: "يعرض، يكشف", status: 0 },
+            { word: "Extinct", meaning: "ينقرض", status: 0 },
+            { word: "Extraordinary (remarkable)", meaning: "استثنائي", status: 0 },
+            { word: "Fabric", meaning: "نسيج، قماش", status: 0 },
+            { word: "Fair", meaning: "عادل", status: 0 },
+            { word: "Famine (starvation)", meaning: "مجاعة", status: 0 },
+            { word: "Fascinating", meaning: "ساحر، خلاب", status: 0 },
+            { word: "Fatal (lethal, deadly)", meaning: "مميت، قاتل", status: 0 },
+            { word: "Favor", meaning: "إحسان، خدمة", status: 0 },
+            { word: "Fear (dread)", meaning: "خوف، فزع", status: 0 },
+            { word: "Fertile (productive)", meaning: "خصب، مثمر", status: 0 },
+            { word: "Fertilize", meaning: "يخصب، يسمد", status: 0 },
+            { word: "Fiction", meaning: "خيال، رواية، تخيل", status: 0 },
+            { word: "Financial (fiscal)", meaning: "مالي", status: 0 },
+            { word: "Firm", meaning: "قوي، راسخ، صارم", status: 0 },
+            { word: "Flood", meaning: "فيضان", status: 0 },
+            { word: "Flourish (prosper, thrive)", meaning: "يزدهر", status: 0 },
+            { word: "Fluid", meaning: "سائل", status: 0 },
+            { word: "Formal (official)", meaning: "رسمي", status: 0 },
+            { word: "Fort", meaning: "حصن", status: 0 },
+            { word: "Fortune (wealth)", meaning: "ثروة، حظ", status: 0 },
+            { word: "Foundation (establishment)", meaning: "مؤسسة", status: 0 },
+            { word: "Frequently (often)", meaning: "بشكل متكرر", status: 0 },
+            { word: "Frustration", meaning: "إحباط، خيبة أمل", status: 0 },
+            { word: "Fuel", meaning: "وقود", status: 0 },
+            { word: "Funeral", meaning: "جنازة", status: 0 },
+            { word: "Gain (achieve, acquire)", meaning: "يكسب، يحصل", status: 0 },
+            { word: "Gap", meaning: "فجوة، هوة", status: 0 },
+            { word: "Gate", meaning: "بوابة", status: 0 },
+            { word: "Gender", meaning: "جنس، نوع", status: 0 },
+            { word: "Generally", meaning: "بشكل عام", status: 0 },
+            { word: "Generation", meaning: "جيل", status: 0 },
+            { word: "Generosity", meaning: "سخاء، كرم", status: 0 },
+            { word: "Genetic", meaning: "وراثي، جيني", status: 0 },
+            { word: "Genius", meaning: "عبقري", status: 0 },
+            { word: "Global (worldwide)", meaning: "عالمي", status: 0 },
+            { word: "Gloom", meaning: "كآبة", status: 0 },
+            { word: "Government", meaning: "حكومة", status: 0 },
+            { word: "Grave", meaning: "قبر", status: 0 },
+            { word: "Guide", meaning: "دليل، مرشد", status: 0 },
+            { word: "Habitat", meaning: "مسكن، موطن", status: 0 },
+            { word: "Handicapped", meaning: "معاق", status: 0 },
+            { word: "Harmony", meaning: "انسجام", status: 0 },
+            { word: "Harsh", meaning: "قاس", status: 0 },
+            { word: "Headache", meaning: "وجع رأس", status: 0 },
+            { word: "Heal", meaning: "يشفى، يتعافى", status: 0 },
+            { word: "Heart attack", meaning: "نوبة قلبية", status: 0 },
+            { word: "Heritage (inheritance)", meaning: "ميراث، إرث", status: 0 },
+            { word: "Hesitant (reluctant)", meaning: "متردد", status: 0 },
+            { word: "Honor", meaning: "يكرم، شرف", status: 0 },
+            { word: "Hostile", meaning: "عدائي", status: 0 },
+            { word: "Human being", meaning: "إنسان", status: 0 },
+            { word: "Humiliate", meaning: "يذل، يهين", status: 0 },
+            { word: "Ideal", meaning: "مثالي", status: 0 },
+            { word: "Identical", meaning: "مماثل، مطابق", status: 0 },
+            { word: "Identity", meaning: "هوية", status: 0 },
+            { word: "Illegal (illegitimate)", meaning: "غير شرعي / قانوني", status: 0 },
+            { word: "Illiterate", meaning: "أمي، جاهل", status: 0 },
+            { word: "Imagination", meaning: "خيال، وهم", status: 0 },
+            { word: "Immediately (instantly)", meaning: "فوراً", status: 0 },
+            { word: "Immigrate", meaning: "يهاجر", status: 0 },
+            { word: "Immoral", meaning: "عديم الأخلاق", status: 0 },
+            { word: "Immortality", meaning: "خلود", status: 0 },
+            { word: "Implications", meaning: "أبعاد، إسقاطات", status: 0 },
+            { word: "Impose", meaning: "يفرض", status: 0 },
+            { word: "Improve (enhance)", meaning: "يطور، يحسن", status: 0 },
+            { word: "Inclusive", meaning: "شامل", status: 0 },
+            { word: "Increase (raise)", meaning: "يزيد، يرتفع", status: 0 },
+            { word: "Indeed", meaning: "حقاً، بالفعل", status: 0 },
+            { word: "Independence", meaning: "استقلال", status: 0 },
+            { word: "Indicate", meaning: "يشير إلى", status: 0 },
+            { word: "Indifferent", meaning: "لا مبال", status: 0 },
+            { word: "Individual", meaning: "فرد، شخص", status: 0 },
+            { word: "Industry", meaning: "صناعة", status: 0 },
+            { word: "Inform (tell, notify)", meaning: "يبلغ، يُعلم", status: 0 },
+            { word: "Initial", meaning: "أولي", status: 0 },
+            { word: "Injured", meaning: "مجروح", status: 0 },
+            { word: "Inquire", meaning: "يسأل، يستفسر", status: 0 },
+            { word: "Insist", meaning: "يصر على، يلح", status: 0 },
+            { word: "Inspiration", meaning: "إلهام، إيحاء", status: 0 },
+            { word: "Instrument", meaning: "آلة موسيقية، جهاز", status: 0 },
+            { word: "Intellectual", meaning: "فكري، عقلاني", status: 0 },
+            { word: "Intend", meaning: "ينوي، يقصد", status: 0 },
+            { word: "Interfere", meaning: "يتدخل", status: 0 },
+            { word: "Interpret", meaning: "يفسر", status: 0 },
+            { word: "Interrupt", meaning: "يعترض، يقاطع", status: 0 },
+            { word: "Invade", meaning: "يغزو، يجتاح", status: 0 },
+            { word: "Investigation", meaning: "تحقيق", status: 0 },
+            { word: "Investment", meaning: "استثمار", status: 0 },
+            { word: "Involve", meaning: "يشرك، يتورط", status: 0 },
+            { word: "Isolate (exclude, segregate)", meaning: "يعزل، يستبعد", status: 0 },
+            { word: "Issue (matter, affair)", meaning: "مسألة، قضية", status: 0 },
+            { word: "Jam", meaning: "مربى الفاكهة", status: 0 },
+            { word: "Jealousy", meaning: "غيرة، حسد", status: 0 },
+            { word: "Junkyard (dump)", meaning: "مزبلة", status: 0 },
+            { word: "Justice (fairness)", meaning: "عدالة", status: 0 },
+            { word: "Justify", meaning: "يبرر", status: 0 },
+            { word: "Kidnap", meaning: "يخطف", status: 0 },
+            { word: "Knowledge", meaning: "معرفة", status: 0 },
+            { word: "Labor", meaning: "عمل", status: 0 },
+            { word: "Lack (shortage)", meaning: "نقص", status: 0 },
+            { word: "Lame", meaning: "أعرج", status: 0 },
+            { word: "Landscape (scenery)", meaning: "منظر طبيعي", status: 0 },
+            { word: "Law", meaning: "قانون", status: 0 },
+            { word: "Leadership", meaning: "قيادة", status: 0 },
+            { word: "Legal", meaning: "قانوني، شرعي", status: 0 },
+            { word: "Legend (myth, tale)", meaning: "أسطورة", status: 0 },
+            { word: "Legible", meaning: "واضح، مقروء", status: 0 },
+            { word: "Liberty (freedom)", meaning: "حرية", status: 0 },
+            { word: "License", meaning: "ترخيص، رخصة", status: 0 },
+            { word: "Lift (raise)", meaning: "يرفع", status: 0 },
+            { word: "Lightning", meaning: "برق", status: 0 },
+            { word: "Limit (restrict)", meaning: "يحد من، يحدد، حد", status: 0 },
+            { word: "Literature", meaning: "أدب", status: 0 },
+            { word: "Local", meaning: "محلي", status: 0 },
+            { word: "Location (site)", meaning: "موقع", status: 0 },
+            { word: "Logic", meaning: "منطق", status: 0 },
+            { word: "Lung", meaning: "رئة", status: 0 },
+            { word: "Luxury", meaning: "رفاهية", status: 0 },
+            { word: "Mainstream", meaning: "التيار الأساسي", status: 0 },
+            { word: "Majority", meaning: "أكثرية، أغلبية", status: 0 },
+            { word: "Malformation", meaning: "تشوه", status: 0 },
+            { word: "Mammal", meaning: "ثديي", status: 0 },
+            { word: "Management", meaning: "إدارة", status: 0 },
+            { word: "Manipulate", meaning: "يشغل، يتلاعب", status: 0 },
+            { word: "Manner (method)", meaning: "أسلوب، نمط", status: 0 },
+            { word: "Manufacture (produce)", meaning: "صناعة، إنتاج", status: 0 },
+            { word: "Mass", meaning: "تجمع، كتلة", status: 0 },
+            { word: "Masterpiece", meaning: "تحفة فنية", status: 0 },
+            { word: "Measurement", meaning: "قياس", status: 0 },
+            { word: "Media", meaning: "وسائل الإعلام", status: 0 },
+            { word: "Medicine", meaning: "طب", status: 0 },
+            { word: "Mercy", meaning: "رحمة، شفقة", status: 0 },
+            { word: "Military", meaning: "عسكري", status: 0 },
+            { word: "Minister", meaning: "وزير", status: 0 },
+            { word: "Misconception", meaning: "اعتقاد، فهم خاطئ", status: 0 },
+            { word: "Mission (task)", meaning: "مهمة", status: 0 },
+            { word: "Modern", meaning: "حديث", status: 0 },
+            { word: "Modest (humble)", meaning: "متواضع", status: 0 },
+            { word: "Moral (ethical)", meaning: "أخلاقي", status: 0 },
+            { word: "Motivate", meaning: "يحفز", status: 0 },
+            { word: "Murder", meaning: "يقتل", status: 0 },
+            { word: "Naked eye", meaning: "العين المجردة", status: 0 },
+            { word: "National", meaning: "قومي، وطني", status: 0 },
+            { word: "Nature reserve", meaning: "محمية طبيعية", status: 0 },
+            { word: "Necessary (essential, vital)", meaning: "ضروري", status: 0 },
+            { word: "Negative", meaning: "سلبي", status: 0 },
+            { word: "Neglect", meaning: "يهمل، يتجاهل", status: 0 },
+            { word: "Negotiate", meaning: "يتفاوض", status: 0 },
+            { word: "Network", meaning: "شبكة", status: 0 },
+            { word: "Nobility", meaning: "طبقة النبلاء، نبيلة", status: 0 },
+            { word: "Norm (standard)", meaning: "نموذج، معيار، نهج", status: 0 },
+            { word: "Nowadays", meaning: "في هذه الأيام", status: 0 },
+            { word: "Numerous", meaning: "عديد، كثير", status: 0 },
+            { word: "Nurture (bring up)", meaning: "يربي، ينشأ", status: 0 },
+            { word: "Nutrition (nourishment)", meaning: "تغذية", status: 0 },
+            { word: "Obey", meaning: "يطيع، ينصاع", status: 0 },
+            { word: "Objection", meaning: "معارضة", status: 0 },
+            { word: "Obligate (force, compel)", meaning: "يجبر", status: 0 },
+            { word: "Observe (supervise)", meaning: "يراقب", status: 0 },
+            { word: "Obtain (attain)", meaning: "يحصل على", status: 0 },
+            { word: "Occasion", meaning: "مناسبة", status: 0 },
+            { word: "Occupation", meaning: "احتلال", status: 0 },
+            { word: "Odd", meaning: "غريب", status: 0 },
+            { word: "Offend (insult)", meaning: "يؤذي، يجرح مشاعر", status: 0 },
+            { word: "Offer (suggest)", meaning: "يعرض", status: 0 },
+            { word: "On behalf of", meaning: "بالنيابة عن", status: 0 },
+            { word: "Operation", meaning: "عملية", status: 0 },
+            { word: "Oppress (suppress, repress)", meaning: "يقمع", status: 0 },
+            { word: "Optimistic", meaning: "متفائل", status: 0 },
+            { word: "Organization (association)", meaning: "منظمة", status: 0 },
+            { word: "Origin (source)", meaning: "أصل، مصدر", status: 0 },
+            { word: "Outrageous", meaning: "شائن، فظيع", status: 0 },
+            { word: "Overestimate", meaning: "يُبالغ، يبالغ التقدير", status: 0 },
+            { word: "Overlook", meaning: "يراقب، يشرف", status: 0 },
+            { word: "Overlook (ignore, disregard)", meaning: "يتجاهل، يتغاضى", status: 0 },
+            { word: "Owe", meaning: "مدين", status: 0 },
+            { word: "Own (possess)", meaning: "يملك", status: 0 },
+            { word: "Pace (rate)", meaning: "وتيرة", status: 0 },
+            { word: "Pain", meaning: "ألم", status: 0 },
+            { word: "Panic", meaning: "ذعر، فزع", status: 0 },
+            { word: "Paradise", meaning: "الجنة، الفردوس", status: 0 },
+            { word: "Particularly (specifically)", meaning: "بشكل خاص", status: 0 },
+            { word: "Passenger", meaning: "مسافر", status: 0 },
+            { word: "Perfect", meaning: "مثالي، كامل", status: 0 },
+            { word: "Perform", meaning: "يؤدي، يقوم", status: 0 },
+            { word: "Period (era)", meaning: "فترة زمنية، عهد", status: 0 },
+            { word: "Permanent (constant, lasting, perpetual)", meaning: "دائم، مستمر", status: 0 },
+            { word: "Permit (allow)", meaning: "يسمح، يأذن", status: 0 },
+            { word: "Persecution", meaning: "اضطهاد", status: 0 },
+            { word: "Perspective (point of view)", meaning: "وجهة نظر", status: 0 },
+            { word: "Persuade (convince)", meaning: "يقنع", status: 0 },
+            { word: "Phase (period)", meaning: "مرحلة", status: 0 },
+            { word: "Phenomenon", meaning: "ظاهرة", status: 0 },
+            { word: "Physician (doctor)", meaning: "طبيب", status: 0 },
+            { word: "Plague (epidemic)", meaning: "وباء، مرض", status: 0 },
+            { word: "Please", meaning: "يرضي، يعجب", status: 0 },
+            { word: "Pleasure", meaning: "متعة، سرور", status: 0 },
+            { word: "Political", meaning: "سياسي", status: 0 },
+            { word: "Pollute (contaminate)", meaning: "يلوث", status: 0 },
+            { word: "Population", meaning: "مجموعة سكانية", status: 0 },
+            { word: "Possess (own, have)", meaning: "يملك", status: 0 },
+            { word: "Possibility", meaning: "إمكانية، احتمال", status: 0 },
+            { word: "Poverty", meaning: "فقر", status: 0 },
+            { word: "Prefer (rather)", meaning: "يفضل", status: 0 },
+            { word: "Pregnant", meaning: "حامل", status: 0 },
+            { word: "Prejudice", meaning: "تحيز، رأي مسبق", status: 0 },
+            { word: "Pressure", meaning: "ضغط", status: 0 },
+            { word: "Privilege", meaning: "امتياز", status: 0 },
+            { word: "Process", meaning: "يعالج", status: 0 },
+            { word: "Professional (expert)", meaning: "محترف، مهني", status: 0 },
+            { word: "Promote", meaning: "يروج، يرقي", status: 0 },
+            { word: "Property (belongings)", meaning: "ممتلكات، عقارات", status: 0 },
+            { word: "Prove", meaning: "يثبت، يبرهن", status: 0 },
+            { word: "Publish (issue)", meaning: "ينشر", status: 0 },
+            { word: "Qualifications", meaning: "مؤهلات", status: 0 },
+            { word: "Quality", meaning: "جودة", status: 0 },
+            { word: "Quantity (amount)", meaning: "كمية", status: 0 },
+            { word: "Query (question)", meaning: "سؤال", status: 0 },
+            { word: "Quite (totally, fully)", meaning: "إلى حد بعيد، تماما", status: 0 },
+            { word: "Quotation", meaning: "اقتباس", status: 0 },
+            { word: "Race", meaning: "عرق، جنس، سباق", status: 0 },
+            { word: "Racism", meaning: "التمييز العرقي", status: 0 },
+            { word: "Rage", meaning: "غضب", status: 0 },
+            { word: "Raise", meaning: "ارتفاع، يرفع، يربي", status: 0 },
+            { word: "Random", meaning: "عشوائي", status: 0 },
+            { word: "Rare (scarce)", meaning: "نادر", status: 0 },
+            { word: "React (respond)", meaning: "يرد فعل، يستجيب", status: 0 },
+            { word: "Reality", meaning: "واقع، حقيقة", status: 0 },
+            { word: "Recognition", meaning: "إدراك، تقدير", status: 0 },
+            { word: "Recommendation", meaning: "توصية، تزكية", status: 0 },
+            { word: "Recover", meaning: "يشفى", status: 0 },
+            { word: "Recycle", meaning: "يستحدث", status: 0 },
+            { word: "Reference", meaning: "مرجع", status: 0 },
+            { word: "Refute", meaning: "يدحض، يخطئ", status: 0 },
+            { word: "Regime", meaning: "نظام حكم", status: 0 },
+            { word: "Region (area, zone)", meaning: "منطقة", status: 0 },
+            { word: "Reinforcement", meaning: "تعزيز، تقوية", status: 0 },
+            { word: "Relationship", meaning: "علاقة، صلة", status: 0 },
+            { word: "Release", meaning: "يحرر، يطلق سراح", status: 0 },
+            { word: "Relevant (related)", meaning: "متعلق بالأمر", status: 0 },
+            { word: "Reliable (trustworthy)", meaning: "جدير بالثقة", status: 0 },
+            { word: "Relieve", meaning: "يرتاح، يهدأ", status: 0 },
+            { word: "Repair (mend, amend, fix)", meaning: "يصلح، يرمم", status: 0 },
+            { word: "Repeat", meaning: "يكرر", status: 0 },
+            { word: "Reproduce", meaning: "يتكاثر، يُعيد إنتاج", status: 0 },
+            { word: "Reputation", meaning: "سمعة، شهرة", status: 0 },
+            { word: "Requirement", meaning: "مطلب، حاجة", status: 0 },
+            { word: "Resemble", meaning: "يشبه", status: 0 },
+            { word: "Resistance", meaning: "مقاومة", status: 0 },
+            { word: "Respond (react)", meaning: "يرد، يستجيب", status: 0 },
+            { word: "Retirement", meaning: "تقاعد", status: 0 },
+            { word: "Review", meaning: "نقد، مراجعة، إعادة النظر", status: 0 },
+            { word: "Revolution", meaning: "ثورة", status: 0 },
+            { word: "Ridicule (mock, laugh at)", meaning: "يسخر من، يتهكم", status: 0 },
+            { word: "Ruin", meaning: "يهدم", status: 0 },
+            { word: "Rumor (hearsay, gossip)", meaning: "إشاعة", status: 0 },
+            { word: "Sacred (holy)", meaning: "مقدس", status: 0 },
+            { word: "Salary (wage)", meaning: "معاش", status: 0 },
+            { word: "Sanction", meaning: "جزاء، عقوبة", status: 0 },
+            { word: "Scatter", meaning: "يبعثر، ينثر", status: 0 },
+            { word: "Schedule", meaning: "جدول مواعيد", status: 0 },
+            { word: "Secular (not religious)", meaning: "علماني", status: 0 },
+            { word: "Secure", meaning: "يحمي، يضمن", status: 0 },
+            { word: "Segregation", meaning: "فصل، عزل", status: 0 },
+            { word: "Sensation", meaning: "شعور، إحساس", status: 0 },
+            { word: "Separate (split)", meaning: "يفصل", status: 0 },
+            { word: "Settlement", meaning: "مستوطنة، تسوية", status: 0 },
+            { word: "Side effects", meaning: "عوارض جانبية", status: 0 },
+            { word: "Significant (important)", meaning: "مهم، ملحوظ", status: 0 },
+            { word: "Sink (submerge)", meaning: "يغرق", status: 0 },
+            { word: "Situate (locate)", meaning: "يحدد مكان / موقع", status: 0 },
+            { word: "Smuggling", meaning: "تهريب", status: 0 },
+            { word: "Society", meaning: "مجتمع", status: 0 },
+            { word: "Sophisticated (advanced)", meaning: "متطور", status: 0 },
+            { word: "Spacious", meaning: "فسيح، واسع", status: 0 },
+            { word: "Specialist (expert)", meaning: "مختص", status: 0 },
+            { word: "Species (kind)", meaning: "جنس، نوع، صنف", status: 0 },
+            { word: "Spirit", meaning: "روح، حيوية", status: 0 },
+            { word: "Spontaneous (unplanned)", meaning: "تلقائي، عفوي", status: 0 },
+            { word: "Stab", meaning: "يطعن", status: 0 },
+            { word: "Stable", meaning: "ثابت", status: 0 },
+            { word: "State", meaning: "يصرح، ولاية، حالة", status: 0 },
+            { word: "Status", meaning: "حالة، وضع", status: 0 },
+            { word: "Stimulate (prompt, motivate)", meaning: "يحفز", status: 0 },
+            { word: "Straight", meaning: "مستقيم", status: 0 },
+            { word: "Strike", meaning: "إضراب", status: 0 },
+            { word: "Structure (building, construction)", meaning: "مبنى", status: 0 },
+            { word: "Struggle (conflict)", meaning: "صراع، كفاح", status: 0 },
+            { word: "Submit", meaning: "يخضع", status: 0 },
+            { word: "Subsequently", meaning: "بعد ذلك، نتيجة لـ", status: 0 },
+            { word: "Substantial", meaning: "ملحوظ", status: 0 },
+            { word: "Suffer", meaning: "يعاني", status: 0 },
+            { word: "Suicide", meaning: "انتحار", status: 0 },
+            { word: "Suitable (fitting, compatible)", meaning: "ملائم، مناسب", status: 0 },
+            { word: "Summary", meaning: "خلاصة، تلخيص", status: 0 },
+            { word: "Superficial (trivial)", meaning: "سطحي، ظاهري", status: 0 },
+            { word: "Supply (provide)", meaning: "يزود، يمون", status: 0 },
+            { word: "Swallow", meaning: "يبتلع", status: 0 },
+            { word: "Symptoms", meaning: "أعراض، علامات", status: 0 },
+            { word: "Tangible", meaning: "واقعي، ملموس", status: 0 },
+            { word: "Temperament", meaning: "مزاج", status: 0 },
+            { word: "Temperature", meaning: "درجة حرارة", status: 0 },
+            { word: "Temporary", meaning: "مؤقت", status: 0 },
+            { word: "Tension (stress)", meaning: "توتر", status: 0 },
+            { word: "Testify", meaning: "يشهد، يدلي بشهادة", status: 0 },
+            { word: "Theory", meaning: "نظرية", status: 0 },
+            { word: "Threaten", meaning: "يهدد", status: 0 },
+            { word: "Thrive (flourish)", meaning: "يزدهر", status: 0 },
+            { word: "Thunderstorm", meaning: "عاصفة رعدية", status: 0 },
+            { word: "Tolerant", meaning: "متساهل، متسامح", status: 0 },
+            { word: "Torment (torture)", meaning: "يعذب", status: 0 },
+            { word: "Transform (change, alter)", meaning: "يحوّل، يغير", status: 0 },
+            { word: "Translation", meaning: "ترجمة", status: 0 },
+            { word: "treaty", meaning: "معاهدة، ميثاق", status: 0 },
+            { word: "Triumph (victory)", meaning: "نصر", status: 0 },
+            { word: "Typical", meaning: "نموذجي", status: 0 },
+            { word: "Ultimate", meaning: "مطلق، نهائي", status: 0 },
+            { word: "Unfortunately", meaning: "لسوء الحظ", status: 0 },
+            { word: "Union", meaning: "اتحاد", status: 0 },
+            { word: "Unique", meaning: "مميز", status: 0 },
+            { word: "Universal (global, worldwide)", meaning: "عالمي", status: 0 },
+            { word: "Upheaval", meaning: "يحدث، يختل", status: 0 },
+            { word: "urban", meaning: "مدني، متحضر", status: 0 },
+            { word: "Urge", meaning: "يلح، حافز", status: 0 },
+            { word: "Used to", meaning: "اعتاد", status: 0 },
+            { word: "Useful", meaning: "نافع، مفيد", status: 0 },
+            { word: "Utilize", meaning: "يستخدم، يستغل", status: 0 },
+            { word: "Utter (pronounce)", meaning: "يلفظ", status: 0 },
+            { word: "Vaccination", meaning: "تلقيح، تطعيم", status: 0 },
+            { word: "Vague", meaning: "غامض", status: 0 },
+            { word: "Validity", meaning: "صحة، شرعية", status: 0 },
+            { word: "Valley", meaning: "واد", status: 0 },
+            { word: "Vanish (fade)", meaning: "يختفي، يتلاشى", status: 0 },
+            { word: "Variety (diversity)", meaning: "تنوع", status: 0 },
+            { word: "Vehicle", meaning: "مركبة", status: 0 },
+            { word: "Verify", meaning: "يتحقق من، يثبت", status: 0 },
+            { word: "Via", meaning: "بواسطة", status: 0 },
+            { word: "Violation", meaning: "انتهاك، مخالفة", status: 0 },
+            { word: "Violence", meaning: "عنف", status: 0 },
+            { word: "Virtual (practical)", meaning: "عملي، واقعي", status: 0 },
+            { word: "Virtue (merit, attribute)", meaning: "صفة، فضيلة", status: 0 },
+            { word: "Vision", meaning: "رؤية، تصور", status: 0 },
+            { word: "Vocation (occupation, profession)", meaning: "مهنة", status: 0 },
+            { word: "Volunteer", meaning: "متطوع", status: 0 },
+            { word: "Wander (roam)", meaning: "يتجول، يهيم", status: 0 },
+            { word: "Warning (caution)", meaning: "إنذار، تحذير", status: 0 },
+            { word: "Waste (rubbish, garbage)", meaning: "فضلات", status: 0 },
+            { word: "Wave", meaning: "موجة", status: 0 },
+            { word: "Weapon", meaning: "سلاح", status: 0 },
+            { word: "Welfare", meaning: "رفاهية", status: 0 },
+            { word: "Whole (entire)", meaning: "كل، تام", status: 0 },
+            { word: "Willingly", meaning: "عن طيب خاطر", status: 0 },
+            { word: "Witty", meaning: "ذكي، بارع", status: 0 },
+            { word: "Wound (injury)", meaning: "يجرح", status: 0 },
+            { word: "Yawn", meaning: "يتثاءب", status: 0 },
+            { word: "Yearn (crave)", meaning: "يشتاق، يتوق إلى", status: 0 },
+            { word: "Youth", meaning: "شباب", status: 0 },
+            { word: "Zone (region, area)", meaning: "منطقة", status: 0 },
+        ];
 
-                mainSections.forEach((sectionTitle, index) => {
-                    const sectionId = sectionTitle.closest('.main-topic-node').id;
-                    const listItem = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = `#${sectionId}`;
-                    link.textContent = sectionTitle.textContent.trim();
-                    link.classList.add('hover:text-green-900', 'transition-colors', 'duration-200');
-                    listItem.appendChild(link);
-                    tocList.appendChild(listItem);
+        let currentWordIndex = 0;
+        let isFlipped = false;
+        const flashcard = document.getElementById('flashcard');
+        const flashcardContent = document.getElementById('flashcard-content');
+        const flipBtn = document.getElementById('flip-btn');
+        const pronounceBtn = document.getElementById('pronounce-btn');
+        const flashcardActions = document.getElementById('flashcard-actions');
+        const easyBtn = document.getElementById('easy-btn');
+        const fiftyFiftyBtn = document.getElementById('fifty-fifty-btn');
+        const hardBtn = document.getElementById('hard-btn');
+        const unknownBtn = document.getElementById('unknown-btn');
+        const startExamBtn = document.getElementById('start-exam-btn');
+        const submitExamBtn = document.getElementById('submit-exam-btn');
+        const examQuestionsContainer = document.getElementById('exam-questions');
+        const examResultsContainer = document.getElementById('exam-results');
+
+        // قائمة البطاقات التي يجب مراجعتها
+        let reviewList = [];
+
+        // وظيفة لعرض الكلمة الحالية
+        function displayWord() {
+            isFlipped = false;
+            flashcard.classList.remove('flipped');
+            flashcardContent.textContent = words[currentWordIndex].word;
+            flashcardContent.classList.remove('flashcard-back');
+            flashcardActions.style.display = 'none'; // إخفاء الأزرار في البداية
+        }
+
+        // وظيفة لقلب البطاقة لعرض المعنى
+        function flipCard() {
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                flashcard.classList.add('flipped');
+                flashcardContent.textContent = words[currentWordIndex].meaning;
+                flashcardContent.classList.add('flashcard-back');
+                flashcardActions.style.display = 'flex'; // إظهار الأزرار بعد القلب
+            } else {
+                flashcard.classList.remove('flipped');
+                flashcardContent.textContent = words[currentWordIndex].word;
+                flashcardContent.classList.remove('flashcard-back');
+                flashcardActions.style.display = 'none';
+            }
+        }
+        
+        // وظيفة لتحديث حالة الكلمة والانتقال إلى الكلمة التالية
+        function updateWordStatus(status) {
+            words[currentWordIndex].status = status;
+            
+            // إضافة الكلمة إلى قائمة المراجعة إذا كانت صعبة أو لا أعرفها
+            if (status === 1 || status === 2) {
+                reviewList.push(words[currentWordIndex]);
+            }
+            
+            moveToNextWord();
+        }
+
+        // وظيفة للانتقال إلى الكلمة التالية
+        function moveToNextWord() {
+            // إذا كانت هناك بطاقات في قائمة المراجعة، اعرضها
+            if (reviewList.length > 0) {
+                const nextWord = reviewList.shift(); // خذ أول بطاقة من القائمة
+                currentWordIndex = words.indexOf(nextWord);
+            } else {
+                // وإلا، انتقل إلى الكلمة التالية بترتيب عادي
+                currentWordIndex = (currentWordIndex + 1) % words.length;
+            }
+            displayWord();
+        }
+
+        // وظيفة لنطق الكلمة
+        function pronounceWord() {
+            const utterance = new SpeechSynthesisUtterance(words[currentWordIndex].word);
+            utterance.lang = 'en-US'; // يمكنك تغيير اللغة هنا
+            speechSynthesis.speak(utterance);
+        }
+        
+        // وظيفة لإنشاء أسئلة الاختبار
+        function createExamQuestions() {
+            examQuestionsContainer.innerHTML = '';
+            const shuffledWords = [...words].sort(() => 0.5 - Math.random());
+            shuffledWords.forEach(wordObj => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('exam-question');
+                questionDiv.innerHTML = `<h4>ما معنى "${wordObj.word}"؟</h4>`;
+
+                const options = generateOptions(wordObj.meaning, words);
+                options.forEach(option => {
+                    questionDiv.innerHTML += `
+                        <label>
+                            <input type="radio" name="q-${wordObj.word}" value="${option}"> ${option}
+                        </label>
+                    `;
                 });
+                examQuestionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        // وظيفة لإنشاء خيارات متعددة
+        function generateOptions(correctMeaning, allWords) {
+            const options = [correctMeaning];
+            const otherMeanings = allWords.filter(w => w.meaning !== correctMeaning).map(w => w.meaning);
+
+            while (options.length < 4 && otherMeanings.length > 0) {
+                const randomIndex = Math.floor(Math.random() * otherMeanings.length);
+                options.push(otherMeanings.splice(randomIndex, 1)[0]);
             }
 
-            // Function for search functionality
-            function setupSearch() {
-                const searchInput = document.getElementById('search-input');
-                const searchResultsDiv = document.getElementById('search-results');
-                const contentDiv = document.getElementById('mind-map-content');
-                let originalContent = contentDiv.innerHTML; // Store original content to restore after search
+            return options.sort(() => 0.5 - Math.random());
+        }
 
-                searchInput.addEventListener('input', (event) => {
-                    const searchTerm = event.target.value.trim();
-                    searchResultsDiv.innerHTML = ''; // Clear previous results
-                    contentDiv.innerHTML = originalContent; // Restore original content before highlighting
+        // وظيفة لتقييم الاختبار
+        function submitExam() {
+            let score = 0;
+            const questions = examQuestionsContainer.querySelectorAll('.exam-question');
+            questions.forEach(question => {
+                const word = question.querySelector('h4').textContent.replace('ما معنى "', '').replace('؟"', '');
+                const correctMeaning = words.find(w => w.word === word).meaning;
+                const selectedOption = question.querySelector(`input[name="q-${word}"]:checked`);
+                const resultSpan = document.createElement('span');
 
-                    if (searchTerm.length > 0) {
-                        const regex = new RegExp(`(${searchTerm})`, 'gi');
-                        let matches = 0;
-
-                        // Find all text nodes within the content
-                        const walker = document.createTreeWalker(contentDiv, NodeFilter.SHOW_TEXT, null, false);
-                        let node;
-                        const textNodesToProcess = [];
-
-                        while ((node = walker.nextNode())) {
-                            // Exclude script and style elements, and their content
-                            if (node.nodeValue.trim().length > 0 && 
-                                node.parentNode.tagName !== 'SCRIPT' && 
-                                node.parentNode.tagName !== 'STYLE' &&
-                                !node.parentNode.classList.contains('central-node') && /* Exclude central node text */
-                                !node.parentNode.closest('.toggle-btn') /* Exclude toggle buttons */
-                            ) {
-                                textNodesToProcess.push(node);
-                            }
-                        }
-
-                        textNodesToProcess.forEach(textNode => {
-                            const parentElement = textNode.parentNode;
-                            const originalText = textNode.nodeValue;
-                            const newHTML = originalText.replace(regex, (match) => {
-                                matches++;
-                                return `<span class="highlight">${match}</span>`;
-                            });
-
-                            if (newHTML !== originalText) {
-                                const tempDiv = document.createElement('div');
-                                tempDiv.innerHTML = newHTML;
-                                while (tempDiv.firstChild) {
-                                    parentElement.insertBefore(tempDiv.firstChild, textNode);
-                                }
-                                parentElement.removeChild(textNode);
-                            }
-                        });
-
-                        if (matches > 0) {
-                            searchResultsDiv.innerHTML = `<p class="text-green-700">تم العثور على ${matches} نتيجة لـ "${searchTerm}".</p>`;
-                            // Scroll to the first highlight
-                            const firstHighlight = document.querySelector('.highlight');
-                            if (firstHighlight) {
-                                firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }
-                        } else {
-                            searchResultsDiv.innerHTML = `<p class="text-red-600">لم يتم العثور على نتائج لـ "${searchTerm}".</p>`;
-                        }
-                    }
-                });
-            }
-
-            // Function for back-to-top button
-            function setupBackToTopButton() {
-                const backToTopButton = document.getElementById('back-to-top');
-
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 300) { // Show button after scrolling down 300px
-                        backToTopButton.style.display = 'block';
-                        setTimeout(() => backToTopButton.style.opacity = '1', 10); // Small delay for CSS transition
-                    } else {
-                        backToTopButton.style.opacity = '0';
-                        // Use a timeout to hide display property after transition
-                        setTimeout(() => {
-                            if (window.scrollY <= 300) { // Double check in case scroll position changed during timeout
-                                backToTopButton.style.display = 'none';
-                            }
-                        }, 300); // Matches opacity transition duration
-                    }
-                });
-
-                backToTopButton.addEventListener('click', () => {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                });
-            }
-
-            // New toggle section function
-            function toggleSection(contentId, toggleButton) {
-                const contentDiv = document.getElementById(contentId);
-                const isHidden = contentDiv.classList.contains('hidden');
-
-                if (isHidden) {
-                    contentDiv.classList.remove('hidden');
-                    toggleButton.textContent = '-';
-                    toggleButton.setAttribute('aria-expanded', 'true');
+                if (selectedOption && selectedOption.value === correctMeaning) {
+                    score++;
+                    resultSpan.textContent = ' - إجابة صحيحة ✅';
+                    resultSpan.classList.add('correct');
                 } else {
-                    contentDiv.classList.add('hidden');
-                    toggleButton.textContent = '+';
-                    toggleButton.setAttribute('aria-expanded', 'false');
+                    resultSpan.textContent = ` - إجابة خاطئة ❌ (الإجابة الصحيحة هي: ${correctMeaning})`;
+                    resultSpan.classList.add('incorrect');
                 }
-            }
-
-            // Initialize all functionalities
-            generateTableOfContents();
-            setupSearch();
-            setupBackToTopButton();
-
-            // Setup collapsible sections using event delegation
-            const toggleHeaders = document.querySelectorAll('.toggle-header');
-            toggleHeaders.forEach(header => {
-                const toggleButton = header.querySelector('.toggle-btn');
-                const contentId = header.dataset.target; // Get target content ID from data attribute
-
-                header.addEventListener('click', () => {
-                    toggleSection(contentId, toggleButton);
-                });
+                question.appendChild(resultSpan);
             });
 
-            // Initial setup for collapsible sections (all collapsed by default)
-            const allContentWrappers = document.querySelectorAll('.content-wrapper');
-            allContentWrappers.forEach(wrapper => {
-                wrapper.classList.add('hidden');
-                const toggleButton = wrapper.closest('.main-topic-node, .sub-topic-node')?.querySelector('.toggle-btn');
-                if (toggleButton) {
-                    toggleButton.textContent = '+';
-                    toggleButton.setAttribute('aria-expanded', 'false');
-                }
-            });
+            examResultsContainer.innerHTML = `<h3>النتيجة النهائية: ${score} من ${words.length}</h3>`;
+            examResultsContainer.style.display = 'block';
+            submitExamBtn.style.display = 'none';
+        }
+
+        // الأحداث (Event Listeners)
+        flipBtn.addEventListener('click', flipCard);
+        pronounceBtn.addEventListener('click', pronounceWord);
+        startExamBtn.addEventListener('click', () => {
+            examResultsContainer.style.display = 'none';
+            createExamQuestions();
+            startExamBtn.style.display = 'none';
+            submitExamBtn.style.display = 'block';
         });
+
+        submitExamBtn.addEventListener('click', submitExam);
+
+        // ربط أزرار التكرار المتباعد بالوظيفة الجديدة
+        easyBtn.addEventListener('click', () => updateWordStatus(3));
+        fiftyFiftyBtn.addEventListener('click', () => updateWordStatus(2));
+        hardBtn.addEventListener('click', () => updateWordStatus(1));
+        unknownBtn.addEventListener('click', () => updateWordStatus(0));
+        
+        // الأزرار السابقة والتالية ستنتقل للكلمة التالية/السابقة فقط إذا لم يكن هناك بطاقات للمراجعة
+        prevBtn.addEventListener('click', () => {
+            // لن أغير المنطق هنا، فقط أقدم البطاقة السابقة
+            currentWordIndex = (currentWordIndex - 1 + words.length) % words.length;
+            displayWord();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            // سأغير منطق الزر التالي بحيث يستدعي moveToNextWord
+            moveToNextWord();
+        });
+        
+        // العرض الأولي
+        displayWord();
     </script>
 </body>
 </html>
